@@ -7,21 +7,25 @@
 *	
 */
 
+#include <string.h>
+#include <stdlib.h>
+
 #include "gpio.h"
+#include "time.h"
 
 int a;
 
-void main(void)
+void kernel_main(void)
 {
+	malloc( 1024 * sizeof( unsigned int ) );
 	unsigned int tmp = 0; 
 	GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
 	while(1)
 	{
 		GPIO_SET_GPCLR(16);
-		for(tmp=0; tmp<50000; tmp++)
-		;
-		GPIO_SET_GPCLR(16);
-		
+		sleep(500);
+		GPIO_SET_GPCLR(16);		
+		sleep(500);
 	}
 }
 
