@@ -9,6 +9,15 @@
 
 #include "time.h"
 
+/*
+*	2014年12月25日21:01:06
+*	V1.0 	By Breaker
+*
+*	int sleep(int ms)
+*   	休眠ms毫秒
+*	return 0 成功  -1 失败	
+*/
+
 int sleep(int ms)
 {
 	unsigned int *TIMER_CLO_P = (unsigned int *)TIMER_CLO;

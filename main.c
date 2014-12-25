@@ -2,7 +2,7 @@
 *   	2014年12月25日10:58:18
 *	V1.0 	By Breaker
 *
-*	文件名：main.h
+*	文件名：main.c
 *	程序的主函数，永远不返回
 *	
 */
@@ -13,9 +13,8 @@
 #include "gpio.h"
 #include "time.h"
 
-int a;
-
-void kernel_main(void)
+/*程序的主函数，永远不返回*/
+void main(void)
 {
 	malloc( 1024 * sizeof( unsigned int ) );
 	unsigned int tmp = 0; 

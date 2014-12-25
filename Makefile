@@ -1,3 +1,11 @@
+#
+#	2014年12月25日21:00:09
+#	V1.0 	By Breaker
+#
+#	文件名：Makefile
+#	项目的 Makefile
+#	
+#
 
 kernel.img:kernel.elf Makefile
 	arm-none-eabi-objcopy kernel.elf -O binary kernel.img

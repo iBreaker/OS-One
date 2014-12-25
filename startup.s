@@ -1,3 +1,12 @@
+/*
+*   	2014年12月25日21:09:43
+*	V1.0 	By Breaker
+*
+*	文件名：start.s
+*	程序起始点
+*	
+*/
+
 .section ".text.startup"
 .global _start
 .global _get_stack_pointer
