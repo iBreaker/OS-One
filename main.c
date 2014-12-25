@@ -9,6 +9,8 @@
 
 #include "gpio.h"
 
+int a;
+
 void main(void)
 {
 	unsigned int tmp = 0; 
