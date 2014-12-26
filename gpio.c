@@ -98,7 +98,7 @@ int GPIO_SET_GPSET(int pin)
 		return -1;
 	}
 	
-	*point = (1 << bit_num);
+	*point |= (1 << bit_num);
 }
 
 /*
@@ -130,7 +130,7 @@ int GPIO_SET_GPCLR(int pin)
 		return -1;
 	}
 	
-	*point = (1 << bit_num);
+	*point |= (1 << bit_num);
 }
 
 

@@ -20,8 +20,11 @@
 
 int sleep(int ms)
 {
-	unsigned int *TIMER_CLO_P = (unsigned int *)TIMER_CLO;
-	unsigned int current_time = 0;
+	/* 2014年12月26日21:25:14 又是没有加volatile
+	关键字惹的祸，编译器把算法优化了，之应该存在cache中 */
+	volatile unsigned int *TIMER_CLO_P = (unsigned int *)TIMER_CLO;
+	unsigned long current_time = 0;
+	unsigned long us = 0;
 
 	//检查
 	if(ms < 0)
@@ -30,9 +33,13 @@ int sleep(int ms)
 	}
 	
 	/* 毫秒转化为微秒 */
-	ms *= 1000; 
+	us = ms * 1000; 
 	current_time = *TIMER_CLO_P;
 	
-	while((*TIMER_CLO_P - current_time) < ms);
+	while((*TIMER_CLO_P - current_time) < us);
+	{
+
+	}
+
 	return 0;
 }
