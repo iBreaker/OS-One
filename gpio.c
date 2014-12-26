@@ -45,22 +45,23 @@ int GPIO_SET_GPFSEL(int pin, int func)
 	//赋值
 	
 	point = (unsigned long*)GET_GPFSEL_ADDR(pin);
+	//point = (unsigned long*)GPFSEL1;
 	switch(func)
 	{
 		case 0:
-			mask |= ( 1 << bit_num );
-			mask |= ( 1 << bit_num + 1) ;
-			mask |= ( 1 << bit_num + 2) ;
-			//^ 异乎
+			mask |=  1 << (bit_num * 3);
+			mask |=  1 << ((bit_num * 3) + 1) ;
+			mask |=  1 << ((bit_num * 3) + 2) ;
+			//^ 异或
 			~mask; 				
 			*point &= mask;
 			break;
 		case 1:
-			mask |= 1 << bit_num;
-			mask |= 1 << bit_num + 1;
+			mask |= 1 << ((bit_num * 3) + 2);
+			mask |= 1 << (bit_num * 3) + 1;
 			~mask;
 			*point &= mask;
-			*point |= ( bit_num + 2 << 1 );
+			*point |= 1 << (bit_num * 3);
 			break;
 		default:
 			break;
