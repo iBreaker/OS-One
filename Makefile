@@ -10,8 +10,8 @@
 kernel.img:kernel.elf Makefile
 	arm-none-eabi-objcopy kernel.elf -O binary kernel.img
 
-kernel.elf:main.o gpio.o startup.o startup.s time.o pi.x Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o -o kernel.elf
+kernel.elf:main.o gpio.o startup.o  time.o GPU.o GPUS.o startup.s pi.x Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o GPU.o GPUS.o -o kernel.elf 
 
 main.o:main.c Makefile
 #2014年12月25日09:29:18
@@ -26,7 +26,13 @@ startup.o:startup.c Makefile
 
 time.o:time.c time.h Makefile
 	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c time.c -o time.o
-	
+
+GPU.o:GPU.c GPU.h Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c GPU.c -o GPU.o
+
+GPUS.o:GPU.s  Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c GPU.s -o GPUS.o
+		
 clean:
 	rm -f *.o  *.elf  *.img  *~
 
