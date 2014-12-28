@@ -10,8 +10,8 @@
 kernel.img:kernel.elf Makefile
 	arm-none-eabi-objcopy kernel.elf -O binary kernel.img
 
-kernel.elf:main.o gpio.o startup.o  time.o GPU.o GPUS.o startup.s pi.x Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o GPU.o GPUS.o -o kernel.elf 
+kernel.elf:main.o gpio.o startup.o  time.o GPU.o GPUS.o startup.s   pi.x Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o GPU.o GPUS.o  -o kernel.elf 
 
 main.o:main.c Makefile
 #2014年12月25日09:29:18
@@ -36,5 +36,10 @@ GPUS.o:GPU.s  Makefile
 clean:
 	rm -f *.o  *.elf  *.img  *~
 
+install:
+	make kernel.img
+	cp kernel.img /media/breaker/boot/kernel.img
+	umount /dev/sdc1
+	umount /dev/sdc2
 	
 

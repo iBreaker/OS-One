@@ -7,13 +7,13 @@
 *	
 */
 
-#define CPU_BASE 	0x2000B880
-#define CPU_Read	0x2000B880	
-#define CPU_Poll 	0x2000B890
-#define CPU_Sender 	0x2000B894
-#define CPU_Status 	0x2000B89C
-#define CPU_Config 	0x2000B8A0
-#define CPU_Write 	0x2000B8AC
+#define GPU_BASE 	0x2000B880
+#define GPU_Read	0x2000B880	
+#define GPU_Poll 	0x2000B890
+#define GPU_Sender 	0x2000B894
+#define GPU_Status 	0x2000B898
+#define GPU_Config 	0x2000B89C
+#define GPU_Write 	0x2000B8A0
 
 struct FrameBufferInfoS
 {
@@ -31,7 +31,9 @@ struct FrameBufferInfoS
 
 extern struct FrameBufferInfoS FrameBufferInfo;
 
-int GPU_SendMail(unsigned int width, unsigned int height, unsigned int bitDepth, unsigned int channel);
+unsigned int init_GPU(unsigned int width, unsigned int height, unsigned int bitDepth);
+
+int GPU_SendMail(unsigned int GPU_MSG, unsigned int channel);
 unsigned int GPU_RecMail(unsigned int channel);
 
 
