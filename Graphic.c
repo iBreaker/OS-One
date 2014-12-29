@@ -102,7 +102,6 @@ void drawCharacter(unsigned ASC2, RGB_24Bit color, int top, int left)
 {
 	int row;
 	char data;
-	char font[256];
 	RGB_24Bit *pointer;
 	for (row = 0; row < 16; row++)
 	{
