@@ -29,12 +29,7 @@ struct FrameBufferInfoS
 	volatile unsigned int bufSize; 		/* #36 GPU - Size ， GPU会更改此值，GPU为缓冲区分配内存的大小*/ 
 };
 
-struct RGB_24Bit
-{
-	unsigned char R;
-	unsigned char G;
-	unsigned char B;
-};
+
 
 extern struct FrameBufferInfoS FrameBufferInfo;
 

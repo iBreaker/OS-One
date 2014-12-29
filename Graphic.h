@@ -1,0 +1,21 @@
+/*
+*   	2014年12月29日11:09:11
+*	V1.0 	By Breaker
+*
+*	文件名：Graphic.c
+*	声明所有宏定义，图像处理相关的函数
+*	定义相关结构体
+*/
+
+typedef struct RGB_24Bit_S
+{
+	unsigned char R;
+	unsigned char G;
+	unsigned char B;
+
+}RGB_24Bit;
+
+
+int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth);
+void DrawDot(RGB_24Bit color, int top, int left);
+void DrawBlock(RGB_24Bit color, int top, int left, unsigned int width, unsigned int height);
