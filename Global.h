@@ -8,6 +8,6 @@
 */
 
 /*Graphic.c*/
-extern unsigned int GpuInfoAddr;  		/*GPU信息首地址*/
+extern unsigned int GpuInfoAddr;  			/*GPU信息首地址*/
 extern volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
-extern char font[256];				/*字体首地址*/
+extern unsigned char font[256];				/*字体首地址*/

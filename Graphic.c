@@ -110,26 +110,26 @@ void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
 {
 	int row;
 	char data;
-	RGB_24Bit *pointer;
-
+	unsigned char *ASC2_addr;
 	/*检查*/
 	if( ASC2 > 128 )
 	{
-		return;		
+		return;
 	}
-
+	
+	/*计算参数字符字体所在的首地址*/
+	ASC2_addr = (unsigned char *)((unsigned int)font + (ASC2 * 16));
 	for (row = 0; row < 16; row++)
 	{
-		data = font[row];
-		pointer = (RGB_24Bit *) (GpuBufAddr + (((struct FrameBufferInfoS *)GpuInfoAddr)->phyHeight) * (top + row) + left);
-		if ((data & 0x80) != 0) { pointer[0] = color; }
-		if ((data & 0x40) != 0) { pointer[1] = color; }
-		if ((data & 0x20) != 0) { pointer[2] = color; }
-		if ((data & 0x10) != 0) { pointer[3] = color; }
-		if ((data & 0x08) != 0) { pointer[4] = color; }
-		if ((data & 0x04) != 0) { pointer[5] = color; }
-		if ((data & 0x02) != 0) { pointer[6] = color; }
-		if ((data & 0x01) != 0) { pointer[7] = color; }
+		data = ASC2_addr[row];
+		if ((data & 0x80) != 0) DrawDot(color, top+row, left );
+		if ((data & 0x40) != 0) DrawDot(color, top+row, left + 1);
+		if ((data & 0x20) != 0) DrawDot(color, top+row, left + 2);
+		if ((data & 0x10) != 0) DrawDot(color, top+row, left + 3);
+		if ((data & 0x08) != 0) DrawDot(color, top+row, left + 4);
+		if ((data & 0x04) != 0) DrawDot(color, top+row, left + 5);
+		if ((data & 0x02) != 0) DrawDot(color, top+row, left + 6);
+		if ((data & 0x01) != 0) DrawDot(color, top+row, left + 7);
 	}
 }
 

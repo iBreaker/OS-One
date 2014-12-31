@@ -49,5 +49,9 @@ void  deb_screen(void)
 	DrawBlock(color,0,0,1,600);
 	DrawBlock(color,0,800-1,1,600);
 	DrawBlock(color,600-1,0,800,1);
-	drawCharacter('A', color, 0, 0);
+	
+	color.R = 0xFF;
+	color.G = 0xFF;
+	color.B = 0xFF;
+	drawCharacter('A', color, 10, 10);
  }
