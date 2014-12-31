@@ -122,16 +122,35 @@ void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
 	for (row = 0; row < 16; row++)
 	{
 		data = ASC2_addr[row];
-		if ((data & 0x80) != 0) DrawDot(color, top+row, left );
-		if ((data & 0x40) != 0) DrawDot(color, top+row, left + 1);
-		if ((data & 0x20) != 0) DrawDot(color, top+row, left + 2);
-		if ((data & 0x10) != 0) DrawDot(color, top+row, left + 3);
-		if ((data & 0x08) != 0) DrawDot(color, top+row, left + 4);
-		if ((data & 0x04) != 0) DrawDot(color, top+row, left + 5);
-		if ((data & 0x02) != 0) DrawDot(color, top+row, left + 6);
-		if ((data & 0x01) != 0) DrawDot(color, top+row, left + 7);
+		if ((data & 0x80) != 0) DrawDot(color, top+row, left + 7);
+		if ((data & 0x40) != 0) DrawDot(color, top+row, left + 6);
+		if ((data & 0x20) != 0) DrawDot(color, top+row, left + 5);
+		if ((data & 0x10) != 0) DrawDot(color, top+row, left + 4);
+		if ((data & 0x08) != 0) DrawDot(color, top+row, left + 3);
+		if ((data & 0x04) != 0) DrawDot(color, top+row, left + 2);
+		if ((data & 0x02) != 0) DrawDot(color, top+row, left + 1);
+		if ((data & 0x01) != 0) DrawDot(color, top+row, left + 0);
 	}
 }
 
+/*
+*	2014年12月31日17:36:55
+*	V1.0 	By Breaker
+*
+*	void drawString(char *string, RGB_24Bit color, int top, int left)
+*   	显示字符串
+*	return void 	
+*/
+void drawString(char *string, RGB_24Bit color, int top, int left)
+{
+	while(*string != 0)
+	{
+		drawCharacter(*string, color, top, left);
+		
+		string++;
+		/*计算下次显示字符的位置*/
+		left = left + 8;
+	}
+}
 
 

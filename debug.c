@@ -54,4 +54,5 @@ void  deb_screen(void)
 	color.G = 0xFF;
 	color.B = 0xFF;
 	drawCharacter('A', color, 10, 10);
+	drawString("123456??",color,40, 30);
  }
