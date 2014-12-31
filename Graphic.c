@@ -38,7 +38,7 @@ int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth)
 	color.R = 0x28;
 	color.G = 0x82;
 	color.B = 0xE6;
-	DrawBlock(color, 0, 0, 1024, 768);
+	DrawBlock(color, 0, 0, (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth), (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth));
 }
 
 /*
@@ -62,10 +62,10 @@ void DrawDot(RGB_24Bit color, int top, int left)
 	{
 		return;
 	}
-
-	*(volatile unsigned char *)((unsigned int)GpuBufAddr + ((1024 * top + left) * 3 ))= color.R;
-	*(volatile unsigned char *)((unsigned int)GpuBufAddr + ((1024 * top + left) * 3 + 1))= color.G;	
-	*(volatile unsigned char *)((unsigned int)GpuBufAddr + ((1024 * top + left) * 3 + 2))= color.B;	
+	
+	*(volatile unsigned char *)((unsigned int)GpuBufAddr + (((((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth) * top + left) * 3 ))= color.R;
+	*(volatile unsigned char *)((unsigned int)GpuBufAddr + (((((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth) * top + left) * 3 + 1))= color.G;	
+	*(volatile unsigned char *)((unsigned int)GpuBufAddr + (((((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth)* top + left) * 3 + 2))= color.B;	
 }
 
 int DrawLine(RGB_24Bit color, int x1, int y1, int x2, int y2)
@@ -98,11 +98,26 @@ int DrawBlockByMemory()
 	
 }
 
-void drawCharacter(unsigned ASC2, RGB_24Bit color, int top, int left)
+/*
+*	2014年12月29日16:58:27
+*	V1.0 	By Breaker
+*
+*	void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
+*   	显示字体
+*	return void 	
+*/
+void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
 {
 	int row;
 	char data;
 	RGB_24Bit *pointer;
+
+	/*检查*/
+	if( ASC2 > 128 )
+	{
+		return;		
+	}
+
 	for (row = 0; row < 16; row++)
 	{
 		data = font[row];

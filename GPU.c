@@ -8,6 +8,7 @@
 */
 #include "gpio.h"
 #include "GPU.h"
+#include "Global.h"
 
 unsigned int init_GPU(unsigned int width, unsigned int height, unsigned int bitDepth)
 {

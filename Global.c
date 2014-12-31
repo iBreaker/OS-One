@@ -12,4 +12,3 @@
 /*Graphic.c*/
 unsigned int GpuInfoAddr;  		/*GPU信息首地址*/
 volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
-char font[256];				/*字体首地址*/		/*字体首地址*/

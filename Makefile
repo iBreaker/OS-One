@@ -15,8 +15,8 @@ default:
 kernel.img:kernel.elf Makefile
 	arm-none-eabi-objcopy kernel.elf -O binary kernel.img
 
-kernel.elf:main.o gpio.o startup.o  time.o GPU.o GPUS.o Graphic.o Global.o startup.s   pi.x Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o GPU.o GPUS.o Graphic.o Global.o -o kernel.elf 
+kernel.elf:main.o gpio.o startup.o  time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o startup.s   pi.x Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o -o kernel.elf 
 
 main.o:main.c Makefile
 #2014年12月25日09:29:18
@@ -43,13 +43,19 @@ Graphic.o:Graphic.c Graphic.h  Makefile
 
 Global.o:Global.c Global.h  Makefile
 	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c Global.c -o     Global.o 
-		
+
+GlobalS.o:Global.s  Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c Global.s -o     GlobalS.o 
+	
+debug.o:debug.c  debug.h Makefile
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c debug.c -o     debug.o 
+	
 clean:
 	rm -f *.o  *.elf  *.img  *~
 install:
 	make kernel.img
 	cp kernel.img /media/breaker/boot/kernel.img
-	umount /dev/sdc1
-	umount /dev/sdc2
+	umount /dev/sdb1
+	umount /dev/sdb2
 	
 

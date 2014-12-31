@@ -19,3 +19,4 @@ typedef struct RGB_24Bit_S
 int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth);
 void DrawDot(RGB_24Bit color, int top, int left);
 void DrawBlock(RGB_24Bit color, int top, int left, unsigned int width, unsigned int height);
+void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left);
