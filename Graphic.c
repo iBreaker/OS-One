@@ -10,8 +10,10 @@
 #include "Global.h"
 #include "Graphic.h"
 #include "GPU.h" 
+#include "stdarg.h"
 
-/*
+
+/*****************************************************
 *	2014年12月29日11:11:14
 *	V2.0 	By Breaker
 *
@@ -41,7 +43,7 @@ int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth)
 	DrawBlock(color, 0, 0, (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth), (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth));
 }
 
-/*
+/*****************************************************
 *	2014年12月29日16:57:16
 *	V1.0 	By Breaker
 *
@@ -73,7 +75,7 @@ int DrawLine(RGB_24Bit color, int x1, int y1, int x2, int y2)
 	
 }
 
-/*
+/*****************************************************
 *	2014年12月29日16:58:27
 *	V1.0 	By Breaker
 *
@@ -98,15 +100,17 @@ int DrawBlockByMemory()
 	
 }
 
-/*
+
+
+/*****************************************************
 *	2014年12月29日16:58:27
 *	V1.0 	By Breaker
 *
-*	void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
+*	void drawCharacter(unsigned char ASC2, RGB_24Bit color, int *top, int *left)
 *   	显示字体
 *	return void 	
 */
-void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
+void drawCharacter(unsigned char ASC2, RGB_24Bit color, int *top, int *left)
 {
 	int row;
 	char data;
@@ -122,18 +126,19 @@ void drawCharacter(unsigned char ASC2, RGB_24Bit color, int top, int left)
 	for (row = 0; row < 16; row++)
 	{
 		data = ASC2_addr[row];
-		if ((data & 0x80) != 0) DrawDot(color, top+row, left + 7);
-		if ((data & 0x40) != 0) DrawDot(color, top+row, left + 6);
-		if ((data & 0x20) != 0) DrawDot(color, top+row, left + 5);
-		if ((data & 0x10) != 0) DrawDot(color, top+row, left + 4);
-		if ((data & 0x08) != 0) DrawDot(color, top+row, left + 3);
-		if ((data & 0x04) != 0) DrawDot(color, top+row, left + 2);
-		if ((data & 0x02) != 0) DrawDot(color, top+row, left + 1);
-		if ((data & 0x01) != 0) DrawDot(color, top+row, left + 0);
+		if ((data & 0x80) != 0) DrawDot(color, *top+row, *left + 7);
+		if ((data & 0x40) != 0) DrawDot(color, *top+row, *left + 6);
+		if ((data & 0x20) != 0) DrawDot(color, *top+row, *left + 5);
+		if ((data & 0x10) != 0) DrawDot(color, *top+row, *left + 4);
+		if ((data & 0x08) != 0) DrawDot(color, *top+row, *left + 3);
+		if ((data & 0x04) != 0) DrawDot(color, *top+row, *left + 2);
+		if ((data & 0x02) != 0) DrawDot(color, *top+row, *left + 1);
+		if ((data & 0x01) != 0) DrawDot(color, *top+row, *left + 0);
 	}
+	*left += 8;
 }
 
-/*
+/*****************************************************
 *	2014年12月31日17:36:55
 *	V1.0 	By Breaker
 *
@@ -145,12 +150,133 @@ void drawString(char *string, RGB_24Bit color, int top, int left)
 {
 	while(*string != 0)
 	{
-		drawCharacter(*string, color, top, left);
+		drawCharacter(*string, color, &top, &left);
 		
 		string++;
 		/*计算下次显示字符的位置*/
-		left = left + 8;
+		//left = left + 8;
 	}
+}
+
+/*****************************************************
+*	2015年01月01日16:34:02
+*	V1.0 	By Breaker
+*
+*	void drawDec(int dec, RGB_24Bit color, int *top, int *left)
+*   	显示十进制数字，drawStringF()子函数
+*	return void 	
+*/
+void drawDec(int dec, RGB_24Bit color, int *top, int *left)
+{
+	int times = 10;
+	while( dec / times != 0)
+	{
+		times *= 10;
+	}
+	
+	times /= 10;
+	
+	do {
+		unsigned char num = 0;
+		num = (unsigned char ) (dec / times);
+		drawCharacter( (num + '0'), color, top, left );
+		dec -=  num * times;
+		times /= 10;
+	}while(times != 0);
+	
+}
+
+/*****************************************************
+*	2015年01月01日16:36:14
+*	V1.0 	By Breaker
+*
+*	void drawFlt(double flt, RGB_24Bit color, int *top, int *left);
+*   	显示浮点数，drawStringF()子函数
+*	return void 	
+*/
+/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why?*/
+void drawFlt(double flt, RGB_24Bit color, int *top, int *left)
+{
+	int icnt = 0;
+	int tmpintA = 0;
+	int tmpintB = 0;
+	
+	tmpintA = (int)flt ;
+	//tmpintB = (int)((flt % (double)1)* 1000000);
+	drawDec(tmpintA ,  color, top, left);
+	drawCharacter( '.', color, top, left );
+	drawDec(tmpintA, color, top, left);
+}
+
+/*****************************************************
+*	2015年01月01日11:18:22
+*	V1.0 	By Breaker
+*
+*	void drawStringF(char *string, RGB_24Bit color, int top, int left)
+*   	格式化显示字符串
+*	return void 	
+*/
+void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...)
+{
+	/*  */
+	double vargflt = 0;
+	int  vargint = 0;
+	char* vargpch = 0;
+	char vargch = 0;
+	char* pfmt = 0;
+	va_list vp;
+	
+	/*left 后第一个参数*/
+	va_start(vp, left);
+	
+	 while(*pfmt)
+	{
+		if(*pfmt == '%')
+		{
+			switch(*(++pfmt))
+			{
+				case 'c':
+					vargch = va_arg(vp, int); 
+					drawCharacter(vargint, color, &top, &left);
+					break;
+				case 'd':
+				case 'i':
+					vargint = va_arg(vp, int);
+					drawDec(vargint,color, &top, &left);
+					break;
+				case 'f':
+					//vargflt = va_arg(vp, double);
+					vargflt = 3.14;
+					//drawFlt(vargflt,color, &top, &left);
+					break;
+				case 's':
+					vargpch = va_arg(vp, char*);
+					//printstr(vargpch);
+					break;
+				case 'b':
+				case 'B':
+					vargint = va_arg(vp, int);
+					//printbin(vargint);
+					break;
+				case 'x':
+				case 'X':
+					vargint = va_arg(vp, int);
+					//printhex(vargint);
+					break;
+				case '%':
+					drawCharacter('%', color, &top, &left );
+					break;
+				default:
+					break;
+			}
+			pfmt++;
+		}
+		else
+		{
+			drawCharacter(*pfmt++, color, &top, &left );
+		}	
+	}
+	va_end(vp);
 }
 
 

@@ -39,7 +39,7 @@ GPUS.o:GPU.s  Makefile
 	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c GPU.s -o GPUS.o
 
 Graphic.o:Graphic.c Graphic.h  Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c Graphic.c -o     Graphic.o 
+	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c Graphic.c -o     Graphic.o  -Wno-varargs
 
 Global.o:Global.c Global.h  Makefile
 	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -g -Wl,--verbose -c Global.c -o     Global.o 
@@ -54,8 +54,9 @@ clean:
 	rm -f *.o  *.elf  *.img  *~
 install:
 	make kernel.img
+	sudo mount /dev/sdc1  /media/breaker/boot/
+	rm -f  /media/breaker/boot/kernel.img
 	cp kernel.img /media/breaker/boot/kernel.img
-	umount /dev/sdb1
-	umount /dev/sdb2
+	umount /dev/sdc1
 	
 

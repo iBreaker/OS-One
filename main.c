@@ -24,7 +24,7 @@ void main(void)
 	/* init */
 	GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
 	GPIO_SET_GPSET(16);
-	init_screen(800, 600, 24);
+	init_screen(1440, 900, 24);
 	
 	/* debug */
 	
