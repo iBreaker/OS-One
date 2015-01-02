@@ -142,15 +142,15 @@ void drawCharacter(unsigned char ASC2, RGB_24Bit color, int *top, int *left)
 *	2014年12月31日17:36:55
 *	V1.0 	By Breaker
 *
-*	void drawString(char *string, RGB_24Bit color, int top, int left)
+*	void drawString(char *string, RGB_24Bit color, int *top, int *left)
 *   	显示字符串
 *	return void 	
 */
-void drawString(char *string, RGB_24Bit color, int top, int left)
+void drawString(char *string, RGB_24Bit color, int *top, int *left)
 {
 	while(*string != 0)
 	{
-		drawCharacter(*string, color, &top, &left);
+		drawCharacter(*string, color, top, left);
 		
 		string++;
 		/*计算下次显示字符的位置*/
@@ -168,6 +168,7 @@ void drawString(char *string, RGB_24Bit color, int top, int left)
 */
 void drawDec(int dec, RGB_24Bit color, int *top, int *left)
 {
+	
 	int times = 10;
 	while( dec / times != 0)
 	{
@@ -187,25 +188,102 @@ void drawDec(int dec, RGB_24Bit color, int *top, int *left)
 }
 
 /*****************************************************
-*	2015年01月01日16:36:14
+*	2015年01月02日14:07:24
 *	V1.0 	By Breaker
 *
 *	void drawFlt(double flt, RGB_24Bit color, int *top, int *left);
-*   	显示浮点数，drawStringF()子函数
+*	显示浮点数，drawStringF()子函数
+* 	别的文件不能调用参数列表中含有浮点型数据的函数，很奇怪。
+* 	格式化显示浮点型数据还是没有弄好，总会出现一些很奇怪的
+* 	问题。弄这个函数两天了，先放着吧。调试显示浮点数不是很多
 *	return void 	
 */
 /*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why?*/
-void drawFlt(double flt, RGB_24Bit color, int *top, int *left)
+void drawFlt(float  flt, RGB_24Bit color, int *x, int *y)
 {
-	int icnt = 0;
-	int tmpintA = 0;
-	int tmpintB = 0;
+
+	//int tmpintA = 0;
+	//int tmpintB = 0;
 	
-	tmpintA = (int)flt ;
-	//tmpintB = (int)((flt % (double)1)* 1000000);
-	drawDec(tmpintA ,  color, top, left);
-	drawCharacter( '.', color, top, left );
-	drawDec(tmpintA, color, top, left);
+	//tmpintA = (int) flt ;
+	//tmpintB =  (int )  ((flt - tmpintA) * 10000000) ;
+	//test_drawFlt_sub0(color, x, y, tmpintA, tmpintB);
+	//drawDec(a, color, x, y);
+	//drawCharacter('.', color, x, y);
+	//drawDec(b, color, x, y);
+}
+
+
+/*****************************************************
+*	2015年01月02日14:01:53
+*	V1.0 	By Breaker
+*
+*	void drawHex(int hex, RGB_24Bit color, char IS_Big,int *top, int *left)
+*   	显示十六进制数字，drawStringF()子函数
+*	return void 	
+*/
+void drawHex(int hex, RGB_24Bit color, char IS_Big,int *top, int *left)
+{
+	int times = 16;
+	while( hex / times != 0)
+	{
+		times *= 16;
+	}
+	
+	times /= 16;
+	
+	do {
+		unsigned char num = 0;
+		num = (unsigned char ) (hex / times);
+		if(num < 10)
+		{
+			drawCharacter( (num + '0'), color, top, left );
+		}
+		else
+		{
+			num -= 10;
+			if( IS_Big == 1)
+			{
+				drawCharacter( (num + 'A'), color, top, left );
+			}
+			else
+			{
+				drawCharacter( (num + 'a'), color, top, left );
+			}
+			
+		}
+		
+		hex -=  num * times;
+		times /= 16;
+	}while(times != 0);
+}
+
+
+/*****************************************************
+*	2015年01月02日14:01:53
+*	V1.0 	By Breaker
+*
+*	void drawBin(int bin, RGB_24Bit color, char IS_Big,int *top, int *left)
+*   	显示十六进制数字，drawStringF()子函数
+*	return void 	
+*/
+void drawBin(int bin, RGB_24Bit color, char IS_Big,int *top, int *left)
+{
+	int times = 2;
+	while( bin / times != 0)
+	{
+		times *= 2;
+	}
+	
+	times /= 2;
+	
+	do {
+		unsigned char num = 0;
+		num = (unsigned char ) (bin / times);
+		drawCharacter( (num + '0'), color, top, left );
+		bin -=  num * times;
+		times /= 2;
+	}while(times != 0);
 }
 
 /*****************************************************
@@ -228,6 +306,7 @@ void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...)
 	
 	/*left 后第一个参数*/
 	va_start(vp, left);
+	pfmt = fmt;
 	
 	 while(*pfmt)
 	{
@@ -241,27 +320,30 @@ void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...)
 					break;
 				case 'd':
 				case 'i':
+					GPIO_SET_GPCLR(16);
 					vargint = va_arg(vp, int);
 					drawDec(vargint,color, &top, &left);
 					break;
 				case 'f':
-					//vargflt = va_arg(vp, double);
-					vargflt = 3.14;
+					vargflt = va_arg(vp, double);
 					//drawFlt(vargflt,color, &top, &left);
 					break;
 				case 's':
 					vargpch = va_arg(vp, char*);
-					//printstr(vargpch);
+					drawString(vargpch,color, &top, &left);
 					break;
 				case 'b':
 				case 'B':
 					vargint = va_arg(vp, int);
-					//printbin(vargint);
+					drawBin(vargint,color, 0,&top, &left);
 					break;
 				case 'x':
+					vargint = va_arg(vp, int);
+					drawHex(vargint,color, 0,&top, &left);
+					break;
 				case 'X':
 					vargint = va_arg(vp, int);
-					//printhex(vargint);
+					drawHex(vargint,color, 1,&top, &left);
 					break;
 				case '%':
 					drawCharacter('%', color, &top, &left );
@@ -278,5 +360,7 @@ void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...)
 	}
 	va_end(vp);
 }
+
+
 
 

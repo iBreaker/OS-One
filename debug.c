@@ -12,7 +12,8 @@
 #include "time.h"
 #include "Graphic.h"
 #include "Global.h"
- void test_drawFlt(int *x, int *y);
+
+
 /*
 *	2014年12月31日16:12:49
 *	V1.0 	By Breaker
@@ -26,7 +27,7 @@ void  deb_GPIO(void)
 	 while(1)
 	{	
 		sleep(1000);
-		GPIO_SET_GPCLR(16);			
+		GPIO_SET_GPCLR(16);
 		sleep(1000);
 		GPIO_SET_GPSET(16);
 	}
@@ -46,7 +47,7 @@ void  deb_screen(void)
 	color.R = 0xFF;
 	color.G = 0x00;
 	color.B = 0x00;
-	double A = 3.14;
+	float A = 3.14;
 	int top,left;
 	top = 40;
 	left = 20;
@@ -60,25 +61,7 @@ void  deb_screen(void)
 	color.B = 0xFF;
 	
 	/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why*/
-	test_drawFlt(&top, &left);
+	drawStringF("%d........,hehe ... %x Bin: %b",color,  top, left ,123,123,123);
+	//drawDec(123,color,  &top, &left );
  }
  
- 
- void test_drawFlt( int *x, int *y)
-{	
-	double  A = 3.14;
-	int temp = 100;
-	RGB_24Bit color;
-	color.R = 0xFF;
-	color.G = 0xFF;
-	color.B = 0xFF;
-	
-	int icnt = 0;
-	int tmpintA = 0;
-	int tmpintB = 0;
-	
-	tmpintA = (int) A ;
-	tmpintB =  (int )  ((A - tmpintA) * 100000) ;
-	drawDec(tmpintA, color, x, y);
-	drawDec(tmpintB, color, x, y);
-}

@@ -54,9 +54,10 @@ clean:
 	rm -f *.o  *.elf  *.img  *~
 install:
 	make kernel.img
-	sudo mount /dev/sdc1  /media/breaker/boot/
+	sudo mount /dev/sdb1  /media/breaker/boot/
 	rm -f  /media/breaker/boot/kernel.img
 	cp kernel.img /media/breaker/boot/kernel.img
-	umount /dev/sdc1
+	umount /dev/sdb1
+	make clean
 	
 

@@ -29,7 +29,7 @@ void main(void)
 	/* debug */
 	
 	deb_screen();
-	deb_GPIO();
+	//deb_GPIO();
 	
 	
 	//malloc( 1024 * sizeof( unsigned int ) );
