@@ -30,6 +30,7 @@ void main(void)
 	
 	deb_screen();
 	//deb_GPIO();
+	deb_keyboard();
 	
 	
 	//malloc( 1024 * sizeof( unsigned int ) );

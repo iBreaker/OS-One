@@ -320,7 +320,6 @@ void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...)
 					break;
 				case 'd':
 				case 'i':
-					GPIO_SET_GPCLR(16);
 					vargint = va_arg(vp, int);
 					drawDec(vargint,color, &top, &left);
 					break;

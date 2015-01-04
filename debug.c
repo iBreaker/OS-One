@@ -12,6 +12,7 @@
 #include "time.h"
 #include "Graphic.h"
 #include "Global.h"
+#include "csud.h"
 
 
 /*
@@ -61,7 +62,42 @@ void  deb_screen(void)
 	color.B = 0xFF;
 	
 	/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why*/
-	drawStringF("%d........,hehe ... %x Bin: %b",color,  top, left ,123,123,123);
-	//drawDec(123,color,  &top, &left );
+	drawStringF("123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
+ }
+ 
+ 
+/*****************************************************
+*	2015年01月03日14:38:20
+*	V1.0 	By Breaker
+*
+*	 void  deb_keyboard(void)
+*      画出图案
+*	return   void
+*/
+ void  deb_keyboard(void)
+ {
+	RGB_24Bit color;
+	color.R = 0xFF;
+	color.G = 0x00;
+	color.B = 0x00;
+	unsigned int top, left;
+	top = 400;
+	left = 0;
+	
+	while(1)
+	 {
+		char unsigned key = 0;
+		KeyboardUpdate();
+		key = KeyboardGetChar();
+		 if(key != 0)
+		 {
+			GPIO_SET_GPCLR(16);
+		 }
+		 else
+		 {
+			 
+		 }
+		 
+	 }
  }
  
