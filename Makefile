@@ -52,15 +52,19 @@ default:
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.c
 	${GNU}gcc ${CFLAGS} -c $< -o $@
 	
-${TARGET}.img: ${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
+${TARGET}.img: ${TARGET}.elf
+	${GNU}objcopy  ${TARGET}.elf -O binary $@
+
+${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
 	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
 	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf
-	${GNU}objcopy  ${TARGET}.elf -O binary $@
 	
+disasm:${TARGET}.elf
+	${GNU}objdump -S  $< > ${TARGET}.disasm
 clean:
 	rm -rf  ./object/*.o
-	rm -rf *.img *.elf
-	
+	rm -rf *.img *.elf *.disasm
+
 install:
 	make kernel.img
 	sudo mount /dev/sdc1  /media/breaker/boot/

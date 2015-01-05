@@ -9,7 +9,7 @@
 extern int __bss_start__;
 extern int __bss_end__;
  
-extern void main( unsigned int r0, unsigned int r1, unsigned int atags );
+extern void os_main( unsigned int r0, unsigned int r1, unsigned int atags );
  
 /*
 *	2014年12月25日21:06:14
@@ -39,7 +39,7 @@ void _cstartup( unsigned int r0, unsigned int r1, unsigned int r2 )
         	*bss++ = 0;
  
     	/* We should never return from main ... */
-    	main( r0, r1, r2 );
+    	os_main( r0, r1, r2 );
  
     	/* ... but if we do, safely trap here */
     	while(1)

@@ -19,7 +19,7 @@ volatile unsigned int tmp = 0;
 
 
 /*程序的主函数，永远不返回*/
-void main(void)
+void os_main(void)
 {
 	/* init */
 	GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
