@@ -10,4 +10,4 @@
 .align 4
 .global font
 font:			/*字体首地址*/
-.incbin "font0.bin"	
+.incbin "./source/font0.bin"

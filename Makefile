@@ -1,64 +1,66 @@
-#
+##############################
 #	2014年12月25日21:00:09
 #	V1.0 	By Breaker
 #
 #	文件名：Makefile
 #	项目的 Makefile
-#	
 #
+##############################
+#	2015年01月05日11:58:29    
+#	V2.0 	By Breaker 
+#	增加include文件夹和source 等文件夹，libcsud.a
+#	整理项目结构
+
+#默认参数
+DIR_SRC ?= ./source
+DIR_INC ?= ./include
+DIR_OBJ ?= ./object
+DIR_LIB ?= ./lib
+
+TARGET ?= kernel
+#
+#（1）Makefile中的 符号 $@, $^, $< 的意思：
+#　　$@  表示目标文件
+#　　$^  表示所有的依赖文件
+#　　$<  表示第一个依赖文件
+#　　$?  表示比目标还要新的依赖文件列表
+#
+#（2）wildcard、notdir、patsubst的意思：
+#
+#　　wildcard : 扩展通配符
+#　　notdir ： 去除路径
+#　　patsubst ：替换通配符
+
+GNU = arm-none-eabi-
+CFLAGS +=  -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
+			-nostartfiles -fshort-wchar  -g -Wl,--verbose -c -I ${DIR_INC} 
+LFLAGS +=   -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
+			-nostartfiles  -fshort-wchar  -g -Wl,-T,${DIR_SRC}/pi.x 
+objects = startup.o main.o gpio.o time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o  keyboardS.o 
+
+SRC = $(wildcard  ${DIR_SRC}/*.c)
+ASB = $(wildcard  ${DIR_SRC}/*.s)
+OBJ = $(patsubst  %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
+LIB = $(notdir $(wildcard ${DIR_LIB}/*.a))
+INC = $(wildcard ${DIR_INC}/*.h)
 
 default:
 	clear
 	make kernel.img
 	make clean
-
-kernel.img:kernel.elf Makefile
-	arm-none-eabi-objcopy kernel.elf -O binary kernel.img
-
-kernel.elf:main.o gpio.o startup.o  time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o startup.s  libcsud.a  keyboard.o keyboardS.o pi.x Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles    -fshort-wchar  -g -Wl,-T,pi.x startup.s startup.o main.o gpio.o time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o  keyboardS.o -lcsud -L. -o kernel.elf   
-
-main.o:main.c Makefile
-#2014年12月25日09:29:18
-#这里之前是8个空格而不是Tab，导致编译出x64的程序，不能正常连接
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c main.c -o main.o
 	
-gpio.o:gpio.c gpio.h Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c gpio.c -o gpio.o
+${DIR_OBJ}/%.o:${DIR_SRC}/%.c
+	${GNU}gcc ${CFLAGS} -c $< -o $@
 	
-startup.o:startup.c Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c startup.c -o startup.o
-
-time.o:time.c time.h Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c time.c -o time.o
-
-GPU.o:GPU.c GPU.h Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c GPU.c -o GPU.o
-
-GPUS.o:GPU.s  Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c GPU.s -o GPUS.o
-
-Graphic.o:Graphic.c Graphic.h  Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c Graphic.c -o     Graphic.o  -Wno-varargs
-
-Global.o:Global.c Global.h  Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c Global.c -o     Global.o 
-
-GlobalS.o:Global.s  Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c Global.s -o     GlobalS.o 
-	
-debug.o:debug.c  debug.h Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c debug.c -o     debug.o 
-	
-keyboard.o:keyboard.c  csud.h Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c keyboard.c -o     keyboard.o
-	
-keyboardS.o:keyboard.s  csud.h Makefile
-	arm-none-eabi-gcc -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s -nostartfiles -fshort-wchar  -g -Wl,--verbose -c keyboard.s -o     keyboardS.o
-
+${TARGET}.img: ${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
+	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
+	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf
+	${GNU}objcopy  ${TARGET}.elf -O binary $@
 	
 clean:
-	rm -f *.o  *.elf  *.img  *~
+	rm -rf  ./object/*.o
+	rm -rf *.img *.elf
+	
 install:
 	make kernel.img
 	sudo mount /dev/sdc1  /media/breaker/boot/
