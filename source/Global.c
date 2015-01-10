@@ -8,7 +8,11 @@
 */
 
 #include "Global.h"
+#include "timer.h"
 
 /*Graphic.c*/
 unsigned int GpuInfoAddr;  		/*GPU信息首地址*/
 volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
+
+/*timer.c*/
+arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		/*ArmTimer首地址*/

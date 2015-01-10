@@ -7,8 +7,6 @@
 *	
 */
 
-#include <string.h>
-#include <stdlib.h>
 #include "gpio.h"
 #include "time.h"
 #include "Graphic.h"
@@ -25,12 +23,15 @@ void os_main(void)
 	GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
 	GPIO_SET_GPSET(16);
 	init_screen(1440, 900, 24);
+	_enable_interrupts();
+	init_timer();
+	
 	
 	/* debug */
 	
-	deb_screen();
+	//deb_screen();
 	//deb_GPIO();
-	deb_keyboard();
+	//deb_keyboard();
 	
 	
 	//malloc( 1024 * sizeof( unsigned int ) );

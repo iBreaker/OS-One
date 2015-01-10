@@ -3,3 +3,4 @@
 *.elf
 *.img
 *.kate-swp
+*.disasm

@@ -10,7 +10,22 @@
 .section ".text.startup"
 .global _start
 .global _get_stack_pointer
+.global _exception_table
+.global _enable_interrupts
  
+.equ    CPSR_MODE_USER,         		0x10
+.equ    CPSR_MODE_FIQ,          		0x11
+.equ    CPSR_MODE_IRQ,          		0x12
+.equ    CPSR_MODE_SVR,          		0x13
+.equ    CPSR_MODE_ABORT,        		0x17
+.equ    CPSR_MODE_UNDEFINED,    	0x1B
+.equ    CPSR_MODE_SYSTEM,       		0x1F
+
+// See ARM section A2.5 (Program status registers)
+.equ    CPSR_IRQ_INHIBIT,       		0x80
+.equ    CPSR_FIQ_INHIBIT,       		0x40
+.equ    CPSR_THUMB,             			0x20
+
 _start:
 
 	ldr pc, _reset_h
@@ -42,7 +57,9 @@ _reset_:
 	// Set the stack pointer at the end of RAM.
 	// Keep it within the limits and also keep it aligned to a 32-bit
 	// boundary!
-	ldr     sp, =(128 * (1024 * 1024))
+	
+	mov     sp, #0x4000
+	//ldr     sp, =(128 * (1024 * 1024))
 	//ldr     sp, =(256 * (1024 * 1024))
 	//ldr     sp, =(512 * (1024 * 1024))
 	sub     sp, sp, #0x4
@@ -60,3 +77,12 @@ _get_stack_pointer:
  
     // Return from the function
     mov     pc, lr
+    
+
+_enable_interrupts:
+    mrs	r0, cpsr
+    bic	r0, r0, #0x80
+    msr	cpsr_c, r0
+
+    mov     pc, lr
+
