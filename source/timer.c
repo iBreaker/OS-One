@@ -15,11 +15,12 @@ void init_timer(void)
 	irq_controller_t *IRQcontroller = (irq_controller_t *)INTERRUPT_CONTROLLER_BASE; /*中断控制器首地址*/
 	
 	IRQcontroller->Enable_Basic_IRQs = BASIC_ARM_TIMER_IRQ;
-	ArmTimer->Load = 0x400;
+	
+	/*内核频率，100Hz*/
+	ArmTimer->Load = Kernrl_100Hz * 100;
 	ArmTimer->Control = 	ARMTIMER_CTRL_23BIT |
 							ARMTIMER_CTRL_ENABLE |
 							ARMTIMER_CTRL_INT_ENABLE |
-							ARMTIMER_CTRL_PRESCALE_256;
-	_enable_interrupts();
+							ARMTIMER_CTRL_PRESCALE_1;
   }
  

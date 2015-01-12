@@ -22,6 +22,10 @@
 #define ARMTIMER_CTRL_ENABLE		( 1 << 7 )
 #define ARMTIMER_CTRL_DISABLE		( 0 << 7 )
 
+/*内核频率*/
+#define Kernrl_100Hz 		10000
+#define Kernrl_1000Hz 	1000
+
 typedef struct {
 	/* timer load 寄存器设置计数器的值。当timer load 寄存器重写或者 
 	 timer value 寄存器被减到0的时候，timer load 中的值会写入
