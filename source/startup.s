@@ -54,9 +54,18 @@ _reset_:
 	ldmia	r0!, {r2, r3, r4, r5, r6, r7, r8, r9} 
 	stmia	r1!, {r2, r3, r4, r5, r6, r7, r8, r9}
 	
-	// Set the stack pointer at the end of RAM.
-	// Keep it within the limits and also keep it aligned to a 32-bit
-	// boundary!
+	// We're going to use interrupt mode, so setup the interrupt mode
+	// stack pointer which differs to the application stack pointer:
+	mov r0, #(CPSR_MODE_IRQ | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
+	msr cpsr_c, r0
+	mov sp, #0x8000
+
+	// Switch back to supervisor mode (our application mode) and
+	// set the stack pointer towards the end of RAM. Remember that the
+	// stack works its way down memory, our heap will work it's way
+	// up memory toward the application stack.
+	mov r0, #(CPSR_MODE_SVR | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
+	msr cpsr_c, r0
 	
 	mov     sp, #0x4000
 	//ldr     sp, =(128 * (1024 * 1024))

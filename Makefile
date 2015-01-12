@@ -67,10 +67,10 @@ clean:
 
 install:
 	make kernel.img
-	sudo mount /dev/sdd1  /media/breaker/boot/
+	sudo mount /dev/sde1  /media/breaker/boot/
 	rm -f  /media/breaker/boot/kernel.img
 	cp kernel.img /media/breaker/boot/kernel.img
-	umount /dev/sdd1
+	umount /dev/sde1
 	make clean
 	
 
