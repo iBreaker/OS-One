@@ -16,3 +16,9 @@ volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
 
 /*timer.c*/
 arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		/*ArmTimer首地址*/
+
+/*interupt.c*/
+int TimerCounter = 0;
+
+/*timer.c*/
+os_timer_ctrl_st os_timer_ctrl;

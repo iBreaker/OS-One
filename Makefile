@@ -35,7 +35,7 @@ GNU = arm-none-eabi-
 CFLAGS +=  -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
 			-nostartfiles -fshort-wchar  -g -Wl,--verbose -c -I ${DIR_INC} 
 LFLAGS +=   -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
-			-nostartfiles  -fshort-wchar  -g -Wl,-T,${DIR_SRC}/pi.x 
+			-nostartfiles  -fshort-wchar  -g -Wl,-T,${DIR_SRC}/pi.x -Wl,-Map,${TARGET}.map 
 objects = startup.o main.o gpio.o time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o  keyboardS.o 
 
 SRC = $(wildcard  ${DIR_SRC}/*.c)
@@ -57,13 +57,14 @@ ${TARGET}.img: ${TARGET}.elf
 
 ${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
 	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
-	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf
+	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf  
 	
-disasm:${TARGET}.elf
+dbg:${TARGET}.elf
 	${GNU}objdump -S  $< > ${TARGET}.disasm
+
 clean:
 	rm -rf  ./object/*.o
-	rm -rf *.img *.elf *.disasm
+	rm -rf *.img *.elf *.disasm *.map
 
 install:
 	make kernel.img

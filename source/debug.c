@@ -15,6 +15,7 @@
 #include "csud.h"
 
 
+
 /*
 *	2014年12月31日16:12:49
 *	V1.0 	By Breaker
@@ -63,6 +64,17 @@ void  deb_screen(void)
 	
 	/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why*/
 	drawStringF("123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
+
+
+	RGB_24Bit color_b;
+	color_b.R = 0x28;
+	color_b.G = 0x82;
+	color_b.B = 0xE6;
+	while(1)
+	{
+		DrawBlock(color_b, 100, 100 , 300, 16);
+		drawStringF("%d",color,  100, 100 ,TimerCounter);
+	}
  }
  
  

@@ -5,6 +5,27 @@
 *	文件名：timer.h
 *    	系统时钟相关声明
 */ 
+#ifndef _TIMER_H
+#define _TIMER_H
+
+/****
+ 1. bcm2835 system  timer 
+ */
+#define TIMER_BASE 	0x20003000
+#define TIMER_CS	0x20003000
+#define TIMER_CLO	0x20003004
+#define TIMER_CHI	0x20003008
+#define TIMER_C0	0x2000300c
+#define TIMER_C1	0x20003010
+#define TIMER_C2	0x20003014
+#define TIMER_C3	0x20003018
+
+int sleep(int ms);
+
+
+/****
+ 2.ARM timer 
+ */
 #define ARMTIMER_BASE	0x2000B400
 
 /** @brief 0 : 16-bit counters - 1 : 23-bit counter */
@@ -22,9 +43,6 @@
 #define ARMTIMER_CTRL_ENABLE		( 1 << 7 )
 #define ARMTIMER_CTRL_DISABLE		( 0 << 7 )
 
-/*内核频率*/
-#define Kernrl_100Hz 		10000
-#define Kernrl_1000Hz 	1000
 
 typedef struct {
 	/* timer load 寄存器设置计数器的值。当timer load 寄存器重写或者 
@@ -95,5 +113,51 @@ typedef struct {
 	volatile unsigned int FreeRunningCounter;
 } arm_timer_t;
 
-void init_timer(void);
+/*设置arm timer中断频率*/
+void init_arm_timer(unsigned int Load);
+
+/****
+ 3. os timer
+ */
+
+/*内核频率*/
+#define Kernrl_100Hz 		10000
+#define Kernrl_1000Hz 	1000
+
+/*每个os timer的结构*/
+typedef struct{
+	
+	/*os timer名称字符串的地址,
+	 *若这个地址为0表示id号未被占用
+	 * 所以每个os timer都必须有自己的名称  */
+	unsigned char *description;
+	
+	/*os timer 周期*/
+	unsigned int load;
+	
+	/*下次提醒的时间，以os_timer_ctrl 中的value作比较*/
+	unsigned int value;
+	
+	/*下个时钟的id*/
+	unsigned char next_os_timer_id;
+	
+}os_timer_st;
+
+
+/*os timer ctrl 用来管理os timer 。记录了os timer 的所有信息*/
+typedef struct{
+	
+	/*os timer ctrl 的value，每秒钟100递增*/
+	unsigned int value;
+	
+	/*最多支持256个 os timer*/
+	os_timer_st os_timer_t[256];
+	
+}os_timer_ctrl_st;
+
+
+
+unsigned char set_os_timer(unsigned int ms, unsigned int load, unsigned char *description);
+
+#endif
 

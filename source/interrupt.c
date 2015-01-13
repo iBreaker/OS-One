@@ -9,6 +9,7 @@
 #include "interrupt.h"
 #include "timer.h"
 #include "gpio.h"
+#include "Global.h"
 
 
 static irq_controller_t *irq_controller = (irq_controller_t *) INTERRUPT_CONTROLLER_BASE;
@@ -42,8 +43,9 @@ void  __attribute__((interrupt("ABORT")))data_abort_vector(void)
 	
 }
 
-void __attribute__((interrupt("IRQ"))) interrupt_vector()
+void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 {
+	
 	arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		/*ArmTimer首地址*/
 	static int lit = 0;
 		
@@ -53,6 +55,7 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector()
 	ArmTimer->IRQClear = 1;
 	
 	/* Flip the LED */
+	
 	if( lit )
 	{
 		GPIO_SET_GPSET(16);
@@ -63,6 +66,9 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector()
 		GPIO_SET_GPCLR(16);
 		lit = 1;
 	}
+	
+	TimerCounter ++;
+	
 }
 
 void  __attribute__((interrupt("FIQ")))fast_interrupt_vector(void)

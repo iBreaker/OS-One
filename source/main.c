@@ -9,6 +9,7 @@
 
 #include "gpio.h"
 #include "time.h"
+#include "timer.h"
 #include "Graphic.h"
 #include "debug.h"
 
@@ -24,12 +25,12 @@ void os_main(void)
 	GPIO_SET_GPSET(16);
 	init_screen(1440, 900, 24);
 	
-	init_timer();
+	init_arm_timer(Kernrl_100Hz);
 	_enable_interrupts();
 	
 	/* debug */
 	
-	//deb_screen();
+	deb_screen();
 	//deb_GPIO();
 	//deb_keyboard();
 	
