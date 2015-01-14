@@ -14,9 +14,9 @@
 unsigned int GpuInfoAddr;  		/*GPU信息首地址*/
 volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
 
-/*timer.c*/
-arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		/*ArmTimer首地址*/
+s32 os_top = 0;					//全局位置指针（屏幕显示）
+s32 os_left = 0;
 
-
 /*timer.c*/
-os_timer_ctrl_st os_timer_ctrl;
+arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		//ArmTimer首地址
+os_timer_ctrl_st os_timer_ctrl;		//timer ctrl

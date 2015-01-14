@@ -67,13 +67,18 @@ void  deb_screen(void)
 
 }
  
- 
+ void  deb_os_printf (void)
+ {
+	 os_printf ("123:%%d%d,%%x%x,%%b%b",123,123,123);
+	 os_printf ("%n");
+	os_printf ("123:%%d%d,%%x%x,%%b%b",123,123,123); 
+ }
 /*****************************************************
 *	2015年01月03日14:38:20
 *	V1.0 	By Breaker
 *
 *	 void  deb_keyboard(void)
-*      画出图案
+*      usb键盘
 *	return   void
 **/
  void  deb_keyboard(void)

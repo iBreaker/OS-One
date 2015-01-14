@@ -361,5 +361,86 @@ void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...)
 }
 
 
-
+/*****************************************************
+*	2015年01月14日22:17:15
+*	V1.0 	By Breaker
+*
+*	void os_printf(char *fmt, ...)
+*   	格式化显示字符串
+*	return void 	
+*/
+void os_printf(char *fmt, ...)
+{
+	/*  */
+	double vargflt = 0;
+	int  vargint = 0;
+	char* vargpch = 0;
+	char vargch = 0;
+	char* pfmt = 0;
+	va_list vp;
+	
+	RGB_24Bit color;
+	color.R=0xFF;
+	color.G=0xFF;
+	color.B=0xFF;
+	
+	/*fmt 后第一个参数*/
+	va_start(vp, fmt);
+	pfmt = fmt;
+	
+	 while(*pfmt)
+	{
+		if(*pfmt == '%')
+		{
+			switch(*(++pfmt))
+			{
+				case 'c':
+					vargch = va_arg(vp, int); 
+					drawCharacter(vargint, color, &os_top, &os_left);
+					break;
+				case 'd':
+				case 'i':
+					vargint = va_arg(vp, int);
+					drawDec(vargint,color, &os_top, &os_left);
+					break;
+				case 'f':
+					vargflt = va_arg(vp, double);
+					//drawFlt(vargflt,color, &os_top, &left);
+					break;
+				case 's':
+					vargpch = va_arg(vp, char*);
+					drawString(vargpch,color, &os_top, &os_left);
+					break;
+				case 'b':
+				case 'B':
+					vargint = va_arg(vp, int);
+					drawBin(vargint,color, 0,&os_top, &os_left);
+					break;
+				case 'x':
+					vargint = va_arg(vp, int);
+					drawHex(vargint,color, 0,&os_top, &os_left);
+					break;
+				case 'X':
+					vargint = va_arg(vp, int);
+					drawHex(vargint,color, 1,&os_top, &os_left);
+					break;
+				case 'n':
+					os_top +=16;
+					os_left = 0;
+					break;
+				case '%':
+					drawCharacter('%', color, &os_top, &os_left );
+					break;
+				default:
+					break;
+			}
+			pfmt++;
+		}
+		else
+		{
+			drawCharacter(*pfmt++, color, &os_top, &os_left );
+		}	
+	}
+	va_end(vp);
+}
 

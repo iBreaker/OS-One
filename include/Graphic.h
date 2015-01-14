@@ -26,5 +26,6 @@ void drawDec(int dec, RGB_24Bit color, int *top, int *left);
 void drawFlt(float  flt, RGB_24Bit color, int *x, int *y);
 void drawHex(int hex, RGB_24Bit color, char IS_Big,int *top, int *left);
 void drawBin(int bin, RGB_24Bit color, char IS_Big,int *top, int *left);
+void os_printf(char *fmt, ...);
 
 

@@ -227,18 +227,21 @@ void os_timer_remove_pointer(void)
  {
 	os_timer_ctrl.value ++;
 	
-	u32 value = os_timer_ctrl.value ;
 	unsigned char os_timer_id ;
 	u8 next_os_timer_id;
 	
 	os_timer_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id;
 	
 	
-	if ( value <  os_timer_ctrl.os_timer_t[os_timer_id].value )
+	if ( os_timer_ctrl.value  <  os_timer_ctrl.os_timer_t[os_timer_id].value )
 	{
 		return ;
 	}
 	
+	if(os_timer_id == 0)
+	{
+		return;
+	}
 	u8 times = 1;
 	u8 temp_id = os_timer_id; //4
 	u32 temp_value = os_timer_ctrl.os_timer_t[temp_id].value;
@@ -252,12 +255,11 @@ void os_timer_remove_pointer(void)
 		temp_value = os_timer_ctrl.os_timer_t[temp_id].value;
 		temp_next_id = os_timer_ctrl.os_timer_t[temp_id].next_os_timer_id;
 		temp_next_value = os_timer_ctrl.os_timer_t[temp_next_id].value;
-		blink_GPIO16();
 	}
 	
 	
 	
-	for(; times > 0; times--)
+	for(times ; times > 0; times--)
 	{
 		os_timer_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id;
 		next_os_timer_id = os_timer_ctrl.os_timer_t[os_timer_id].next_os_timer_id;
@@ -270,7 +272,7 @@ void os_timer_remove_pointer(void)
 		}
 		else
 		{
-			os_timer_ctrl.os_timer_t[os_timer_id].value = os_timer_ctrl.value + os_timer_ctrl.os_timer_t[os_timer_id].load ;
+			os_timer_ctrl.os_timer_t[os_timer_id].value += os_timer_ctrl.os_timer_t[os_timer_id].load ;
 			os_timer_remove_pointer();
 			os_timer_insert_pointer(os_timer_ctrl.os_timer_t[os_timer_id].value , os_timer_id);
 		}

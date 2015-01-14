@@ -57,12 +57,12 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 	os_timer_ctrl_reflash();
 	
 	/***********************************
-	 * 调试代码*/
+	 * 调试代码*
 	if( os_timer_ctrl.value  % 1000 == 500 )
 	{
 		deb_timer_refalsh();
 	}
-	/************************************/
+	************************************/
 }
 
 void  __attribute__((interrupt("FIQ")))fast_interrupt_vector(void)
