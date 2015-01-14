@@ -8,6 +8,7 @@
 #ifndef _TIMER_H
 #define _TIMER_H
 
+#include "stdtype.h"
 /****
  1. bcm2835 system  timer 
  */
@@ -126,12 +127,7 @@ void init_arm_timer(unsigned int Load);
 
 /*每个os timer的结构*/
 typedef struct{
-	
-	/*os timer名称字符串的地址,
-	 *若这个地址为0表示id号未被占用
-	 * 所以每个os timer都必须有自己的名称  */
-	unsigned char *description;
-	
+		
 	/*os timer 周期*/
 	unsigned int load;
 	
@@ -157,7 +153,8 @@ typedef struct{
 
 
 
-unsigned char set_os_timer(unsigned int ms, unsigned int load, unsigned char *description);
+ unsigned char set_os_timer(unsigned int ms, unsigned int load);
+ void free_os_timer( void );
 
 #endif
 

@@ -9,9 +9,13 @@
 #include "timer.h"
 #include "interrupt.h"
 #include "Global.h"
+#include "Graphic.h"
 
 unsigned char get_os_timer_id( void);
-void os_timer_sort(unsigned int value, unsigned char os_timer_id);
+void os_timer_insert_pointer(unsigned int value, unsigned char os_timer_id);
+void os_timer_remove_pointer(void);
+void time_out_msg (unsigned char os_timer_id);
+
 
 /*
 *	2014年12月25日21:01:06
@@ -42,7 +46,7 @@ int sleep(int ms)
 	
 	while((*TIMER_CLO_P - current_time) < us);
 	{
-
+		
 	}
 
 	return 0;
@@ -84,17 +88,15 @@ void init_arm_timer(unsigned int Load)
 	 int i = 0;
 	 for(i =0; i < 256; i++)
 	 {
-		 os_timer_ctrl.os_timer_t[i].description = (unsigned char *)0;
 		 os_timer_ctrl.os_timer_t[i].load = 0;
 		 os_timer_ctrl.os_timer_t[i].value = 0;
 		 os_timer_ctrl.os_timer_t[i].next_os_timer_id = 0;
 	}
-	/*随便一个非零值，0号os timer 被系统占用
+	/*0号os timer 被系统占用
 	 是一个特殊的timer，它是最后一个超时的os timer
 	 它的next_os_timer_id指向即将超时的os timer*/
-	os_timer_ctrl.os_timer_t[0].description = (unsigned char *)1;
-	os_timer_ctrl.os_timer_t[i].load = 0xffffffff;
-	os_timer_ctrl.os_timer_t[i].value = 0xffffffff;
+	os_timer_ctrl.os_timer_t[0].load = 0xffffffff;
+	os_timer_ctrl.os_timer_t[0].value = 0xffffffff;
  }
  
 
@@ -103,21 +105,15 @@ void init_arm_timer(unsigned int Load)
 *	2015年01月13日15:56:02
 *	V1.0 	By Breaker
 *
-*	void set_os_timer (void)
+*	 unsigned char set_os_timer(unsigned int ms, unsigned int load)
 *   	初始化 os timer ctrl
-*	return char
+*	return  os timer id
 */
- unsigned char set_os_timer(unsigned int ms, unsigned int load, unsigned char *description)
- {
-	 /*验证参数有效性*/
-	 if( description == 0 )
-	 {
-		 return 0;
-	 }
-	 
+ unsigned char set_os_timer(unsigned int ms, unsigned int load)
+ {	 
 	 unsigned long sum = 0;
 	 sum = ms + os_timer_ctrl.value ;
-	 if(sum> 0xFFFFFFFF)
+	 if(sum > 0xFFFFFFFF)
 	 {
 		 return 0;
 	 }
@@ -132,10 +128,9 @@ void init_arm_timer(unsigned int Load)
 	}
 	
 	//申请到id ,设置os timer
-	os_timer_ctrl.os_timer_t[os_timer_id].description = description;
-	os_timer_ctrl.os_timer_t[os_timer_id].value = ms + os_timer_ctrl.value;
+	os_timer_ctrl.os_timer_t[os_timer_id].value = sum;
 	os_timer_ctrl.os_timer_t[os_timer_id].load = load;
-	os_timer_sort(os_timer_ctrl.os_timer_t[os_timer_id].value, os_timer_id);
+	os_timer_insert_pointer(os_timer_ctrl.os_timer_t[os_timer_id].value, os_timer_id);
 	return os_timer_id;
  }
  
@@ -152,7 +147,7 @@ void init_arm_timer(unsigned int Load)
 	 int i = 0;
 	 for(i =0; i < 256; i++)
 	 {
-		 if( os_timer_ctrl.os_timer_t[i].description == 0 )
+		 if( os_timer_ctrl.os_timer_t[i].value == 0 )
 		 {
 			 return i;
 		 }
@@ -160,15 +155,15 @@ void init_arm_timer(unsigned int Load)
 	 return 0;
  }
  
-/*****************************************************************
+ /*****************************************************************
 *	2015年01月13日16:30:45
 *	V1.0 	By Breaker
 *
-*	void os_timer_sort(void)
-*   	排序，更新每个os timer 的 next_os_timer_id
-*	return os timer id ,返回0申请失败
+*	void os_timer_insert_pointer(unsigned int value, unsigned char os_timer_id)
+*   	增加新os timer 的时候调指针
+*	return void
 */
-void os_timer_sort(unsigned int value, unsigned char os_timer_id)
+void os_timer_insert_pointer(unsigned int value, unsigned char os_timer_id)
 {
 	unsigned char  next_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id; //即将超时的os timer
 	unsigned char  last_id = 0;		//自己指向自己
@@ -178,18 +173,123 @@ void os_timer_sort(unsigned int value, unsigned char os_timer_id)
 		next_id = os_timer_ctrl.os_timer_t[next_id].next_os_timer_id;
 	}
 	
-
-	//一般情况
+	//调整指针
 	os_timer_ctrl.os_timer_t[last_id].next_os_timer_id = os_timer_id;
 	os_timer_ctrl.os_timer_t[os_timer_id].next_os_timer_id = next_id;
+}
+
+/*****************************************************************
+*	2015年01月14日12:54:45
+*	V1.0 	By Breaker
+*
+*	void free_os_timer_id( void )
+*   	释放一个os timer id 
+*	return 0 失败
+*/
+void free_os_timer( void )
+{
+	unsigned char os_timer_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id;
+	
+	if(os_timer_id != 0)
+	{
+		os_timer_ctrl.os_timer_t[os_timer_id].value =0;
+		os_timer_ctrl.os_timer_t[os_timer_id].load = 0;
+		os_timer_remove_pointer();
+	}
+}
+
+/*****************************************************************
+*	2015年01月14日12:52:25
+*	V1.0 	By Breaker
+*
+*	void os_timer_remove_pointer(void )
+*   	删除os timer的时候调整指针
+*	return void
+*/
+void os_timer_remove_pointer(void)
+{
+	unsigned char os_timer_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id;
+	os_timer_ctrl.os_timer_t[0].next_os_timer_id = os_timer_ctrl.os_timer_t[os_timer_id].next_os_timer_id ;
+	os_timer_ctrl.os_timer_t[os_timer_id].next_os_timer_id  = 0;
 	
 }
- 
+
+
+/*****************************************************************
+*	2015年01月14日13:22:30
+*	V1.0 	By Breaker
+*
+*	void os_timer_ctrl_reflash(void)
+*   	每过既定时间检查是否有超时的os timer
+*	return void
+*/
  void os_timer_ctrl_reflash(void)
  {
-	  
+	os_timer_ctrl.value ++;
+	
+	u32 value = os_timer_ctrl.value ;
+	unsigned char os_timer_id ;
+	u8 next_os_timer_id;
+	
+	os_timer_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id;
+	
+	
+	if ( value <  os_timer_ctrl.os_timer_t[os_timer_id].value )
+	{
+		return ;
+	}
+	
+	u8 times = 1;
+	u8 temp_id = os_timer_id; //4
+	u32 temp_value = os_timer_ctrl.os_timer_t[temp_id].value;
+	u8 temp_next_id  = os_timer_ctrl.os_timer_t[temp_id].next_os_timer_id;  //2
+	u32 temp_next_value = os_timer_ctrl.os_timer_t[temp_next_id].value;
+	
+	while (( temp_value == temp_next_value)  && (temp_id != temp_next_id))
+	{
+		times ++;
+		temp_id = temp_next_id; 
+		temp_value = os_timer_ctrl.os_timer_t[temp_id].value;
+		temp_next_id = os_timer_ctrl.os_timer_t[temp_id].next_os_timer_id;
+		temp_next_value = os_timer_ctrl.os_timer_t[temp_next_id].value;
+		blink_GPIO16();
+	}
+	
+	
+	
+	for(; times > 0; times--)
+	{
+		os_timer_id = os_timer_ctrl.os_timer_t[0].next_os_timer_id;
+		next_os_timer_id = os_timer_ctrl.os_timer_t[os_timer_id].next_os_timer_id;
+		
+		time_out_msg (os_timer_id);
+		
+		if (os_timer_ctrl.os_timer_t[os_timer_id].load == 0)
+		{
+			free_os_timer();
+		}
+		else
+		{
+			os_timer_ctrl.os_timer_t[os_timer_id].value = os_timer_ctrl.value + os_timer_ctrl.os_timer_t[os_timer_id].load ;
+			os_timer_remove_pointer();
+			os_timer_insert_pointer(os_timer_ctrl.os_timer_t[os_timer_id].value , os_timer_id);
+		}
+		//os_timer_id = next_os_timer_id;
+	}
  }
  
+ /*****************************************************************
+*	2015年01月14日13:35:10
+*	V1.0 	By Breaker
+*
+*	 void time_out_msg (unsigned char os_timer_id)
+*   	将超时计时器的id发送到fifo
+*	return void
+*/
+void time_out_msg (unsigned char os_timer_id)
+{
+	blink_GPIO16();
+}
   
 
   

@@ -65,17 +65,7 @@ void  deb_screen(void)
 	/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why*/
 	drawStringF("123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
 
-
-	RGB_24Bit color_b;
-	color_b.R = 0x28;
-	color_b.G = 0x82;
-	color_b.B = 0xE6;
-	while(1)
-	{
-		DrawBlock(color_b, 100, 100 , 300, 16);
-		drawStringF("%d",color,  100, 100 ,TimerCounter);
-	}
- }
+}
  
  
 /*****************************************************
@@ -85,7 +75,7 @@ void  deb_screen(void)
 *	 void  deb_keyboard(void)
 *      画出图案
 *	return   void
-*/
+**/
  void  deb_keyboard(void)
  {
 	RGB_24Bit color;
@@ -112,4 +102,57 @@ void  deb_screen(void)
 		 
 	 }
  }
+ 
+/*****************************************************
+*	2015年01月14日14:24:53
+*	V1.0 	By Breaker
+*
+*	 void  deb_timer(void)
+*      画出图案
+*	return   void
+**/
+void  deb_timer(void)
+{
+	init_os_timer_ctrl();
+	set_os_timer(2000,1100);
+	set_os_timer(1100,1200);
+	set_os_timer(2000,0);
+	set_os_timer(1100,0);
+}
+
+void deb_timer_refalsh(void)
+{
+	RGB_24Bit color_b;
+	color_b.R = 0x28;
+	color_b.G = 0x82;
+	color_b.B = 0xE6;
+	
+	DrawBlock(color_b, 0, 0 , 1440, 900);
+	
+	RGB_24Bit color;
+	color.R = 0xFF;
+	color.G = 0x00;
+	color.B = 0x00;
+	
+	int i;
+	int left,top;
+	left = 0; top = 0;
+	
+	drawStringF("value:%d", color, 0, 700, os_timer_ctrl.value);
+	
+	for(i=0; i<256; i++)
+	{
+		drawStringF("> %d", color, top, left, i);
+		left += 48;
+		drawStringF("%d", color,top, left, os_timer_ctrl.os_timer_t[i].value);
+		left += 64;
+		drawStringF("%d", color,top, left , os_timer_ctrl.os_timer_t[i].load);
+		left += 64;
+		drawStringF("%d", color,top, left, os_timer_ctrl.os_timer_t[i].next_os_timer_id);
+		
+		left = 0;
+		top += 16;
+	}
+}
+
  

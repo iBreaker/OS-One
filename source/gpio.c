@@ -217,4 +217,18 @@ unsigned long GET_GPCLR_ADDR(int pin)
 	return 0;
 }
 
-
+void blink_GPIO16(void)
+{
+	static int lit = 0;
+	
+	if( lit )
+	{
+		GPIO_SET_GPSET(16);
+		lit = 0;
+	}
+	else
+	{
+		GPIO_SET_GPCLR(16);
+		lit = 1;
+	}
+}

@@ -41,3 +41,5 @@
 int GPIO_SET_GPFSEL(int pin, int func);
 int GPIO_SET_GPSET(int pin);
 int GPIO_SET_GPCLR(int pin);
+
+void blink_GPIO16(void);

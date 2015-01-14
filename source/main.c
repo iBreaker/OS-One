@@ -8,7 +8,6 @@
 */
 
 #include "gpio.h"
-#include "time.h"
 #include "timer.h"
 #include "Graphic.h"
 #include "debug.h"
@@ -30,12 +29,10 @@ void os_main(void)
 	
 	/* debug */
 	
-	deb_screen();
+	//deb_screen();
 	//deb_GPIO();
 	//deb_keyboard();
-	
-	
-	//malloc( 1024 * sizeof( unsigned int ) );
+	deb_timer();
 
 	while(1)
 	;

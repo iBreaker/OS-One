@@ -47,28 +47,22 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 {
 	
 	arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		/*ArmTimer首地址*/
-	static int lit = 0;
+	//static int lit = 0;
 		
 	/* Clear the ARM Timer interrupt - it's the only interrupt we have
 	enabled, so we want don't have to work out which interrupt source
 	caused us to interrupt */
 	ArmTimer->IRQClear = 1;
 	
-	/* Flip the LED */
+	os_timer_ctrl_reflash();
 	
-	if( lit )
+	/***********************************
+	 * 调试代码*/
+	if( os_timer_ctrl.value  % 1000 == 500 )
 	{
-		GPIO_SET_GPSET(16);
-		lit = 0;
+		deb_timer_refalsh();
 	}
-	else
-	{
-		GPIO_SET_GPCLR(16);
-		lit = 1;
-	}
-	
-	TimerCounter ++;
-	
+	/************************************/
 }
 
 void  __attribute__((interrupt("FIQ")))fast_interrupt_vector(void)
