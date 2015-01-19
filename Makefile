@@ -49,7 +49,7 @@ default:
 	make kernel.img
 	make clean
 	
-${DIR_OBJ}/%.o:${DIR_SRC}/%.c
+${DIR_OBJ}/%.o:${DIR_SRC}/%.c 
 	${GNU}gcc ${CFLAGS} -c $< -o $@
 	
 ${TARGET}.img: ${TARGET}.elf
@@ -59,7 +59,7 @@ ${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x
 	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
 	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf  
 	
-dbg:${TARGET}.elf
+disasm:${TARGET}.elf
 	${GNU}objdump -S  $< > ${TARGET}.disasm
 
 clean:
