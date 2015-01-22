@@ -30,11 +30,11 @@ void os_main(void)
 	/* debug */
 	
 	//deb_screen();
-	deb_os_printf();
+	//deb_os_printf();
 	//deb_GPIO();
 	//deb_keyboard();
 	//deb_timer();
-
+	 deb_linedlist();
 	while(1)
 	;
 }

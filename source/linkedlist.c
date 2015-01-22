@@ -7,11 +7,14 @@
 **/ 
 
 #include "linkedlist.h"
+#include "Graphic.h"
 
 u8 ll_get_free_id(LinkedList *ll);
 void ll_reflash_head_and_tail(LinkedList *ll);
 void ll_link(LinkedList *ll, u8 new_prior, u8 id);
 void ll_rm_link(LinkedList *ll, u8 id);
+u8 ll_get_max(LinkedList *ll);
+u8 ll_get_min(LinkedList *ll);
 
 
 /*****************************************************************
@@ -67,6 +70,9 @@ u8 ll_add_to_head(LinkedList *ll, u32 value)
 	/*4.改值*/
 	ll->node[id].value = value;
 	
+	ll->ctrl.max = ll_get_max(ll);
+	ll->ctrl.min = ll_get_min(ll);
+	ll->ctrl.count ++;
 	return id;
 }
 
@@ -100,7 +106,10 @@ u8 ll_add_to_tail(LinkedList *ll, u32 value)
 	
 	/*4.改值*/
 	ll->node[id].value = value;
-	
+
+	ll->ctrl.max = ll_get_max(ll);
+	ll->ctrl.min = ll_get_min(ll);
+	ll->ctrl.count ++;
 	return id;
 }
 
@@ -122,8 +131,20 @@ u8 ll_add_by_order(LinkedList *ll, u32 value, u32 sort_value)
 		tmp_id = ll_get_next_id(ll, tmp_id);
 	}
 	
-	u8 new_prior = ll_get_next_id(ll, tmp_id);
-	u8 new_next =  tmp_id;
+	u8 new_prior;
+	u8 new_next;
+		
+	if(sort_value < ll_get_value(ll, ll_get_head_id(ll)) )
+	{
+		new_prior = ll_get_tail_id(ll);
+		new_next = ll_get_head_id(ll);
+	}
+	else
+	{
+		new_prior = ll_get_prior_id (ll, tmp_id);
+		new_next = tmp_id;
+	}
+
 	
 	/*共改4个指针(不算首尾指针)*/
 	ll_link( ll, new_prior, id);
@@ -132,13 +153,16 @@ u8 ll_add_by_order(LinkedList *ll, u32 value, u32 sort_value)
 	
 	/*4.改值*/
 	ll->node[id].value = value;
-	
+
+	ll->ctrl.max = ll_get_max(ll);
+	ll->ctrl.min = ll_get_min(ll);
+	ll->ctrl.count ++;
 	return id;
 }
 
-u8 ll_add_after_id(LinkedList *ll,u32 value, u8 new_prior)
+u8 ll_add_after_id(LinkedList *ll,u32 value, u8 id_after)
 {
-	if( (0 == ll->node[new_prior].next ) && (0 == ll->node[new_prior].prior ) && (0 == ll->node[new_prior].value ))
+	if( (0 == ll->node[id_after].next ) && (0 == ll->node[id_after].prior ) && (0 == ll->node[id_after].value ))
 	{
 		return 0;
 	}
@@ -152,16 +176,19 @@ u8 ll_add_after_id(LinkedList *ll,u32 value, u8 new_prior)
 		return 0;
 	}
 	
-	u8 new_next =  ll_get_next_id(ll, new_prior);
+	u8 new_next =  ll_get_next_id(ll, id_after);
 	
 	/*共改4个指针(不算首尾指针)*/
-	ll_link( ll, new_prior, id);
+	ll_link( ll, id_after, id);
 	
 	ll_reflash_head_and_tail(ll);
 	
 	/*4.改值*/
 	ll->node[id].value = value;
-	
+
+	ll->ctrl.max = ll_get_max(ll);
+	ll->ctrl.min = ll_get_min(ll);
+	ll->ctrl.count ++;
 	return id;
 }
 
@@ -178,20 +205,23 @@ u8 ll_remove_by_id(LinkedList *ll, u8 id)
 	ll->node[id].value = 0;
 	ll->node[id].prior = 0;
 	ll->node[id].next = 0;
-	
+
+	ll->ctrl.max = ll_get_max(ll);
+	ll->ctrl.min = ll_get_min(ll);
+	ll->ctrl.count --;
 	return 1;
 }
 
 //2015年01月19日15:36:45
 u8 ll_remove_head(LinkedList *ll)
 {
-	ll_remove_by_id(ll, ll_get_head_id(ll));
+	return ll_remove_by_id(ll, ll_get_head_id(ll));
 }
 
 //2015年01月19日15:36:59
 u8 ll_remove_tail(LinkedList *ll)
 {
-	ll_remove_by_id(ll, ll_get_prior_id(ll, ll_get_tail_id(ll)));
+	return ll_remove_by_id(ll, ll_get_prior_id(ll, ll_get_tail_id(ll)));
 }
 
 /*****************************************************************
@@ -370,4 +400,65 @@ void ll_rm_link(LinkedList *ll, u8 id)
 	/*共改2个指针(不算首尾指针)*/	
  	ll->node[prior].next = next;
  	ll->node[next].prior = prior;
+}
+
+/*****************************************************************
+*	2015年01月22日11:13:23
+*	V1.0 	By Breaker
+*
+*	u8 ll_get_max(LinkedList *ll)
+*   	获取最大值
+*	return u8 返回最大值id
+*/
+u8 ll_get_max(LinkedList *ll)
+{
+	int id = 0;
+	u32 max_value = 0;
+	u8 max_id = ll_get_head_id(ll);
+	
+	u8 tmp = 0;
+	while(( 0 != ll->node[id].next ||  0 != ll->node[id].prior || 0 != ll->node[id].value ) && tmp < 255 )
+	{
+		if ( ( max_value <= ll_get_value(ll, id) )&&  ( id != 0 ))
+		{
+			max_value = ll_get_value(ll, id) ;
+			max_id = id;
+		}
+		
+		id = ll_get_next_id(ll, id); 
+		tmp ++;
+	}
+	
+	os_printf("|%d-%d",max_id, max_value);
+	return max_id;
+}
+
+/*****************************************************************
+*	2015年01月22日11:23:50
+*	V1.0 	By Breaker
+*
+*	u8 ll_get_min(LinkedList *ll)
+*   	获取最小值
+*	return u8 返回最小值id
+*/
+u8 ll_get_min(LinkedList *ll)
+{
+	int id = 0;
+	u32 min_value = 0xFFFFFFFF;
+	u8 min_id = ll_get_head_id(ll);
+	
+	u8 tmp = 0;
+	while(( 0 != ll->node[id].next ||  0 != ll->node[id].prior || 0 != ll->node[id].value ) && tmp < 255 )
+	{
+		if (( min_value >= ll_get_value(ll, id) ) &&  ( id != 0 ))
+		{
+			min_value = ll_get_value(ll, id) ;
+			min_id = id;
+		}
+		
+		id = ll_get_next_id(ll, id);
+		tmp ++;
+	}
+	
+	return min_id;
 }

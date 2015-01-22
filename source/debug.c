@@ -13,8 +13,10 @@
 #include "Graphic.h"
 #include "Global.h"
 #include "csud.h"
+#include "linkedlist.h"
 
 
+ void deb_linedlist_reflash(LinkedList *Task);
 
 /*
 *	2014年12月31日16:12:49
@@ -160,4 +162,49 @@ void deb_timer_refalsh(void)
 	}
 }
 
+ /*****************************************************
+*	2015年01月22日09:18:15
+*	V1.0 	By Breaker
+*
+*	 void  deb_linedlist(void)
+*      调试链表
+*	return   void
+*/
+ void  deb_linedlist(void)
+ {
+	 LinkedList task;
+	 LinkedList *Task = & task;
+	 ll_init(Task);
+	 
+	 ll_add_to_head(Task,1);
+	 ll_add_to_head(Task, 2);
+	 ll_add_to_head(Task, 3);
+	 ll_add_to_head(Task, 5);
+	 ll_add_to_tail(Task, 6);
+	 ll_add_to_tail(Task, 7);
+	 
+	 ll_add_by_order(Task, 8, 4);
+	 ll_add_after_id(Task, 9, 3);
+	 
+	 ll_add_to_head(Task, 0);
+	 ll_add_to_head(Task, 0);
+	 ll_add_to_head(Task, 0);
+	 ll_add_by_order(Task, 8, 4);
+	 
+	 ll_remove_by_id(Task, 4);
+	 ll_remove_tail(Task);
+	 ll_remove_head(Task);
+	
+	 deb_linedlist_reflash(Task);
+ }
  
+ void deb_linedlist_reflash(LinkedList *Task)
+ {
+	 int i = 0;
+	  os_printf("%n");
+	 while(0 != Task->node[i].next ||  0 != Task->node[i].prior || 0 != Task->node[i].value)
+	 {
+		os_printf("%d - %d   %d   %d   %d   %d   %d   %d   %d   %n", i,Task->node[i].prior, Task->node[i].next, Task->node[i].value, Task->ctrl.count, Task->ctrl.head, Task->ctrl.tail, Task->ctrl.min, Task->ctrl.max);
+		i = ll_get_next_id(Task, i);
+	 }
+ }
