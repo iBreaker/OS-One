@@ -11,6 +11,7 @@
 
 #include "timer.h"
 #include "stdtype.h"
+#include "task.h"
 
 /*Graphic.c*/
 extern unsigned int GpuInfoAddr;  			/*GPU信息首地址*/
@@ -23,5 +24,8 @@ extern s32 os_left ;
 /*timer.c*/
 extern int TimerCounter;					//ArmTimer首地址
 extern os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
+
+/*debug.c*/
+extern TS task1,task2;
 
 #endif

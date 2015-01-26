@@ -34,7 +34,8 @@ void os_main(void)
 	//deb_GPIO();
 	//deb_keyboard();
 	//deb_timer();
-	 deb_linedlist();
+	//deb_linedlist();
+	deb_task();
 	while(1)
 	;
 }

@@ -2,7 +2,7 @@
 *	2015年01月14日13:42:54
 *	V1.0 	By Breaker
 *
-*	文件名：stdtype.c
+*	文件名：stdtype.h
 *    	自定义类型
 **/
 #ifndef _STDTYPES_H
