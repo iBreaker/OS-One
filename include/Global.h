@@ -24,6 +24,7 @@ extern s32 os_left ;
 /*timer.c*/
 extern int TimerCounter;					//ArmTimer首地址
 extern os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
+extern arm_timer_t *ArmTimer;
 
 /*debug.c*/
 extern TS task1,task2;

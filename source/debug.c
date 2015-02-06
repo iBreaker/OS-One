@@ -228,61 +228,77 @@ void  deb_task(void)
 	 u32 sp = 256 * (1024 * 1024);
 	 task_init(&task1, sp, &task1_func);
 	 
-	 sp -=  (1024 * 1024);
+		
+	 sp -=  10 * (1024 * 1024);
 	 task_init(&task2, sp, &task2_func);
-	  //asm("nop");
-	 task1_func();
+	 
+	  //asm volatile("nop");
+	 task2_func();
 }
 
 void task1_func(void)
 {
 	while(1)
 	{
-		asm("LDR r0, %[cpsr]" :  : [cpsr]"m"(task1.cpsr)); 
-		asm("MSR cpsr, r0"); 
-		asm("LDR r0, %[spsr]" :  : [spsr]"m"(task1.spsr)); 
-		asm("MSR spsr, r0"); 
-		asm("LDR r0, %[r0]" :  : [r0]"m"(task1.r0));
-		asm("LDR r1, %[r1]" :  : [r1]"m"(task1.r1)); 
-		asm("LDR r2, %[r2]" :  : [r2]"m"(task1.r2)); 
-		asm("LDR r3, %[r3]" :  : [r3]"m"(task1.r3)); 
-		asm("LDR r4, %[r4]" :  : [r4]"m"(task1.r4)); 
-		asm("LDR r5, %[r5]" :  : [r5]"m"(task1.r5)); 
-		asm("LDR r6, %[r6]" :  : [r6]"m"(task1.r6)); 
-		asm("LDR r7, %[r7]" :  : [r7]"m"(task1.r7)); 
-		asm("LDR r8, %[r8]" :  : [r8]"m"(task1.r8)); 
-		asm("LDR r9, %[r9]" :  : [r9]"m"(task1.r9)); 
-		asm("LDR r10, %[r10]" :  : [r10]"m"(task1.r10)); 
-		asm("LDR r11, %[r11]" :  : [r11]"m"(task1.r11)); 
-		asm("LDR r12, %[r12]" :  : [r12]"m"(task1.r12)); 
-		asm("LDR sp, %[sp]" :  : [sp]"m"(task1.sp)); 
-		asm("LDR lr, %[lr]" :  : [lr]"m"(task1.lr)); 
+		asm volatile("LDR r0, %[cpsr]" :  : [cpsr]"m"(task1.cpsr)); 
+		asm volatile("AND r0,r0, #0x80");
+		asm volatile("MSR cpsr, r0"); 
 		
-		GPIO_SET_GPCLR(16);
+		asm volatile("LDR r0, %[spsr]" :  : [spsr]"m"(task1.spsr)); 
+		asm volatile("MSR spsr, r0"); 
+		
+		asm volatile("LDR r1, %[r1]" :  : [r1]"m"(task1.r1)); 
+		asm volatile("LDR r2, %[r2]" :  : [r2]"m"(task1.r2)); 
+		asm volatile("LDR r3, %[r3]" :  : [r3]"m"(task1.r3)); 
+		asm volatile("LDR r4, %[r4]" :  : [r4]"m"(task1.r4)); 
+		asm volatile("LDR r5, %[r5]" :  : [r5]"m"(task1.r5)); 
+		asm volatile("LDR r6, %[r6]" :  : [r6]"m"(task1.r6)); 
+		asm volatile("LDR r7, %[r7]" :  : [r7]"m"(task1.r7)); 
+		asm volatile("LDR r8, %[r8]" :  : [r8]"m"(task1.r8)); 
+		asm volatile("LDR r9, %[r9]" :  : [r9]"m"(task1.r9)); 
+		asm volatile("LDR r10, %[r10]" :  : [r10]"m"(task1.r10)); 
+		asm volatile("LDR r11, %[r11]" :  : [r11]"m"(task1.r11)); 
+		asm volatile("LDR r12, %[r12]" :  : [r12]"m"(task1.r12)); 
+		asm volatile("LDR sp, %[sp]" :  : [sp]"m"(task1.sp)); 
+		asm volatile("LDR lr, %[lr]" :  : [lr]"m"(task1.lr)); 
+		
+		asm volatile("MRS r0, cpsr"); 
+		asm volatile("BIC r0, r0, #0x80");
+		asm volatile("MSR cpsr, r0"); 
+		
+		asm volatile("LDR r0, %[r0]" :  : [r0]"m"(task1.r0));
+		
+		GPIO_SET_GPSET(16);
+		//os_printf("TASK 1%n");
 		sleep(1000);
 		
-		asm("STR r0, %[r0]" :  : [r0]"m"(task1.r0));
-		asm("STR r1, %[r1]" :  : [r1]"m"(task1.r1)); 
-		asm("STR r2, %[r2]" :  : [r2]"m"(task1.r2)); 
-		asm("STR r3, %[r3]" :  : [r3]"m"(task1.r3)); 
-		asm("STR r4, %[r4]" :  : [r4]"m"(task1.r4)); 
-		asm("STR r5, %[r5]" :  : [r5]"m"(task1.r5)); 
-		asm("STR r6, %[r6]" :  : [r6]"m"(task1.r6)); 
-		asm("STR r7, %[r7]" :  : [r7]"m"(task1.r7)); 
-		asm("STR r8, %[r8]" :  : [r8]"m"(task1.r8)); 
-		asm("STR r9, %[r9]" :  : [r9]"m"(task1.r9)); 
-		asm("STR r10, %[r10]" :  : [r10]"m"(task1.r10)); 
-		asm("STR r11, %[r11]" :  : [r11]"m"(task1.r11)); 
-		asm("STR r12, %[r12]" :  : [r12]"m"(task1.r12)); 
-		asm("STR sp, %[sp]" :  : [sp]"m"(task1.sp)); 
-		asm("STR lr, %[lr]" :  : [lr]"m"(task1.lr)); 
+		asm volatile("STR r0, %[r0]" :  : [r0]"m"(task1.r0));
+		asm volatile("MRS r0, cpsr"); 
+		asm volatile("AND r0,r0, #0x80");
+		asm volatile("MSR cpsr, r0"); 
 		
-		asm("LDR r0, %[cpsr]" :  : [cpsr]"m"(task2.cpsr)); 
-		asm("MRS r0, cpsr"); 
-		asm("LDR r0, %[spsr]" :  : [spsr]"m"(task2.spsr)); 
-		asm("MRS r0, spsr"); 
+		asm volatile("STR r1, %[r1]" :  : [r1]"m"(task1.r1)); 
+		asm volatile("STR r2, %[r2]" :  : [r2]"m"(task1.r2)); 
+		asm volatile("STR r3, %[r3]" :  : [r3]"m"(task1.r3)); 
+		asm volatile("STR r4, %[r4]" :  : [r4]"m"(task1.r4)); 
+		asm volatile("STR r5, %[r5]" :  : [r5]"m"(task1.r5)); 
+		asm volatile("STR r6, %[r6]" :  : [r6]"m"(task1.r6)); 
+		asm volatile("STR r7, %[r7]" :  : [r7]"m"(task1.r7)); 
+		asm volatile("STR r8, %[r8]" :  : [r8]"m"(task1.r8)); 
+		asm volatile("STR r9, %[r9]" :  : [r9]"m"(task1.r9)); 
+		asm volatile("STR r10, %[r10]" :  : [r10]"m"(task1.r10)); 
+		asm volatile("STR r11, %[r11]" :  : [r11]"m"(task1.r11)); 
+		asm volatile("STR r12, %[r12]" :  : [r12]"m"(task1.r12)); 
+		asm volatile("STR sp, %[sp]" :  : [sp]"m"(task1.sp)); 
+		asm volatile("STR lr, %[lr]" :  : [lr]"m"(task1.lr)); 
 		
-		asm("LDR pc, %[pc]" :  : [pc]"m"(task2.pc)); 
+ 		asm volatile("MRS r0, cpsr"); 
+		asm volatile("BIC r0, r0, #0x80");
+ 		asm volatile("STR r0, %[cpsr]" :  : [cpsr]"m"(task1.cpsr)); 
+ 		asm volatile("MRS r0, spsr"); 
+ 		asm volatile("STR r0, %[spsr]" :  : [spsr]"m"(task1.spsr)); 
+		
+		asm volatile("LDR pc, %[pc]" :  : [pc]"m"(task2.pc)); 
 	}
 	
 	//STR r1, *r1
@@ -293,51 +309,63 @@ void task2_func(void)
 {
 	while(1)
 	{
-		asm("LDR r0, %[cpsr]" :  : [cpsr]"m"(task2.cpsr)); 
-		asm("MSR cpsr, r0"); 
-		asm("LDR r0, %[spsr]" :  : [spsr]"m"(task2.spsr)); 
-		asm("MSR spsr, r0"); 
-		asm("LDR r0, %[r0]" :  : [r0]"m"(task2.r0));
-		asm("LDR r1, %[r1]" :  : [r1]"m"(task2.r1)); 
-		asm("LDR r2, %[r2]" :  : [r2]"m"(task2.r2)); 
-		asm("LDR r3, %[r3]" :  : [r3]"m"(task2.r3)); 
-		asm("LDR r4, %[r4]" :  : [r4]"m"(task2.r4)); 
-		asm("LDR r5, %[r5]" :  : [r5]"m"(task2.r5)); 
-		asm("LDR r6, %[r6]" :  : [r6]"m"(task2.r6)); 
-		asm("LDR r7, %[r7]" :  : [r7]"m"(task2.r7)); 
-		asm("LDR r8, %[r8]" :  : [r8]"m"(task2.r8)); 
-		asm("LDR r9, %[r9]" :  : [r9]"m"(task2.r9)); 
-		asm("LDR r10, %[r10]" :  : [r10]"m"(task2.r10)); 
-		asm("LDR r11, %[r11]" :  : [r11]"m"(task2.r11)); 
-		asm("LDR r12, %[r12]" :  : [r12]"m"(task2.r12)); 
-		asm("LDR sp, %[sp]" :  : [sp]"m"(task2.sp)); 
-		asm("LDR lr, %[lr]" :  : [lr]"m"(task2.lr));  
-	
-		GPIO_SET_GPSET(16);
-		sleep(1000);
+		asm volatile("LDR r0, %[cpsr]" :  : [cpsr]"m"(task2.cpsr)); 
+		asm volatile("AND r0,r0, #0x80");
+		asm volatile("MSR cpsr, r0"); 
+		asm volatile("LDR r0, %[spsr]" :  : [spsr]"m"(task2.spsr)); 
+		asm volatile("MSR spsr, r0"); 
 		
-		asm("STR r0, %[r0]" :  : [r0]"m"(task2.r0));
-		asm("STR r1, %[r1]" :  : [r1]"m"(task2.r1)); 
-		asm("STR r2, %[r2]" :  : [r2]"m"(task2.r2)); 
-		asm("STR r3, %[r3]" :  : [r3]"m"(task2.r3)); 
-		asm("STR r4, %[r4]" :  : [r4]"m"(task2.r4)); 
-		asm("STR r5, %[r5]" :  : [r5]"m"(task2.r5)); 
-		asm("STR r6, %[r6]" :  : [r6]"m"(task2.r6)); 
-		asm("STR r7, %[r7]" :  : [r7]"m"(task2.r7)); 
-		asm("STR r8, %[r8]" :  : [r8]"m"(task2.r8)); 
-		asm("STR r9, %[r9]" :  : [r9]"m"(task2.r9)); 
-		asm("STR r10, %[r10]" :  : [r10]"m"(task2.r10)); 
-		asm("STR r11, %[r11]" :  : [r11]"m"(task2.r11)); 
-		asm("STR r12, %[r12]" :  : [r12]"m"(task2.r12)); 
-		asm("STR sp, %[sp]" :  : [sp]"m"(task2.sp)); 
-		asm("STR lr, %[lr]" :  : [lr]"m"(task2.lr)); 
+		asm volatile("LDR r1, %[r1]" :  : [r1]"m"(task2.r1)); 
+		asm volatile("LDR r2, %[r2]" :  : [r2]"m"(task2.r2)); 
+		asm volatile("LDR r3, %[r3]" :  : [r3]"m"(task2.r3)); 
+		asm volatile("LDR r4, %[r4]" :  : [r4]"m"(task2.r4)); 
+		asm volatile("LDR r5, %[r5]" :  : [r5]"m"(task2.r5)); 
+		asm volatile("LDR r6, %[r6]" :  : [r6]"m"(task2.r6)); 
+		asm volatile("LDR r7, %[r7]" :  : [r7]"m"(task2.r7)); 
+		asm volatile("LDR r8, %[r8]" :  : [r8]"m"(task2.r8)); 
+		asm volatile("LDR r9, %[r9]" :  : [r9]"m"(task2.r9)); 
+		asm volatile("LDR r10, %[r10]" :  : [r10]"m"(task2.r10)); 
+		asm volatile("LDR r11, %[r11]" :  : [r11]"m"(task2.r11)); 
+		asm volatile("LDR r12, %[r12]" :  : [r12]"m"(task2.r12)); 
+		asm volatile("LDR sp, %[sp]" :  : [sp]"m"(task2.sp)); 
+		asm volatile("LDR lr, %[lr]" :  : [lr]"m"(task2.lr));  
 
-		asm("MRS r0, cpsr"); 
-		asm("STR r0, %[cpsr]" :  : [cpsr]"m"(task2.cpsr)); 
-		asm("MRS r0, spsr"); 
-		asm("STR r0, %[spsr]" :  : [spsr]"m"(task2.spsr)); 
+		asm volatile("MRS r0, cpsr"); 
+		asm volatile("BIC r0, r0, #0x80");
+		asm volatile("MSR cpsr, r0"); 
+		asm volatile("LDR r0, %[r0]" :  : [r0]"m"(task2.r0));
 		
-		asm("LDR pc, %[pc]" :  : [pc]"m"(task1.pc));
+		GPIO_SET_GPCLR(16);
+		os_printf("TASK 2%n");
+		sleep(1000);
+
+		asm volatile("STR r0, %[r0]" :  : [r0]"m"(task2.r0));
+		asm volatile("MRS r0, cpsr"); 
+		asm volatile("AND r0,r0, #0x80");
+		asm volatile("MSR cpsr, r0"); 
+		
+		asm volatile("STR r1, %[r1]" :  : [r1]"m"(task2.r1)); 
+		asm volatile("STR r2, %[r2]" :  : [r2]"m"(task2.r2)); 
+		asm volatile("STR r3, %[r3]" :  : [r3]"m"(task2.r3)); 
+		asm volatile("STR r4, %[r4]" :  : [r4]"m"(task2.r4)); 
+		asm volatile("STR r5, %[r5]" :  : [r5]"m"(task2.r5)); 
+		asm volatile("STR r6, %[r6]" :  : [r6]"m"(task2.r6)); 
+		asm volatile("STR r7, %[r7]" :  : [r7]"m"(task2.r7)); 
+		asm volatile("STR r8, %[r8]" :  : [r8]"m"(task2.r8)); 
+		asm volatile("STR r9, %[r9]" :  : [r9]"m"(task2.r9)); 
+		asm volatile("STR r10, %[r10]" :  : [r10]"m"(task2.r10)); 
+		asm volatile("STR r11, %[r11]" :  : [r11]"m"(task2.r11)); 
+		asm volatile("STR r12, %[r12]" :  : [r12]"m"(task2.r12)); 
+		asm volatile("STR sp, %[sp]" :  : [sp]"m"(task2.sp)); 
+		asm volatile("STR lr, %[lr]" :  : [lr]"m"(task2.lr)); 
+
+		asm volatile("MRS r0, cpsr"); 
+		asm volatile("BIC r0, r0, #0x80");
+		asm volatile("STR r0, %[cpsr]" :  : [cpsr]"m"(task2.cpsr)); 
+		asm volatile("MRS r0, spsr"); 
+		asm volatile("STR r0, %[spsr]" :  : [spsr]"m"(task2.spsr)); 
+		
+		asm volatile("LDR pc, %[pc]" :  : [pc]"m"(task1.pc));
 	}
 	
 }

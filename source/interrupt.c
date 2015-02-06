@@ -46,7 +46,7 @@ void  __attribute__((interrupt("ABORT")))data_abort_vector(void)
 void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 {
 	
-	arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		/*ArmTimer首地址*/
+	
 	//static int lit = 0;
 		
 	/* Clear the ARM Timer interrupt - it's the only interrupt we have
