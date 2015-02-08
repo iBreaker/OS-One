@@ -13,8 +13,15 @@
 
 /*Task Status*/
 typedef struct {
-	u32  r0, r1, r2, r3, r4, r5, r6, r7, r8, r9, r10, r11, r12, sp, lr, pc, cpsr, spsr;
-	u8 pid;
+	u32 r4_to_r11[8];		// lower address
+	u32 r0;
+	u32 r1;
+	u32 r2;
+	u32 r3;
+	u32 r12;
+	u32 lr;
+	u32 pc;
+	u32 xpsr;			// higher address
 }TS;
 
 u8 task_init(TS *ts, u32 sp, void *pc);

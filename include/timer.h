@@ -122,6 +122,8 @@ void init_arm_timer(unsigned int Load);
  */
 
 /*内核频率*/
+#define Kernrl_1Hz 		1000000
+#define Kernrl_10Hz 		100000
 #define Kernrl_100Hz 		10000
 #define Kernrl_1000Hz 	1000
 

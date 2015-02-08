@@ -22,9 +22,10 @@ void os_main(void)
 	/* init */
 	GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
 	GPIO_SET_GPSET(16);
+	
 	init_screen(1440, 900, 24);
 	
-	init_arm_timer(Kernrl_100Hz);
+	init_arm_timer(Kernrl_10Hz);
 	_enable_interrupts();
 	
 	/* debug */
@@ -37,6 +38,9 @@ void os_main(void)
 	//deb_linedlist();
 	deb_task();
 	while(1)
+	{
+	//	blink_GPIO16();
+	}
 	;
 }
 

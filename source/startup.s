@@ -39,11 +39,12 @@ _start:
 
 _reset_h:								.word		_reset_
 _undifined_instruction_vector_h:		.word		undifined_instruction_vector
-_software_interrupt_vector_h:		.word		software_interrupt_vector
+_software_interrupt_vector_h:			.word		software_interrupt_vector
 _prefetch_abort_vector_h:				.word		prefetch_abort_vector
 _data_abort_vector_h:					.word		data_abort_vector
-_unused_hander_h:					.word		_reset_
-_interrupt_vector_h:					.word		interrupt_vector
+_unused_hander_h:						.word		_reset_
+//_interrupt_vector_h:					.word		interrupt_vector
+_interrupt_vector_h:					.word 		_interrupt_vector_
 _fast_interrupt_vector_h:				.word		fast_interrupt_vector
 
 _reset_:

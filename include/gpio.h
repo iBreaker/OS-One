@@ -43,3 +43,4 @@ int GPIO_SET_GPSET(int pin);
 int GPIO_SET_GPCLR(int pin);
 
 void blink_GPIO16(void);
+void blink_GPIO19(void);

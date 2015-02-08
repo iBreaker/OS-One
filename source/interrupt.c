@@ -35,12 +35,18 @@ void  __attribute__((interrupt("SWI")))software_interrupt_vector(void)
 
 void  __attribute__((interrupt("ABORT")))prefetch_abort_vector(void)
 {
-	
+	while( 1 )
+	{
+		/* Do Nothing! */
+	}
 }
 
 void  __attribute__((interrupt("ABORT")))data_abort_vector(void)
 {
-	
+	while( 1 )
+	{
+		/* Do Nothing! */
+	}
 }
 
 void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
@@ -52,9 +58,11 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 	/* Clear the ARM Timer interrupt - it's the only interrupt we have
 	enabled, so we want don't have to work out which interrupt source
 	caused us to interrupt */
-	ArmTimer->IRQClear = 1;
 	
-	os_timer_ctrl_reflash();
+	ArmTimer->IRQClear = 1;
+	//os_timer_ctrl_reflash();
+	
+		GPIO_SET_GPCLR(16);
 	
 	/***********************************
 	 * 调试代码*
@@ -67,6 +75,9 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 
 void  __attribute__((interrupt("FIQ")))fast_interrupt_vector(void)
 {
-	
+	while( 1 )
+	{
+		/* Do Nothing! */
+	}
 }
 

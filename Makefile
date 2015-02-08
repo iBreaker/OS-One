@@ -47,7 +47,7 @@ INC = $(wildcard ${DIR_INC}/*.h)
 default:
 	clear
 	make kernel.img
-	make clean
+	make disasm
 	
 ${DIR_OBJ}/%.o:${DIR_SRC}/%.c 
 	${GNU}gcc ${CFLAGS} -c $< -o $@
@@ -66,10 +66,5 @@ clean:
 	rm -rf  ./object/*.o
 	rm -rf *.img *.elf *.disasm *.map
 
-install:
-	make kernel.img
-	rm -f  /media/breaker/boot/kernel.img
-	cp kernel.img /media/breaker/boot/kernel.img
-	make clean
-	
-
+install:install.sh
+	sudo ./install.sh

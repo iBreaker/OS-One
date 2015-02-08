@@ -25,6 +25,7 @@ unsigned long GET_GPCLR_ADDR(int pin);
 
 int GPIO_SET_GPFSEL(int pin, int func)
 {
+	//函数有错误 ,暂时不改   2015年02月08日18:59:50
 	volatile unsigned long *point = 0 ;
 	unsigned long mask = 0;
 	int bit_num = 0;
@@ -219,16 +220,16 @@ unsigned long GET_GPCLR_ADDR(int pin)
 
 void blink_GPIO16(void)
 {
-	static int lit = 0;
+	static int lit16 = 0;
 	
-	if( lit )
+	if( lit16 )
 	{
 		GPIO_SET_GPSET(16);
-		lit = 0;
+		lit16 = 0;
 	}
 	else
 	{
 		GPIO_SET_GPCLR(16);
-		lit = 1;
+		lit16 = 1;
 	}
 }
