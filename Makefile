@@ -67,4 +67,5 @@ clean:
 	rm -rf *.img *.elf *.disasm *.map
 
 install:install.sh
+	make disasm
 	sudo ./install.sh

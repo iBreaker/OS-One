@@ -19,25 +19,44 @@
 */
 _interrupt_vector_:
 	sub		lr, lr, #4
-	push	{r0-r12, lr}
-	mrs  	r0, spsr 
-	push	{r0}
-	mov	ip, sp
-	add 		sp, sp, #60
+	//stmfd	sp!,{r0-r12, lr}
 	
-	//切换到svc
-	mrs  r0, cpsr
-	orr	r0, r0, #0x1
-	msr cpsr, r0
+// 保存
+	str		r0, [sp, #-4]
+	str		r1, [sp, #-8]
+	.word	tasktable
+	ldr		r0, [pc, #-12]
 	
-	sub 		sp, sp, #60
-	ldmia	ip!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, r10} 
-	stmia	sp!, {r1, r2, r3, r4, r5, r6, r7, r8, r9, r10}
-	ldmia	ip!, {r1, r2, r3, r4, r5} 
-	stmia	sp!, {r1, r2, r3, r4, r5}
-	sub 		sp, sp, #60
+	ldr		r1, [sp, #-4]
+	str		r1, [r0, #(0 * 4)]
+	ldr		r1, [sp, #-8]
+	str		r1, [r0, #(1 * 4)]
 	
-	bl		os_timer_ctrl_reflash
+	str		r2, [r0, #(2 * 4)]
+	str		r3, [r0, #(3 * 4)]
+	str		r4, [r0, #(4 * 4)]
+	str		r5, [r0, #(5 * 4)]
+	str		r6, [r0, #(6 * 4)]
+	str		r7, [r0, #(7 * 4)]
+	str		r8, [r0, #(8 * 4)]
+	str		r9, [r0, #(9 * 4)]
+	str		r10, [r0, #(10 * 4)]
+	str		r11, [r0, #(11 * 4)]
+	str		r12, [r0, #(12 * 4)]
+	str		r14, [r0, #(15 * 4)]
+	mrs		r1, spsr		
+	str		r1, [r0, #(16 * 4)]
+
+	mrs		r1, cpsr
+	bic 		r1, r1, #0x1F
+	orr		r1, r1, # 0x13
+	msr		cpsr, r1
+
+	str		r13,[r0, #(13 * 4)]
+	str		r14,[r0, #(14 * 4)]
+	mrs		r1, spsr		
+	str		r1, [r0, #(17 * 4)]
+// 保存
 	
 	mov	r2, #1
 	.word	0x2000B400
@@ -49,11 +68,39 @@ _interrupt_vector_:
 	mov 	r0, #50
 	bl		sleep
 	
-	ldm		sp!, {r0}
-	msr 	cpsr, r0
+//恢复
+	.word	tasktable
+	ldr		r0, [pc, #-12]
 	
-	bl 		_enable_interrupts
-	ldm		sp!, {r0-r12, pc}
+	ldr		r2, [r0, #(2 * 4)]
+	ldr		r3, [r0, #(3 * 4)]
+	ldr		r4, [r0, #(4 * 4)]
+	ldr		r5, [r0, #(5 * 4)]
+	ldr		r6, [r0, #(6 * 4)]
+	ldr		r7, [r0, #(7 * 4)]
+	ldr		r8, [r0, #(8 * 4)]
+	ldr		r9, [r0, #(9 * 4)]
+	ldr		r10, [r0, #(10 * 4)]
+	ldr		r11, [r0, #(11 * 4)]
+	ldr		r12, [r0, #(12 * 4)]
+	ldr		r13, [r0, #(13 * 4)]
+	ldr		r14, [r0, #(14 * 4)]
+	
+	ldr		r1,[r0, #(15 * 4)]
+	str		r1, [sp, #-4]
+	
+	ldr		r1, [r0, #(16 * 4)]
+	msr		cpsr, r1
+	ldr		r1, [r0, #(17 * 4)]
+	msr		spsr, r1
+	
+	ldr		r0, [r0, #(0 * 4)]
+	ldr		r1, [r0, #(1 * 4)]
+	
+	ldr		r15, [sp, #-4]
+	
+//恢复
+	//ldmfd	sp!, {r0-r12, pc}^
 
 	
 
@@ -67,7 +114,7 @@ _interrupt_vector_:
 
 	mov	r0, #16
 	bl		GPIO_SET_GPCLR
-	mov 	r0, #100
+	mov 	r0, #50
 	bl		sleep
 	
 	ldm		sp!, {r0-r12, pc}^
