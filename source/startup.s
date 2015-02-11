@@ -60,7 +60,11 @@ _reset_:
 	mov r0, #(CPSR_MODE_IRQ | CPSR_IRQ_INHIBIT | CPSR_FIQ_INHIBIT )
 	msr cpsr_c, r0
 	mov sp, #0x8000
-
+	
+	mov r0,#CPSR_MODE_UNDEFINED
+	msr cpsr_c, r0
+	mov sp, #0x5000
+	
 	// Switch back to supervisor mode (our application mode) and
 	// set the stack pointer towards the end of RAM. Remember that the
 	// stack works its way down memory, our heap will work it's way

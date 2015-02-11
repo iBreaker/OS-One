@@ -218,13 +218,47 @@ void deb_timer_refalsh(void)
 *	return   void
 */
 
-
+void ok(void);
 void  deb_task(void)
 {
+	
+	RGB_24Bit colorF;
+	colorF.R = 0x00;
+	colorF.G = 0x00;
+	colorF.B = 0x00;
+	RGB_24Bit colorB;
+	colorB.R = 0x28;
+	colorB.G = 0x82;
+	colorB.B = 0xE6;
 	while(1)
 	{
 		GPIO_SET_GPSET(16);
+		static u32 tasku32 = 0;
+		
+		DrawBlock(colorB,10,100, 100 ,16);
+		drawStringF("Task normal:%d", colorF, 10, 10, tasku32 ++ );
 	}
+	
+}
+
+void  deb_task_irq_func(void)
+{
+	RGB_24Bit colorF;
+	colorF.R = 0xFF;
+	colorF.G = 0xFF;
+	colorF.B = 0xFF;
+	RGB_24Bit colorB;
+	colorB.R = 0x28;
+	colorB.G = 0x82;
+	colorB.B = 0xE6;
+		
+	GPIO_SET_GPCLR(16);
+	sleep(50);
+	static u32 task_irq_u32 = 0;
+		
+	DrawBlock(colorB,26,70, 100 ,16);
+	drawStringF("Task irq:%d", colorF, 26, 10, task_irq_u32 ++ );
+		
 }
 
 

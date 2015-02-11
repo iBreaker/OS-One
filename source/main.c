@@ -25,7 +25,7 @@ void os_main(void)
 	
 	init_screen(1440, 900, 24);
 	
-	init_arm_timer(Kernrl_10Hz);
+	init_arm_timer(Kernrl_1Hz);
 	_enable_interrupts();
 	
 	/* debug */

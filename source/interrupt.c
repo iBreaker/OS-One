@@ -63,6 +63,7 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 	//os_timer_ctrl_reflash();
 	
 		GPIO_SET_GPCLR(16);
+		sleep(50);
 	
 	/***********************************
 	 * 调试代码*

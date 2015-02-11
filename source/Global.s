@@ -27,7 +27,7 @@ tasktable:		/*任务状态*/
 	.word		0x00		//	r10
 	.word		0x00		//	r11
 	.word		0x00		//	r12
-	.word		0x00		//	空
+	.word		0x00		//	sp
 	.word		0x00		//	lr
 	.word		0x00		//	pc
 	.word		0x00		//	cpsr
