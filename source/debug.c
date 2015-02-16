@@ -96,8 +96,8 @@ void  deb_screen(void)
 	while(1)
 	 {
 		char unsigned key = 0;
-		KeyboardUpdate();
-		key = KeyboardGetChar();
+		//KeyboardUpdate();
+		//key = KeyboardGetChar();
 		 if(key != 0)
 		 {
 			GPIO_SET_GPCLR(16);
@@ -218,7 +218,7 @@ void deb_timer_refalsh(void)
 *	return   void
 */
 
-void ok(void);
+
 void  deb_task(void)
 {
 	

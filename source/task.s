@@ -7,7 +7,7 @@
 *	
 */
 .global _interrupt_vector_
-
+.extern task_stack , task_global
 
 /*****************************************************
 *	2015年02月08日11:38:45
@@ -25,9 +25,10 @@ _interrupt_vector_:
 	str		r0, [sp, #-4]
 	str		r1, [sp, #-8]
 	
-	.word	tasktable			//加载任务状态内存基地址
-	ldr		r0, [pc, #-12]		
-	
+	.word	task_global			//加载任务状态内存基地址
+	ldr		r1, [pc, #-12]
+	ldr		r0, [r1]
+
 	ldr		r1, [sp, #-4]
 	str		r1, [r0, #(0 * 4)]	//r0
 	ldr		r1, [sp, #-8]
@@ -68,14 +69,16 @@ _interrupt_vector_:
 	bl		os_timer_ctrl_reflash		//系统时钟
 	
 	bl		deb_task_irq_func
+	bl		task_schedule
 	//在这里添加任务调度函数              
 	//终于把任务切换调好了  ;-)  2015年02月11日20:59:00
 	
 //==========================================
-	.word	tasktable
-	ldr		r0, [pc, #-12]				//加载任务状态内存基地址
+	.word	task_global			//加载任务状态内存基地址
+	ldr		r1, [pc, #-12]
+	ldr		r0, [r1]
       
-      	ldr		r2, [r0, #(2 * 4)]			//r2
+    ldr		r2, [r0, #(2 * 4)]			//r2
 	ldr		r3, [r0, #(3 * 4)]
 	ldr		r4, [r0, #(4 * 4)]
 	ldr		r5, [r0, #(5 * 4)]

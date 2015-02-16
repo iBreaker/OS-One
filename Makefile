@@ -32,34 +32,36 @@ TARGET ?= kernel
 #　　patsubst ：替换通配符
 
 GNU = arm-none-eabi-
-CFLAGS +=  -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
+CFLAGS +=   -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
 			-nostartfiles -fshort-wchar  -g -Wl,--verbose -c -I ${DIR_INC} 
-LFLAGS +=   -O2 -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
+LFLAGS +=    -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
 			-nostartfiles  -fshort-wchar  -g -Wl,-T,${DIR_SRC}/pi.x -Wl,-Map,${TARGET}.map 
-objects = startup.o main.o gpio.o time.o GPU.o GPUS.o Graphic.o Global.o GlobalS.o debug.o  keyboardS.o 
+
 
 SRC = $(wildcard  ${DIR_SRC}/*.c)
 ASB = $(wildcard  ${DIR_SRC}/*.s)
 OBJ = $(patsubst  %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
-LIB = $(notdir $(wildcard ${DIR_LIB}/*.a))
+#暂时不链接USB驱动
+#LIB = $(notdir $(wildcard ${DIR_LIB}/*.a))
 INC = $(wildcard ${DIR_INC}/*.h)
 
-default:
-	clear
+all: 
 	make kernel.img
 	make disasm
 	
-${DIR_OBJ}/%.o:${DIR_SRC}/%.c 
+${DIR_OBJ}/%.o: ${DIR_SRC}/%.c  Makefile
 	${GNU}gcc ${CFLAGS} -c $< -o $@
 	
-${TARGET}.img: ${TARGET}.elf
+${TARGET}.img: Makefile  ${TARGET}.elf
 	${GNU}objcopy  ${TARGET}.elf -O binary $@
 
-${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
+#${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
+${TARGET}.elf: Makefile ${OBJ}  ${ASB} ${DIR_SRC}/pi.x   
 	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
-	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf  
+	#${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf  
+	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB}  -o ${TARGET}.elf  
 	
-disasm:${TARGET}.elf
+disasm:${TARGET}.elf 
 	${GNU}objdump -S  $< > ${TARGET}.disasm
 
 clean:

@@ -27,6 +27,8 @@ extern os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
 extern arm_timer_t *ArmTimer;
 
 /*debug.c*/
-extern TS task1,task2;
 
+/*task.c*/
+
+extern TASK_GLOBAL task_global;
 #endif

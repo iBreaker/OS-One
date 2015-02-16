@@ -22,4 +22,7 @@ arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		//ArmTimer首地址
 os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
 
 /*debug.c*/
-TS task1,task2;
+
+/*task.c*/
+TASK_GLOBAL task_global;
+
