@@ -7,7 +7,7 @@
 **/ 
 
 /**
- *    任务信息存放在task_table, task_stack, task_ready, task_gable 四种数据结构中
+ *    任务信息存放在task_table, task_stack, task_ready, task_gable task_info 五种数据结构中
  * 	task_table 是任务切换的时候寄存器保存的地方
  *     task_stack 任务栈
  *     task_ready 任务队列, 只保存任务的关系,调度函数可以快速的计算出合适的任务
@@ -29,32 +29,33 @@ void task_idle(void);
 *	V1.0 	By Breaker
 *
 *		void task_init(LinkedList *ll)
-*   	初始化
+*   	初始化系统任务管理机制
 *		return void
 */
 void task_init()
 {
+		//初始化 task_ready
 		task_ready = &task_ready_ll;
 		ll_init(task_ready);
 
-
-		//创建一个空闲任务
-		u8 rank = 3;
+		//创建一个空闲任务,优先级 比优先级最低的任务还要低
+		u8 rank = MAX_rank + 1;
 		void * task_func = task_idle;
 		u8 TID = task_create( rank , task_func);
 		task_run(TID);
 
+		//初始化task_global
 		task_global.schedule_lock = false;
 		task_global.current_TID = TID;
-		task_global.current_tasktable = &task_table[TID];
+		task_global.current_tasktable = (u32) &task_table[TID];
 }
 
 void task_idle(void)
 {
 		while(true)
 		{
-				blink_GPIO16();
-				sleep(1000);
+				//blink_GPIO16();
+				//sleep(1000);
 		}
 }
 /*****************************************************************
@@ -68,12 +69,7 @@ void task_idle(void)
 u8 task_create(u8 rank, void *task_func)
 {
 		/*1.检查参数合法性*/
-		if( rank > MAX_rank)
-		{
-				return NULL;
-		}
-
-		if( rank  ==  NULL)
+		if(( rank > MAX_rank) || ( NULL == rank ))
 		{
 				return NULL;
 		}
@@ -81,7 +77,7 @@ u8 task_create(u8 rank, void *task_func)
 		/*2.设置TASK_INFO*/
 		u8 TID = task_get_id();
 
-		if( NULL ==TID )
+		if( NULL == TID )
 		{
 				return NULL;
 		}
@@ -90,15 +86,15 @@ u8 task_create(u8 rank, void *task_func)
 		task_info_this.rank = rank;
 		task_info_this.status = DEAD ;
 		task_info_this.task_func = task_func ;
-
+		//task_info.TRID 到 task_run 中设置
 		task_info[TID] = task_info_this;
 
 		/*3.设置tasktable*/
 		task_table[TID].sp = (u32)task_stack[TID] + 1024;
 		task_table[TID].lr = (u32)task_delete;
 		task_table[TID].pc =(u32) task_func;
-		task_table[TID].cpsr = 0x13;
-		task_table[TID].spsr = 0x13;
+		task_table[TID].cpsr = 0x53;	//禁止fiq , svc模式
+		task_table[TID].spsr = 0x53;
 		return TID;
 }
 
@@ -118,19 +114,22 @@ u8 task_get_id()
 *		2015年02月15日14:41:14
 *		V1.0 	By Breaker
 *
-*		void  task_run(void)
+*		u8  task_run(u8 TID)
 *   	将任务加入任务调度函数的管理
 *		return
 */
 u8  task_run(u8 TID)
 {
+		/*1.参数验证, run 的进程状态必须是DEAD,其他状态的进程不可以被run*/
 		if(task_info[TID].status != DEAD)
 		{
 				return NULL;
 		}
 
+		/*2.1 申请加入task_ready链表, 返回0失败*/
 		task_info[TID].TRID = ll_add_by_order(task_ready, TID, task_info[TID].rank);
 
+		/*2.2 验证返回值是否有效*/
 		if( NULL == task_info[TID].TRID)
 		{
 				task_info[TID].TRID = NULL;
@@ -155,10 +154,16 @@ u8  task_run(u8 TID)
 */
 void  task_schedule(void)
 {
-		u8 TID;
-		task_global.current_TID  = ll_get_next_id(task_ready , task_global.current_TID);
-		TID = task_global.current_TID ;
-		task_global.current_tasktable =(u32) &task_table[TID];
+		u8 current_TID , current_TRID;
+		current_TRID = task_info[task_global.current_TID].TRID;										//获取当前TRID
+		current_TRID = ll_get_next_id(task_ready , current_TRID);										//得到下一个TRID
+		if( 0 == current_TRID )
+		{
+				current_TRID = ll_get_next_id(task_ready , current_TRID);
+		}
+
+		task_global.current_TID = (u8) task_ready->node[current_TRID].value;			//设置当前TID													//
+		task_global.current_tasktable = (u32) &task_table[task_global.current_TID];	//设置当前tasktable
 
 		return ;
 }

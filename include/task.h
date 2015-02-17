@@ -55,8 +55,8 @@ typedef struct {
 		u32 spsr;
 }TASK_TABLE;
 
-TASK_TABLE   task_table[16];
-u8   task_stack[16][1024];
+TASK_TABLE   task_table[17];
+u8   task_stack[17][1024];
 
 typedef struct {
 		u32	current_tasktable;

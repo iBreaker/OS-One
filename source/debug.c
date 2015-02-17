@@ -17,6 +17,8 @@
 #include "task.h"
 
 void deb_linedlist_reflash(LinkedList *Task);
+void task1();
+void task2();
 
 /*
 *	2014年12月31日16:12:49
@@ -221,44 +223,55 @@ void deb_timer_refalsh(void)
 
 void  deb_task(void)
 {
-	
-	RGB_24Bit colorF;
-	colorF.R = 0x00;
-	colorF.G = 0x00;
-	colorF.B = 0x00;
-	RGB_24Bit colorB;
-	colorB.R = 0x28;
-	colorB.G = 0x82;
-	colorB.B = 0xE6;
-	while(1)
-	{
-		GPIO_SET_GPSET(16);
-		static u32 tasku32 = 0;
-		
-		DrawBlock(colorB,10,100, 100 ,16);
-		drawStringF("Task normal:%d", colorF, 10, 10, tasku32 ++ );
-	}
-	
+		u8 rank = 3;
+		void * func = task1;
+		u8 TID = task_create(rank , func);
+		task_run(TID);
+
+		func = task2;
+		TID = task_create(rank , func);
+		task_run(TID);
+
 }
 
-void  deb_task_irq_func(void)
+void task1()
 {
 	RGB_24Bit colorF;
-	colorF.R = 0xFF;
-	colorF.G = 0xFF;
-	colorF.B = 0xFF;
+	colorF.R = 0xff;
+	colorF.G = 0xff;
+	colorF.B = 0xff;
 	RGB_24Bit colorB;
 	colorB.R = 0x28;
 	colorB.G = 0x82;
 	colorB.B = 0xE6;
-		
-	GPIO_SET_GPCLR(16);
-	sleep(50);
-	static u32 task_irq_u32 = 0;
-		
-	DrawBlock(colorB,26,70, 100 ,16);
-	drawStringF("Task irq:%d", colorF, 26, 10, task_irq_u32 ++ );
-		
+
+		while(1)
+		{
+				static u32 task1u32 = 0;
+				GPIO_SET_GPSET(16);
+				DrawBlock(colorB,10, 0, 200,16);
+				drawStringF("Task1:%d", colorF, 10, 10, task1u32 ++ );
+		}
+}
+
+void task2()
+{
+		RGB_24Bit colorF;
+		colorF.R = 0x00;
+		colorF.G = 0x00;
+		colorF.B = 0x00;
+		RGB_24Bit colorB;
+		colorB.R = 0x28;
+		colorB.G = 0x82;
+		colorB.B = 0xE6;
+
+		while(1)
+		{
+				static u32 task2u32 = 0;
+				GPIO_SET_GPCLR(16);
+				DrawBlock(colorB, 26, 10, 200 ,16);
+				drawStringF("Task2:%d", colorF, 26, 10, task2u32 ++ );
+		}
 }
 
 

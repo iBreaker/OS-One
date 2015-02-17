@@ -68,9 +68,12 @@ clean:
 	rm -rf  ./object/*.o
 	rm -rf *.img *.elf *.disasm *.map
 
-install:install.sh
-	make
-	sudo ./install.sh 
+install:kernel.img
+	sudo mkdir /media/breaker/boot
+	sudo mount /dev/sdc1 /media/breaker/boot
+	sudo cp kernel.img /media/breaker/boot
+	sudo umount /dev/sdc1
+	sudo rm -r /media/breaker/boot 
 
 
 
