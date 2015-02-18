@@ -22,7 +22,7 @@ typedef enum
 
 typedef enum
 {
-	MSG_NULL, MSG_WAIT4MSG,MSG_SEND,  MSG_SUSPEND, MSG_RESUME
+	MSG_NULL, MSG_WAIT4MSG,MSG_SEND,  MSG_SUSPEND, MSG_RESUME, MSG_NORMAL
 }MSG_TYPE_ENUM;
 
 typedef struct {
@@ -86,7 +86,7 @@ u8  task_run(u8 TID);
 void task_lock_schedule(void);
 void task_unlock_schedule(void);
 u8  task_send_msg(u8 to, MSG_TYPE_ENUM  type, u32 value);
-void task_recevie_msg(void);
+MSG_s  task_recevie_msg(void);
 void task_manager();
 
 #endif

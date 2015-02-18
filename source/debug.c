@@ -256,6 +256,7 @@ void task1()
 		{
 				static u32 task1u32 = 0;
 				GPIO_SET_GPSET(16);
+				task_send_msg(3, MSG_NORMAL, task1u32);
 				//DrawBlock(colorB,10, 0, 200,16);
 				//drawStringF("Task1:%d", colorF, 10, 10, task1u32 ++ );
 		}
@@ -274,10 +275,13 @@ void task2()
 
 		while(1)
 		{
-				static u32 task2u32 = 0;
+				//static u32 task2u32 = 0;
+			 	 u32 task2u32;
 				GPIO_SET_GPCLR(16);
-				//DrawBlock(colorB, 26, 10, 200 ,16);
-				//drawStringF("Task2:%d", colorF, 26, 10, task2u32 ++ );
+				MSG_s  _MSG = task_recevie_msg();
+				task2u32 = _MSG.value ;
+				DrawBlock(colorB,10, 0, 200,16);
+				drawStringF("Task1:%d", colorF, 10, 10, task2u32 );
 		}
 }
 

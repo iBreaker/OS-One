@@ -335,7 +335,7 @@ void MSG_dispose()
 }
 
 
-void task_recevie_msg(void)
+MSG_s  task_recevie_msg(void)
 {
 		MSG_s _MSG;
 		/*1. 通知内核自己进入等待消息状态 */
@@ -348,6 +348,8 @@ void task_recevie_msg(void)
 		/*进入死循环接收消息*/
 		u32 timer_value = os_timer_ctrl.value;
 		while( timer_value == os_timer_ctrl.value ){}
+
+		return  task_info[task_global.current_TID].MSG;
 }
 
 
