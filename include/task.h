@@ -17,22 +17,39 @@
 
 typedef enum
 {
-	READY = 200 ,RUN,WAIT,SUSPEND,DEAD
+	STATUS_NULL ,READY , RUN, WAIT4MSG, WAIT, SUSPEND, DEAD
 }TASK_STATUS_ENUM;
+
+typedef enum
+{
+	MSG_NULL, MSG_WAIT4MSG,MSG_SEND,  MSG_SUSPEND, MSG_RESUME
+}MSG_TYPE_ENUM;
+
+typedef struct {
+	u8 from;
+	u8 to;
+	MSG_TYPE_ENUM  type;
+	u32 value;
+}MSG_s;
 
 /*Task info*/
 typedef struct {
 		u8	rank;										/*优先级*/
 		TASK_STATUS_ENUM status;	/*任务状态*/
-		 void *task_func;						/*函数地址*/
+		 u32 task_func;						/*函数地址*/
 		 u8	TRID;										/*Task Ready ID*/
+		 MSG_s MSG;								/*每个任务的消息缓冲*/
 }TASK_INFO;
 
 TASK_INFO task_info[17];			    /*任务信息*/
+
 LinkedList task_ready_ll;
-LinkedList * task_ready;						/*就绪表*/
-LinkedList MSG;									/*消息控制*/
-LinkedList SEM;									/*信号量控制*/
+LinkedList * task_ready;					/*就绪表*/
+
+LinkedList MSG_list_ll;						/*消息ID控制*/
+LinkedList * MSG_list;
+
+MSG_s MSG[64];									/*消息真正存储的地方*/
 
 typedef struct {
 		u32 r0;
@@ -64,9 +81,13 @@ typedef struct {
 		u8 	schedule_lock ;
 }TASK_GLOBAL;
 
-u8 task_creat(u8 rank, void *task_func);
-u8 task_create(u8 rank, void *task_func);
+u8 task_create(u8 rank, u32 task_func);
 u8  task_run(u8 TID);
+void task_lock_schedule(void);
+void task_unlock_schedule(void);
+u8  task_send_msg(u8 to, MSG_TYPE_ENUM  type, u32 value);
+void task_recevie_msg(void);
+void task_manager();
 
 #endif
 

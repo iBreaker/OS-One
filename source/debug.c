@@ -19,6 +19,7 @@
 void deb_linedlist_reflash(LinkedList *Task);
 void task1();
 void task2();
+void task3();
 
 /*
 *	2014年12月31日16:12:49
@@ -224,14 +225,20 @@ void deb_timer_refalsh(void)
 void  deb_task(void)
 {
 		u8 rank = 3;
-		void * func = task1;
+		u32 func = (u32) task1;
 		u8 TID = task_create(rank , func);
 		task_run(TID);
 
-		func = task2;
+		func = (u32) task2;
 		TID = task_create(rank , func);
 		task_run(TID);
 
+		func = (u32) task3;
+		//TID = task_create(rank , func);
+		//task_run(TID);
+
+		task3();
+		task_manager();
 }
 
 void task1()
@@ -249,8 +256,8 @@ void task1()
 		{
 				static u32 task1u32 = 0;
 				GPIO_SET_GPSET(16);
-				DrawBlock(colorB,10, 0, 200,16);
-				drawStringF("Task1:%d", colorF, 10, 10, task1u32 ++ );
+				//DrawBlock(colorB,10, 0, 200,16);
+				//drawStringF("Task1:%d", colorF, 10, 10, task1u32 ++ );
 		}
 }
 
@@ -269,11 +276,14 @@ void task2()
 		{
 				static u32 task2u32 = 0;
 				GPIO_SET_GPCLR(16);
-				DrawBlock(colorB, 26, 10, 200 ,16);
-				drawStringF("Task2:%d", colorF, 26, 10, task2u32 ++ );
+				//DrawBlock(colorB, 26, 10, 200 ,16);
+				//drawStringF("Task2:%d", colorF, 26, 10, task2u32 ++ );
 		}
 }
 
+void task3()
+{
 
+}
 
  

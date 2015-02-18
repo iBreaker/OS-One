@@ -51,6 +51,7 @@ u8 ll_get_prior_id(LinkedList *ll, u8 id);
 u32 ll_get_value(LinkedList *ll, u8 id); 
 u8 ll_get_tail_id(LinkedList *ll);
 u8 ll_get_head_id(LinkedList *ll);
+u8 ll_set_value(LinkedList *ll, u8 id, u32 value);
 
 #endif
  

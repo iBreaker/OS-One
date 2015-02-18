@@ -462,3 +462,26 @@ u8 ll_get_min(LinkedList *ll)
 	
 	return min_id;
 }
+
+/*****************************************************************
+*	2015年02月18日11:28:31
+*	V1.0 	By Breaker
+*
+*	u8 ll_set_value(LinkedList *ll, u8 id, u32 value)
+*   	获取最小值
+*	return u8 , 0 失败 , 1成功
+*/
+u8 ll_set_value(LinkedList *ll, u8 id, u32 value)
+{
+		if( (0 == ll->node[id].next ) && (0 == ll->node[id].prior ) && (0 == ll->node[id].value ))
+		{
+				return 0;
+		}
+
+		ll->node[id].value = value;
+
+		ll->ctrl.max = ll_get_max(ll);
+		ll->ctrl.min = ll_get_min(ll);
+
+		return 1;
+}

@@ -25,10 +25,11 @@ void os_main(void)
 	
 	init_screen(1440, 900, 24);
 	
+	task_init();
 	init_arm_timer(Kernrl_100Hz);
 	_enable_interrupts();
 	
-	task_init();
+
 
 	/* debug */
 	

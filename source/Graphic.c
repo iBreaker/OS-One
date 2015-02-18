@@ -41,6 +41,7 @@ int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth)
 	color.G = 0x82;
 	color.B = 0xE6;
 	DrawBlock(color, 0, 0, (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth), (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth));
+	return 0;
 }
 
 /*****************************************************
@@ -72,7 +73,7 @@ void DrawDot(RGB_24Bit color, int top, int left)
 
 int DrawLine(RGB_24Bit color, int x1, int y1, int x2, int y2)
 {
-	
+	return 0;
 }
 
 /*****************************************************
@@ -97,7 +98,7 @@ void DrawBlock(RGB_24Bit color, int top, int left, unsigned int width, unsigned 
 
 int DrawBlockByMemory()
 {
-	
+	return 0;
 }
 
 
