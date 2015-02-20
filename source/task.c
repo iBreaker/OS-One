@@ -170,10 +170,12 @@ void  task_schedule(void)
 		do{
 			current_TRID = ll_get_next_id(task_ready , current_TRID);										//得到下一个TRID
 			current_TID = (u8) task_ready->node[current_TRID].value;
+			os_printf("->NEXT TID %d RTID : %d status %d", current_TID, current_TRID,  task_info[current_TID].status);
 		}while(0  == current_TRID || task_info[current_TID].status !=  READY);
 
 		task_global.current_TID = current_TID;			//设置当前TID													//
 		task_global.current_tasktable = (u32) &task_table[task_global.current_TID];	//设置当前tasktable
+		os_printf("%n CURRENT TID: %d", task_global.current_TID);
 		return ;
 }
 
@@ -256,11 +258,6 @@ u8  task_send_msg(u8 to, MSG_TYPE_ENUM  type, u32 value)
 			return false;
 	}
 
-	u8 result = ll_set_value(MSG_list , MSG_ID, value);
-	if( 0 == result)
-	{
-			return false;
-	}
 		/*1.2 填充消息*/
 	MSG_s _MSG;
 	_MSG.from = task_global.current_TID;
@@ -294,44 +291,42 @@ u8  task_send_msg(u8 to, MSG_TYPE_ENUM  type, u32 value)
 */
 void MSG_dispose()
 {
-
+	u8 MSG_ID = task_info[0].MSG.value;
+	u8 to = MSG[MSG_ID].to;
 	switch(task_info[0].MSG.type)
 	{
-			u8 MSG_ID = task_info[0].MSG.value;
-			u8 to = MSG[MSG_ID].to;
-
-			default:
-			case MSG_NULL:
-				return;
-				break;
-
 			case MSG_SEND:
 				if(task_info[to].status != WAIT4MSG)
 				{
-						return;
+						os_printf(" %n status != WAIT4MSG  TASK%d   MSG_ID:%d  ", to, MSG_ID);
+						break;
 				}
 				task_info[to].MSG = MSG[MSG_ID];
 				task_info[to].status = READY;
 
-				 task_info[0].MSG.type = MSG_NULL;
+				 os_printf("%n SEND to %d    ", to);
 				break;
 
 			case MSG_WAIT4MSG:
 				task_info[task_global.current_TID].status = WAIT4MSG;
-				task_info[0].MSG.type = MSG_NULL;
 				break;
 
 			case MSG_SUSPEND:
 				task_info[task_global.current_TID].status = SUSPEND;
-				task_info[0].MSG.type = MSG_NULL;
 				break;
 
 			//这里还是有点问题的, 挂起的进程恢复后不一定是READY
 			case MSG_RESUME:
 				task_info[task_global.current_TID].status = READY;
-				task_info[0].MSG.type = MSG_NULL;
+				break;
+
+			default:
+			case MSG_NULL:
 				break;
 	}
+	task_info[0].MSG.value = NULL;
+	task_info[0].MSG.type = MSG_NULL;
+	ll_remove_by_id(MSG_list, MSG_ID);
 }
 
 

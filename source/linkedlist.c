@@ -428,8 +428,6 @@ u8 ll_get_max(LinkedList *ll)
 		id = ll_get_next_id(ll, id); 
 		tmp ++;
 	}
-	
-	os_printf("|%d-%d",max_id, max_value);
 	return max_id;
 }
 

@@ -229,16 +229,17 @@ void  deb_task(void)
 		u8 TID = task_create(rank , func);
 		task_run(TID);
 
-		//func = (u32) task2;
-		//TID = task_create(rank , func);
-		//task_run(TID);
+		func = (u32) task2;
+		TID = task_create(rank , func);
+		task_run(TID);
 
 		//func = (u32) task3;
 		//TID = task_create(rank , func);
 		//task_run(TID);
 
-		task3();
-		task_manager();
+		//task3();
+		//task_manager();
+		while(1);
 }
 
 void task1()
@@ -255,8 +256,13 @@ void task1()
 		while(1)
 		{
 				static u32 task1u32 = 0;
-				GPIO_SET_GPSET(16);
+				os_printf("-sleep start-");
+				sleep(1000);
+				os_printf("-sleep end-");
+				//GPIO_SET_GPSET(16);
+				//blink_GPIO16();
 				task_send_msg(3, MSG_NORMAL, task1u32);
+				task1u32 ++;
 				//DrawBlock(colorB,10, 0, 200,16);
 				//drawStringF("Task1:%d", colorF, 10, 10, task1u32 ++ );
 		}
@@ -277,8 +283,11 @@ void task2()
 		{
 				//static u32 task2u32 = 0;
 			 	 u32 task2u32;
-				GPIO_SET_GPCLR(16);
+				//GPIO_SET_GPCLR(16);
+			 	blink_GPIO16();
+			 	os_printf("-receive start-");
 				MSG_s  _MSG = task_recevie_msg();
+				os_printf("-receive end-");
 				task2u32 = _MSG.value ;
 				DrawBlock(colorB,10, 0, 200,16);
 				drawStringF("Task1:%d", colorF, 10, 10, task2u32 );
