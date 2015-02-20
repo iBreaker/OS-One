@@ -229,11 +229,11 @@ void  deb_task(void)
 		u8 TID = task_create(rank , func);
 		task_run(TID);
 
-		func = (u32) task2;
-		TID = task_create(rank , func);
-		task_run(TID);
+		//func = (u32) task2;
+		//TID = task_create(rank , func);
+		//task_run(TID);
 
-		func = (u32) task3;
+		//func = (u32) task3;
 		//TID = task_create(rank , func);
 		//task_run(TID);
 
