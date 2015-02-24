@@ -66,8 +66,9 @@ _interrupt_vector_:
 	ldr		r3, [pc, #-12]
 	str		r2, [r3, #12]
 
-	bl		os_timer_ctrl_reflash		//系统时钟
-	bl		task_schedule					//任务调度
+	bl		UART_irq_handler			//UART中断
+	//bl		os_timer_ctrl_reflash		//系统时钟
+	//bl		task_schedule					//任务调度
 
 	//在这里添加任务调度函数              
 	//终于把任务切换调好了  ;-)  2015年02月11日20:59:00

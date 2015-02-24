@@ -15,7 +15,7 @@
 #include "csud.h"
 #include "linkedlist.h"
 #include "task.h"
-
+#include "UART.h"
 void deb_linedlist_reflash(LinkedList *Task);
 void task1();
 void task2();
@@ -32,7 +32,7 @@ void task3();
 void  deb_GPIO(void)
  {
 	 while(1)
-	{	
+	{
 		sleep(1000);
 		blink_GPIO19();
 		sleep(1000);
@@ -218,13 +218,15 @@ void deb_timer_refalsh(void)
 void  deb_task(void)
 {
 		u8 rank = 3;
-		u32 func = (u32) task1;
+		u32 func = (u32) dbg_UART;
 		u8 TID = task_create(rank , func);
 		task_run(TID);
+		os_printf("dbg_UART%n");
 
-		func = (u32) task2;
+		func = (u32) deb_GPIO;
 		TID = task_create(rank , func);
 		task_run(TID);
+		os_printf("deb_GPIO%n");
 
 		//func = (u32) task3;
 		//TID = task_create(rank , func);
@@ -292,4 +294,17 @@ void task3()
 
 }
 
+
+/*****************************************************
+*	2015年02月24日18:03:44
+*	V1.0 	By Breaker
+*
+*	 void  UART_dbg(void)
+*      调试UART
+*	return   void
+*/
+void dbg_UART()
+{
+	notmain();
+}
  

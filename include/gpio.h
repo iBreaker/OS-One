@@ -42,8 +42,8 @@
 #define GPPUDCLK0  0x20200098UL
 #define GPPUDCLK1  0x2020009CUL
 
-int GPIO_SET_GPFSEL(int pin, int func);
-void bcm2835_gpio_fsel(u8 pin, u8 mode);
+void gpio_init(void);
+void GPIO_SET_GPFSEL(u8 pin, u8 mode);
 int GPIO_SET_GPSET(int pin);
 int GPIO_SET_GPCLR(int pin);
 

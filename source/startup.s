@@ -43,8 +43,8 @@ _software_interrupt_vector_h:			.word		software_interrupt_vector
 _prefetch_abort_vector_h:				.word		prefetch_abort_vector
 _data_abort_vector_h:					.word		data_abort_vector
 _unused_hander_h:						.word		_reset_
-//_interrupt_vector_h:					.word		interrupt_vector
-_interrupt_vector_h:					.word 		_interrupt_vector_
+_interrupt_vector_h:					.word		interrupt_vector
+//_interrupt_vector_h:					.word 		_interrupt_vector_
 _fast_interrupt_vector_h:				.word		fast_interrupt_vector
 
 _reset_:
@@ -100,3 +100,16 @@ _enable_interrupts:
 
     mov     pc, lr
 
+.globl PUT32
+PUT32:
+    str r1,[r0]
+    bx lr
+
+.globl GET32
+GET32:
+    ldr r0,[r0]
+    bx lr
+
+.globl dummy
+dummy:
+    bx lr

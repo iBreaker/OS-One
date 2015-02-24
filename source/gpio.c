@@ -15,6 +15,15 @@ unsigned long GET_GPFSEL_ADDR(int pin);
 unsigned long GET_GPSET_ADDR(int pin);
 unsigned long GET_GPCLR_ADDR(int pin);
 
+void bcm2835_peri_set_bits(volatile u32 * paddr, u32  value, u32  mask);
+void bcm2835_peri_write(volatile u32 * paddr, u32  value);
+u32  bcm2835_peri_read(volatile u32 * paddr);
+
+void gpio_init(void)
+{
+		GPIO_SET_GPFSEL(16, 1);
+		GPIO_SET_GPFSEL(19, 1);
+}
 /*
 *	2014年12月24日14:27:29
 *	V1.0 	By Breaker
@@ -25,66 +34,17 @@ unsigned long GET_GPCLR_ADDR(int pin);
 */
 
 
-int GPIO_SET_GPFSEL(int pin, int func)
+void GPIO_SET_GPFSEL(u8 pin, u8 mode)
 {
 	//函数有错误 ,暂时不改   2015年02月08日18:59:50
-	volatile unsigned long *point = 0 ;
-	unsigned long mask = 0;
-	int bit_num = 0;
-	bit_num = pin % 10;
-	
-	//检查
-	
-	if(pin > 53 || pin < 0)
-	{
-		return -1;
-	}
-	
-	if(func > 7 || func < 0)
-	{
-		return -1;
-	}
-	
-	//赋值
-	
-	point = (unsigned long*)GET_GPFSEL_ADDR(pin);
-	//point = (unsigned long*)GPFSEL1;
-	switch(func)
-	{
-		case 0:
-			mask |=  1 << (bit_num * 3);
-			mask |=  1 << ((bit_num * 3) + 1) ;
-			mask |=  1 << ((bit_num * 3) + 2) ;
-			//^ 异或
-			~mask; 				
-			*point &= mask;
-			break;
-		case 1:
-			mask |= 1 << ((bit_num * 3) + 2);
-			mask |= 1 << (bit_num * 3) + 1;
-			~mask;
-			*point &= mask;
-			*point |= 1 << (bit_num * 3);
-			break;
-		default:
-			break;
-	}
-	return 0;
-} 
-
-void bcm2835_peri_set_bits(volatile u32 * paddr, u32  value, u32  mask);
-void bcm2835_peri_write(volatile u32 * paddr, u32  value);
-u32  bcm2835_peri_read(volatile u32 * paddr);
-
-void bcm2835_gpio_fsel(u8 pin, u8 mode)
-{
     // Function selects are 10 pins per 32 bit word, 3 bits per pin
     volatile u32 * paddr = ( volatile u32 * ) GPFSEL0  + (pin/10);
     u8   shift = (pin % 10) * 3;
     u32  mask = 0b111  << shift; // BCM2835_GPIO_FSEL_MASK = 0b111
     u32  value = mode << shift;
     bcm2835_peri_set_bits(paddr, value, mask);
-}
+} 
+
 
 // Set/clear only the bits in value covered by the mask
 void bcm2835_peri_set_bits(volatile u32 * paddr, u32  value, u32  mask)
@@ -110,7 +70,7 @@ u32  bcm2835_peri_read(volatile u32 * paddr)
 	// Make sure we dont return the _last_ read which might get lost
 	// if subsequent code changes to a different peripheral
 	u32 ret = *paddr;
-	*paddr; // Read without assigneing to an unused variable
+	int a = *paddr; // Read without assigneing to an unused variable
 	return ret;
 }
 

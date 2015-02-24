@@ -10,9 +10,10 @@
 #include "timer.h"
 #include "gpio.h"
 #include "Global.h"
+#include "UART.h"
 
 
-static irq_controller_t *irq_controller = (irq_controller_t *) INTERRUPT_CONTROLLER_BASE;
+//static irq_controller_t *irq_controller = (irq_controller_t *) INTERRUPT_CONTROLLER_BASE;
 
 
 
@@ -59,11 +60,11 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 	enabled, so we want don't have to work out which interrupt source
 	caused us to interrupt */
 	
-	ArmTimer->IRQClear = 1;
+	//ArmTimer->IRQClear = 1;
 	//os_timer_ctrl_reflash();
-	
-		GPIO_SET_GPCLR(16);
-		sleep(50);
+	UART_irq_handler();
+		//GPIO_SET_GPCLR(16);
+		//sleep(50);
 	
 	/***********************************
 	 * 调试代码*
