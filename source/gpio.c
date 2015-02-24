@@ -9,6 +9,7 @@
 
 #include "gpio.h"
 
+
 /*这里声明私有函数 共有函数在头文件中声明 */
 unsigned long GET_GPFSEL_ADDR(int pin);
 unsigned long GET_GPSET_ADDR(int pin);
@@ -22,6 +23,7 @@ unsigned long GET_GPCLR_ADDR(int pin);
 *   设置第pin个GPIO的功能(func)
 *	return 0 成功  -1 失败	
 */
+
 
 int GPIO_SET_GPFSEL(int pin, int func)
 {
@@ -70,6 +72,48 @@ int GPIO_SET_GPFSEL(int pin, int func)
 	return 0;
 } 
 
+void bcm2835_peri_set_bits(volatile u32 * paddr, u32  value, u32  mask);
+void bcm2835_peri_write(volatile u32 * paddr, u32  value);
+u32  bcm2835_peri_read(volatile u32 * paddr);
+
+void bcm2835_gpio_fsel(u8 pin, u8 mode)
+{
+    // Function selects are 10 pins per 32 bit word, 3 bits per pin
+    volatile u32 * paddr = ( volatile u32 * ) GPFSEL0  + (pin/10);
+    u8   shift = (pin % 10) * 3;
+    u32  mask = 0b111  << shift; // BCM2835_GPIO_FSEL_MASK = 0b111
+    u32  value = mode << shift;
+    bcm2835_peri_set_bits(paddr, value, mask);
+}
+
+// Set/clear only the bits in value covered by the mask
+void bcm2835_peri_set_bits(volatile u32 * paddr, u32  value, u32  mask)
+{
+    u32  v = bcm2835_peri_read(paddr);
+    v = (v & ~mask) | (value & mask);
+    bcm2835_peri_write(paddr, v);
+}
+
+void bcm2835_peri_write(volatile u32 * paddr, u32  value)
+{
+
+	// Make sure we don't rely on the first write, which may get
+	// lost if the previous access was to a different peripheral.
+	*paddr = value;
+	*paddr = value;
+}
+
+// safe read from peripheral
+u32  bcm2835_peri_read(volatile u32 * paddr)
+{
+
+	// Make sure we dont return the _last_ read which might get lost
+	// if subsequent code changes to a different peripheral
+	u32 ret = *paddr;
+	*paddr; // Read without assigneing to an unused variable
+	return ret;
+}
+
 /*
 *	2014年12月24日15:32:05
 *	V1.0 	By Breaker
@@ -101,6 +145,8 @@ int GPIO_SET_GPSET(int pin)
 	
 	*point |= (1 << bit_num);
 }
+
+
 
 /*
 *	2014年12月24日15:34:59
@@ -230,6 +276,22 @@ void blink_GPIO16(void)
 	else
 	{
 		GPIO_SET_GPCLR(16);
+		lit16 = 1;
+	}
+}
+
+void blink_GPIO19(void)
+{
+	static int lit16 = 0;
+
+	if( lit16 )
+	{
+		GPIO_SET_GPSET(19);
+		lit16 = 0;
+	}
+	else
+	{
+		GPIO_SET_GPCLR(19);
 		lit16 = 1;
 	}
 }

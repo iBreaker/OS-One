@@ -20,14 +20,16 @@ volatile unsigned int tmp = 0;
 void os_main(void)
 {
 	/* init */
-	GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
-	GPIO_SET_GPSET(16);
-	
+	//GPIO_SET_GPFSEL(16,1);	//GPIO16设置为output
+	//GPIO_SET_GPSET(16);
+	bcm2835_gpio_fsel(16, 1);
+	bcm2835_gpio_fsel(19, 1);
+
 	init_screen(1440, 900, 24);
 	
-	task_init();
-	init_arm_timer(Kernrl_1Hz);
-	_enable_interrupts();
+	//task_init();
+	init_arm_timer(Kernrl_100Hz);
+	//_enable_interrupts();
 	
 
 
@@ -35,14 +37,14 @@ void os_main(void)
 	
 	//deb_screen();
 	//deb_os_printf();
-	//deb_GPIO();
+	deb_GPIO();
 	//deb_keyboard();
 	//deb_timer();
 	//deb_linedlist();
-	deb_task();
+	//deb_task();
 	while(1)
 	{
-	//	blink_GPIO16();
+		blink_GPIO16();
 	}
 	;
 }

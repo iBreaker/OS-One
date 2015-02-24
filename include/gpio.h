@@ -7,8 +7,12 @@
 *	
 */
 
-#define GPIO_BASE  0x20200000UL
-#define GPFSEL0    0x20200000UL
+#ifndef _GPIO_H_
+#define _GPIO_H_
+#include "stdtype.h"
+
+#define GPIO_BASE  0x20200000
+#define GPFSEL0    0x20200000
 #define GPFSEL1    0x20200004UL
 #define GPFSEL2    0x20200008UL
 #define GPFSEL3    0x2020000cUL
@@ -39,8 +43,11 @@
 #define GPPUDCLK1  0x2020009CUL
 
 int GPIO_SET_GPFSEL(int pin, int func);
+void bcm2835_gpio_fsel(u8 pin, u8 mode);
 int GPIO_SET_GPSET(int pin);
 int GPIO_SET_GPCLR(int pin);
 
 void blink_GPIO16(void);
 void blink_GPIO19(void);
+
+#endif

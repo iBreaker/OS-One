@@ -6,3 +6,7 @@
 *.disasm
 *.map
 install.sh
+*.xml 
+.cproject 
+.project
+

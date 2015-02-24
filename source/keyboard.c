@@ -5,7 +5,8 @@
 
 void LogPrint(const char* message, u32 messageLength)
 {
-	os_printf(message);
+	char * MSG = (char * ) message;
+	os_printf(MSG);
+	os_printf("%n");
 }
  
-

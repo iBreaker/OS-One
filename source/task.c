@@ -170,12 +170,12 @@ void  task_schedule(void)
 		do{
 			current_TRID = ll_get_next_id(task_ready , current_TRID);										//得到下一个TRID
 			current_TID = (u8) task_ready->node[current_TRID].value;
-			os_printf("->NEXT TID %d RTID : %d status %d", current_TID, current_TRID,  task_info[current_TID].status);
+			//os_printf("->NEXT TID %d RTID : %d status %d", current_TID, current_TRID,  task_info[current_TID].status);
 		}while(0  == current_TRID || task_info[current_TID].status !=  READY);
 
 		task_global.current_TID = current_TID;			//设置当前TID													//
 		task_global.current_tasktable = (u32) &task_table[task_global.current_TID];	//设置当前tasktable
-		os_printf("%n CURRENT TID: %d", task_global.current_TID);
+		//os_printf("%n CURRENT TID: %d", task_global.current_TID);
 		return ;
 }
 

@@ -34,9 +34,9 @@ void  deb_GPIO(void)
 	 while(1)
 	{	
 		sleep(1000);
-		GPIO_SET_GPCLR(16);
+		blink_GPIO19();
 		sleep(1000);
-		GPIO_SET_GPSET(16);
+		blink_GPIO16();
 	}
 }
 
@@ -95,21 +95,14 @@ void  deb_screen(void)
 	unsigned int top, left;
 	top = 400;
 	left = 0;
-	
+	UsbInitialise();
 	while(1)
 	 {
 		char unsigned key = 0;
 		//KeyboardUpdate();
 		//key = KeyboardGetChar();
-		 if(key != 0)
-		 {
-			GPIO_SET_GPCLR(16);
-		 }
-		 else
-		 {
-			 
-		 }
-		 
+		os_printf("%d%n",key);
+		blink_GPIO16();
 	 }
  }
  
