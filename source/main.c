@@ -23,11 +23,11 @@ void os_main(void)
 
 	init_screen(1440, 900, 24);
 	gpio_init();
-	task_init();
-	init_arm_timer(Kernrl_100Hz);
+	uart_init();
+	//task_init();
+	//init_arm_timer(Kernrl_100Hz);
 	 _enable_interrupts();
 	
-
 	/* debug */
 	
 	//deb_screen();
@@ -38,6 +38,7 @@ void os_main(void)
 	//deb_linedlist();
 	//deb_task();
 	dbg_UART();
+
 	while(1)
 	{
 		blink_GPIO16();

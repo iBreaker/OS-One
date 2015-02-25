@@ -14,6 +14,8 @@ extern void dummy ( unsigned int );
 //------------------------------------------------------------------------
 void uart_init ( void )
 {
+    PUT32(IRQ_DISABLE1,1<<29);
+
     unsigned int ra;
 
     PUT32(AUX_ENABLES,1);
@@ -39,6 +41,8 @@ void uart_init ( void )
     PUT32(GPPUDCLK0,0);
 
     PUT32(AUX_MU_CNTL_REG,3);
+
+    PUT32(IRQ_ENABLE1,1<<29);
 }
 //------------------------------------------------------------------------
 void uart_putc ( unsigned int c )
@@ -87,88 +91,15 @@ void UART_irq_handler ( void )
     rb=GET32(AUX_MU_IIR_REG);
     while((rb&6) == 4) //resolve all interrupts to uart
     {
-    	 os_printf("-");
+
             //receiver holds a valid byte
          rc=GET32(AUX_MU_IO_REG); //read byte from rx fifo
          rxbuffer[rxhead]=rc&0xFF;
+         os_printf("%d-%c", rxbuffer[rxhead], rxbuffer[rxhead]);
+         uart_putc(rxbuffer[rxhead]);
          rxhead=(rxhead+1)&RXBUFMASK;
-         os_printf("%n read byte from rx fifo ");
          rb=GET32(AUX_MU_IIR_REG);
     }
 
 }
 //------------------------------------------------------------------------
-int notmain ( void )
-{
-	os_printf("in nomain%n");
-    unsigned int ra;
-    unsigned int rb;
-    unsigned int rc;
-    unsigned int rx;
-
-    PUT32(IRQ_DISABLE1,1<<29);
-
-    uart_init();
-
-    hexstring(0x12345671);
-    for(ra=0;ra<20;ra++) hexstring(ra);
-    hexstring(0x12345672);
-
-    PUT32(IRQ_ENABLE1,1<<29);
-    for(rx=0;rx<5;)
-    {
-        ra=GET32(IRQ_PEND1);
-        if(ra&(1<<29))
-        {
-            hexstrings(ra);
-            hexstrings(GET32(AUX_MU_IIR_REG));
-            hexstring(GET32(AUX_MU_STAT_REG));
-            hexstring(GET32(AUX_MU_IO_REG));
-            hexstrings(GET32(IRQ_PEND1));
-            hexstrings(GET32(AUX_MU_IIR_REG));
-            hexstring(GET32(AUX_MU_STAT_REG));
-            rx++;
-        }
-    }
-    hexstring(0x12345673);
-    rxhead=rxtail;
-    for(rx=0;rx<5;)
-    {
-        while(rxtail!=rxhead)
-        {
-            uart_putc(rxbuffer[rxtail]);
-            rxtail=(rxtail+1)&RXBUFMASK;
-            rx++;
-        }
-        ra=GET32(IRQ_PEND1);
-        if(ra&(1<<29))
-        {
-            //an interrupt has occurred, find out why
-            while(1) //resolve all interrupts to uart
-            {
-                rb=GET32(AUX_MU_IIR_REG);
-                if((rb&1)==1) break; //no more interrupts
-                if((rb&6)==4)
-                {
-                    //receiver holds a valid byte
-                    rc=GET32(AUX_MU_IO_REG); //read byte from rx fifo
-                    rxbuffer[rxhead]=rc&0xFF;
-                    rxhead=(rxhead+1)&RXBUFMASK;
-                }
-            }
-        }
-    }
-    hexstring(0x12345674);
-    //enable_irq();
-
-    while(1)
-    {
-        while(rxtail!=rxhead)
-        {
-            uart_putc(rxbuffer[rxtail]);
-            rxtail=(rxtail+1)&RXBUFMASK;
-            rx++;
-        }
-    }
-    return(0);
-}

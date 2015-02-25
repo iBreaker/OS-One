@@ -305,6 +305,15 @@ void task3()
 */
 void dbg_UART()
 {
-	notmain();
+	os_printf("%d",(u8)'A');
+	u32 * tx = (u32 *)AUX_MU_IO_REG;
+	while(1)
+	{
+		blink_GPIO19();
+		sleep(1000);
+		//hexstring(0x123456);
+		*tx = 65;
+		//os_printf("%n%d",AUX_MU_LSR_REG);
+	}
 }
  
