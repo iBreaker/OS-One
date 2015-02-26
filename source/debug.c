@@ -95,14 +95,9 @@ void  deb_screen(void)
 	unsigned int top, left;
 	top = 400;
 	left = 0;
-	UsbInitialise();
 	while(1)
 	 {
-		char unsigned key = 0;
-		//KeyboardUpdate();
-		//key = KeyboardGetChar();
-		os_printf("%d%n",key);
-		blink_GPIO16();
+
 	 }
  }
  
@@ -305,15 +300,6 @@ void task3()
 */
 void dbg_UART()
 {
-	os_printf("%d",(u8)'A');
-	u32 * tx = (u32 *)AUX_MU_IO_REG;
-	while(1)
-	{
-		blink_GPIO19();
-		sleep(1000);
-		//hexstring(0x123456);
-		*tx = 65;
-		//os_printf("%n%d",AUX_MU_LSR_REG);
-	}
+	input_fifo_dispose();
 }
  

@@ -12,6 +12,9 @@
 #include "timer.h"
 #include "stdtype.h"
 #include "task.h"
+#include "Graphic.h"
+#include "fifo.h"
+#include "input.h"
 
 /*Graphic.c*/
 extern unsigned int GpuInfoAddr;  			/*GPU信息首地址*/
@@ -20,6 +23,9 @@ extern unsigned char font[256];				/*字体首地址*/
 
 extern s32 os_top ;					//全局位置指针（屏幕显示）
 extern s32 os_left ;
+
+extern RGB_24Bit colorF;
+extern RGB_24Bit colorB;
 
 /*timer.c*/
 extern int TimerCounter;					//ArmTimer首地址
@@ -31,4 +37,11 @@ extern arm_timer_t *ArmTimer;
 /*task.c*/
 
 extern TASK_GLOBAL task_global;
+
+/*UART.c*/
+//extern char input_buf_p[input_size];
+extern char * input_buf ;
+extern FIFO8  input_p;
+extern FIFO8  * input;
+
 #endif

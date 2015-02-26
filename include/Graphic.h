@@ -7,6 +7,9 @@
 *	定义相关结构体
 */
 
+#ifndef _GRAPHIC_H
+#define _GRAPHIC_H
+
 typedef struct RGB_24Bit_S
 {
 	unsigned char R;
@@ -28,4 +31,5 @@ void drawHex(int hex, RGB_24Bit color, char IS_Big,int *top, int *left);
 void drawBin(int bin, RGB_24Bit color, char IS_Big,int *top, int *left);
 void os_printf(char *fmt, ...);
 
+#endif
 

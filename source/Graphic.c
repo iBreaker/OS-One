@@ -41,6 +41,14 @@ int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth)
 	color.G = 0x82;
 	color.B = 0xE6;
 	DrawBlock(color, 0, 0, (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth), (((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth));
+
+	colorF.R = 0x00;
+	colorF.G = 0x00;
+	colorF.B = 0x00;
+	colorB.R = 0x28;
+	colorB.G = 0x82;
+	colorB.B = 0xE6;
+
 	return 0;
 }
 
@@ -185,7 +193,6 @@ void drawDec(int dec, RGB_24Bit color, int *top, int *left)
 		dec -=  num * times;
 		times /= 10;
 	}while(times != 0);
-	
 }
 
 /*****************************************************

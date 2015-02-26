@@ -58,7 +58,7 @@ ${TARGET}.img: Makefile  ${TARGET}.elf
 ${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
 #${TARGET}.elf: Makefile ${OBJ}  ${ASB} ${DIR_SRC}/pi.x   
 	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
-	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}  -l csud -o ${TARGET}.elf  
+	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}   -o ${TARGET}.elf  
 	#${GNU}gcc ${LFLAGS} ${OBJ} ${ASB}  -o ${TARGET}.elf  
 	
 disasm:${TARGET}.elf 
