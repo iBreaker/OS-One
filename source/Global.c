@@ -17,10 +17,19 @@ volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
 RGB_24Bit colorF;
 RGB_24Bit colorB;
 
+RGB_24Bit colorBlack;
+RGB_24Bit colorWrite;
+RGB_24Bit colorRed;
+RGB_24Bit colorGreen;
+RGB_24Bit colorBule;
 
 s32 os_top = 0;					//全局位置指针（屏幕显示）
 s32 os_left = 0;
 
+struct pic_layer_table *PicLayerTable;
+ int MouseHaldle;
+ int DesktopHandle;
+ 
 /*timer.c*/
 arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		//ArmTimer首地址
 os_timer_ctrl_st os_timer_ctrl;		//timer ctrl

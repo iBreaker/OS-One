@@ -60,17 +60,17 @@ void  deb_screen(void)
 	int top,left;
 	top = 40;
 	left = 20;
-	DrawBlock(color,0,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth) ,1);
-	DrawBlock(color,0,0,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight) );
-	DrawBlock(color,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth)-1,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight));
-	DrawBlock(color,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight)-1,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth),1);
+	DrawBlock((RGB_24Bit * )GpuBufAddr, color,0,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth) ,1);
+	DrawBlock((RGB_24Bit * )GpuBufAddr, color,0,0,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight) );
+	DrawBlock((RGB_24Bit * )GpuBufAddr, color,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth)-1,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight));
+	DrawBlock((RGB_24Bit * )GpuBufAddr, color,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight)-1,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth),1);
 	
 	color.R = 0xFF;
 	color.G = 0xFF;
 	color.B = 0xFF;
 	
 	/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why*/
-	drawStringF("123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
+	drawStringF((RGB_24Bit * )GpuBufAddr, "123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
 
 }
  
@@ -127,7 +127,7 @@ void deb_timer_refalsh(void)
 	color_b.G = 0x82;
 	color_b.B = 0xE6;
 	
-	DrawBlock(color_b, 0, 0 , 1440, 900);
+	DrawBlock((RGB_24Bit * )GpuBufAddr, color_b, 0, 0 , 1440, 900);
 	
 	RGB_24Bit color;
 	color.R = 0xFF;
@@ -138,17 +138,17 @@ void deb_timer_refalsh(void)
 	int left,top;
 	left = 0; top = 0;
 	
-	drawStringF("value:%d", color, 0, 700, os_timer_ctrl.value);
+	drawStringF((RGB_24Bit * )GpuBufAddr, "value:%d", color, 0, 700, os_timer_ctrl.value);
 	
 	for(i=0; i<256; i++)
 	{
-		drawStringF("> %d", color, top, left, i);
+		drawStringF((RGB_24Bit * )GpuBufAddr, "> %d", color, top, left, i);
 		left += 48;
-		drawStringF("%d", color,top, left, os_timer_ctrl.os_timer_t[i].value);
+		drawStringF((RGB_24Bit * )GpuBufAddr, "%d", color,top, left, os_timer_ctrl.os_timer_t[i].value);
 		left += 64;
-		drawStringF("%d", color,top, left , os_timer_ctrl.os_timer_t[i].load);
+		drawStringF((RGB_24Bit * )GpuBufAddr, "%d", color,top, left , os_timer_ctrl.os_timer_t[i].load);
 		left += 64;
-		drawStringF("%d", color,top, left, os_timer_ctrl.os_timer_t[i].next_os_timer_id);
+		drawStringF((RGB_24Bit * )GpuBufAddr, "%d", color,top, left, os_timer_ctrl.os_timer_t[i].next_os_timer_id);
 		
 		left = 0;
 		top += 16;
@@ -281,8 +281,8 @@ void task2()
 				MSG_s  _MSG = task_recevie_msg();
 				os_printf("-receive end-");
 				task2u32 = _MSG.value ;
-				DrawBlock(colorB,10, 0, 200,16);
-				drawStringF("Task1:%d", colorF, 10, 10, task2u32 );
+				DrawBlock((RGB_24Bit * )GpuBufAddr, colorB,10, 0, 200,16);
+				drawStringF((RGB_24Bit * )GpuBufAddr, "Task1:%d", colorF, 10, 10, task2u32 );
 		}
 }
 
@@ -316,7 +316,7 @@ void dbg_UART()
 void dbg_memory(void)
 {
 	os_printf("init:%d%n",total_free_memory_size());
-	os_free(0x100000, 500 * (1024 *1024));
+	
 	os_printf("GpuBufAddr:%d%n",(u32)GpuBufAddr / (1024 *1024));
 	os_printf("free all:%d%n",total_free_memory_size()/ (1024 *1024));
 	os_malloc(0x100);
@@ -326,4 +326,30 @@ void dbg_memory(void)
 	os_malloc(0x1000000);
 	os_printf("malloc 0x1000000:%d%n",total_free_memory_size() / (1024 *1024));
 	
+}
+
+/*****************************************************
+*	2015年02月27日13:00:46
+*	V1.0 	By Breaker
+*
+*	 void  dbg_input(void)
+*      调试鼠标键盘
+*	return   void
+*/
+void dbg_input(void)
+{
+		//pic_layer_reflash();
+		init_mouse_cursor((RGB_24Bit * )GpuBufAddr, 200,200);
+		
+		os_printf(" R%d G%d B%d", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
+		GpuBufAddr += 3;
+		os_printf(" R%d G%d B%d", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
+		GpuBufAddr += 3;
+		os_printf(" R%d G%d B%d%n", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
+		
+		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[0].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
+		PicLayerTable->Picture[0].buf += 3;
+		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[0].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
+		PicLayerTable->Picture[0].buf += 3;
+		os_printf(" R%d G%d B%d%n", *(u8 * )PicLayerTable->Picture[0].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
 }

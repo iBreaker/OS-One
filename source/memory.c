@@ -108,7 +108,6 @@ void *os_malloc(unsigned int size)
 */
 int os_free (unsigned int addr,unsigned int size)
 {
-	os_printf("size:%d%n", size /( 1024 * 1024));
 	int i;
 	//合起来描述两个点的具体位置（在第index号空闲内存之前之中或之后）
 	int IsIn_start = -1 , IsIn_end = -1;   //-1之前 0之中  +1之后
@@ -258,7 +257,6 @@ int os_free (unsigned int addr,unsigned int size)
 			//根据i的情况处理
 			if(include_count == 0) 		//加
 			{
-				os_printf( "OK%n" );
 				if(FreeMemoryTables->free_count == FreeMemoryTables->max_count)
 				{
 					return -1;
@@ -266,13 +264,11 @@ int os_free (unsigned int addr,unsigned int size)
 				FreeMemoryTables->free_count++;
 				if(IsIn_start == -1 && IsIn_start == -1)  //特殊情况先处理
 				{
-					os_printf( "OK2%n" );
 					for(i=0; i<(FreeMemoryTables->free_count - 1); i++)		 //位移
 					{
 						FreeMemoryTables->FreeMemory[i + 1] = FreeMemoryTables->FreeMemory[i];
 					}
 					FreeMemoryTables->FreeMemory[0] = TempFree;
-					os_printf( "TempFree.size : %d%n",  TempFree.size);
 					index_new = 0;
 					
 				}
@@ -285,7 +281,6 @@ int os_free (unsigned int addr,unsigned int size)
 					FreeMemoryTables->FreeMemory[index_start + 1] = TempFree;
 					
 					index_new = index_start + 1;
-					os_printf( "TempFree.size : %d%n",  TempFree.size / (1024 * 1024));
 				}
 			}
 			else if(include_count == 1)		//大小不变
@@ -311,4 +306,24 @@ int os_free (unsigned int addr,unsigned int size)
 		FreeMemoryTables->max_free_size = FreeMemoryTables->FreeMemory[index_new].size;
 	}
 	return 0;
+}
+
+/*
+*	2015年02月27日17:13:21
+*	V1.0 	By Breaker
+*
+*	复制内存
+*	void os_memcpy(u32 from_addr, u32 to_addr, u32 size)
+*	return  
+*/
+void os_memcpy(u32 from_addr, u32 to_addr, u32 size)
+{
+	u32 i ;
+	u8 * from_addr_p = (u8 *)from_addr;
+	u8 * to_addr_p = (u8 *)to_addr;
+	for(i = 0; i < size; i++)
+	{
+		to_addr_p[i] = from_addr_p[i];
+	}
+	
 }

@@ -22,11 +22,20 @@ extern unsigned int GpuInfoAddr;  			/*GPU信息首地址*/
 extern volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
 extern unsigned char font[256];				/*字体首地址*/
 
+extern RGB_24Bit colorF;
+extern RGB_24Bit colorB;
+extern RGB_24Bit colorBlack;
+extern RGB_24Bit colorWrite;
+extern RGB_24Bit colorRed;
+extern RGB_24Bit colorGreen;
+extern RGB_24Bit colorBule;
+
 extern s32 os_top ;					//全局位置指针（屏幕显示）
 extern s32 os_left ;
 
-extern RGB_24Bit colorF;
-extern RGB_24Bit colorB;
+extern struct pic_layer_table *PicLayerTable;
+extern int MouseHaldle;
+extern int DesktopHandle;
 
 /*timer.c*/
 extern int TimerCounter;					//ArmTimer首地址

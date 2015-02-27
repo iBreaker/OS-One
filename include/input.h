@@ -9,8 +9,10 @@
 #ifndef _INPUT_H
 #define _INPUT_H
 
+#include "stdtype.h"
 #include "UART.h"
 #include "Global.h"
+#include "Graphic.h"
 
 #define input_size 64
 
@@ -24,5 +26,6 @@ typedef struct{
 input_status_s input_status;
 
 void input_fifo_dispose(void);
+void init_mouse_cursor(RGB_24Bit * to_addr, u32 top, u32 left);
 
 #endif

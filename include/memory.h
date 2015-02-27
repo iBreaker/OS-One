@@ -9,6 +9,8 @@
 #ifndef _MEMORY_H
 #define _MEMORY_H
 
+#include "stdtype.h"
+
 #define MAX_MEMORY_T 4096
 #define FreeMemoryTables_addr 0x003c0000
 struct free_memory_s
@@ -30,5 +32,6 @@ void momory_init(unsigned int addr,unsigned int size);
 unsigned int total_free_memory_size();
 void *os_malloc(unsigned int size);
 int os_free (unsigned int addr,unsigned int size);
+void os_memcpy(u32 from_addr, u32 to_addr, u32 size);
 
 #endif
