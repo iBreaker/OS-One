@@ -10,6 +10,10 @@
 #ifndef _GRAPHIC_H
 #define _GRAPHIC_H
 
+#define screen_width	1440
+#define screen_high	900
+#define color_deep	24
+
 typedef struct RGB_24Bit_S
 {
 	unsigned char R;

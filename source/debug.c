@@ -16,6 +16,8 @@
 #include "linkedlist.h"
 #include "task.h"
 #include "UART.h"
+#include "memory.h"
+
 void deb_linedlist_reflash(LinkedList *Task);
 void task1();
 void task2();
@@ -303,3 +305,25 @@ void dbg_UART()
 	input_fifo_dispose();
 }
  
+/*****************************************************
+*	2015年02月27日11:30:18
+*	V1.0 	By Breaker
+*
+*	 void  UART_dbg(void)
+*      调试UART
+*	return   void
+*/
+void dbg_memory(void)
+{
+	os_printf("init:%d%n",total_free_memory_size());
+	os_free(0x100000, 500 * (1024 *1024));
+	os_printf("GpuBufAddr:%d%n",(u32)GpuBufAddr / (1024 *1024));
+	os_printf("free all:%d%n",total_free_memory_size()/ (1024 *1024));
+	os_malloc(0x100);
+	os_printf("malloc 0x100:%d%n",total_free_memory_size() / (1024 *1024));
+	os_malloc(0x100000);
+	os_printf("malloc 0x100000:%d%n",total_free_memory_size() / (1024 *1024));
+	os_malloc(0x1000000);
+	os_printf("malloc 0x1000000:%d%n",total_free_memory_size() / (1024 *1024));
+	
+}

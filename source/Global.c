@@ -8,7 +8,7 @@
 */
 
 #include "Global.h"
-#include "timer.h"
+
 
 /*Graphic.c*/
 unsigned int GpuInfoAddr;  		/*GPU信息首地址*/
@@ -36,5 +36,8 @@ char * input_buf = input_buf_p;
 FIFO8  input_p;
 FIFO8  * input = & input_p;
 
+/*memory.c*/
+struct free_memory_table_s  FreeMemoryTables_p;
+struct free_memory_table_s  *FreeMemoryTables = &FreeMemoryTables_p;
 
 

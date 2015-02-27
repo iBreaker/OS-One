@@ -11,6 +11,7 @@
 #include "timer.h"
 #include "Graphic.h"
 #include "debug.h"
+#include "memory.h"
 
 /*这里不加volatile LED不会闪烁 Why？*/
 volatile unsigned int tmp = 0;
@@ -20,13 +21,18 @@ volatile unsigned int tmp = 0;
 void os_main(void)
 {
 	/* init */
-
-	init_screen(1440, 900, 24);
+	momory_init(0x100000, 500 * (1024 * 1024));
 	gpio_init();
-	uart_init();
+	init_screen(screen_width, screen_high, color_deep);
+	
+	
+	//堆内存从1M开始,共500M
+	
+	
+	//uart_init();
 	//task_init();
 	//init_arm_timer(Kernrl_100Hz);
-	 _enable_interrupts();
+	// _enable_interrupts();
 	
 	/* debug */
 	
@@ -37,8 +43,8 @@ void os_main(void)
 	//deb_timer();
 	//deb_linedlist();
 	//deb_task();
-	dbg_UART();
-
+	//dbg_UART();
+	dbg_memory();
 	while(1)
 	{
 		blink_GPIO16();

@@ -15,6 +15,7 @@
 #include "Graphic.h"
 #include "fifo.h"
 #include "input.h"
+#include "memory.h"
 
 /*Graphic.c*/
 extern unsigned int GpuInfoAddr;  			/*GPU信息首地址*/
@@ -43,5 +44,9 @@ extern TASK_GLOBAL task_global;
 extern char * input_buf ;
 extern FIFO8  input_p;
 extern FIFO8  * input;
+
+/*memory.c*/
+extern struct free_memory_table_s  FreeMemoryTables_p;
+extern struct free_memory_table_s  *FreeMemoryTables;
 
 #endif

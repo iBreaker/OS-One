@@ -42,7 +42,6 @@ SRC = $(wildcard  ${DIR_SRC}/*.c)
 ASB = $(wildcard  ${DIR_SRC}/*.s)
 OBJ = $(patsubst  %.c,${DIR_OBJ}/%.o,$(notdir ${SRC}))
 #暂时不链接USB驱动
-LIB = $(notdir $(wildcard ${DIR_LIB}/*.a))
 INC = $(wildcard ${DIR_INC}/*.h)
 
 all: 
@@ -55,7 +54,7 @@ ${DIR_OBJ}/%.o: ${DIR_SRC}/%.c  Makefile
 ${TARGET}.img: Makefile  ${TARGET}.elf
 	${GNU}objcopy  ${TARGET}.elf -O binary $@
 
-${TARGET}.elf:${OBJ}  ${DIR_LIB}/${LIB} ${ASB} ${DIR_SRC}/pi.x  
+${TARGET}.elf:${OBJ}   ${ASB} ${DIR_SRC}/pi.x  
 #${TARGET}.elf: Makefile ${OBJ}  ${ASB} ${DIR_SRC}/pi.x   
 	@echo ${OBJ}   ${LIB} ${ASB}  ${SRC} ${GNU}
 	${GNU}gcc ${LFLAGS} ${OBJ} ${ASB} -L ${DIR_LIB}   -o ${TARGET}.elf  
