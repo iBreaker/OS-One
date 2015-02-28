@@ -42,7 +42,9 @@ void os_printf(char *fmt, ...);
 
 /*-----------------------------------------------图层处理 Layer-----------------------------------------------------------------------*/
 
+
 #define MaxPicLayer 256
+
 
 struct position 	//位置
 {
@@ -70,8 +72,8 @@ struct pic_layer_table 		//图层表
 {
 	unsigned char LayerCount;
 	unsigned char PicCount;
-	struct pic_layer PicLayer[255];
-	struct picture Picture[255];
+	struct pic_layer PicLayer[MaxPicLayer];
+	struct picture Picture[MaxPicLayer];
 };
 
 struct pic_layer_table  *PicLayerTable_init();  //图层表初始化
@@ -82,6 +84,7 @@ int rm_from_layer(unsigned char PicIndex);	//删除图像
 unsigned char get_LayerIndex_by_PicIndex(unsigned char PicIndex);	//通过 LayerIndex获取 PicIndex
 unsigned char get_PicIndex_by_LayerIndex(unsigned char LayerIndex);  //通过 PicIndex LayerIndex获取
 int set_pic_layer(unsigned char PicIndex,unsigned char LayerIndex);	//改变图片图层
+void pic_layer_reflash();
 
 #endif
 

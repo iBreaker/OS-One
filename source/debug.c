@@ -17,6 +17,7 @@
 #include "task.h"
 #include "UART.h"
 #include "memory.h"
+#include "input.h"
 
 void deb_linedlist_reflash(LinkedList *Task);
 void task1();
@@ -338,18 +339,36 @@ void dbg_memory(void)
 */
 void dbg_input(void)
 {
-		//pic_layer_reflash();
-		init_mouse_cursor((RGB_24Bit * )GpuBufAddr, 200,200);
 		
+
+		input_mouse_init();
 		os_printf(" R%d G%d B%d", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
 		GpuBufAddr += 3;
 		os_printf(" R%d G%d B%d", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
 		GpuBufAddr += 3;
 		os_printf(" R%d G%d B%d%n", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
 		
-		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[0].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
+		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[1].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
 		PicLayerTable->Picture[0].buf += 3;
-		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[0].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
+		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[1].buf + 3, *((u8 * )PicLayerTable->Picture[0].buf + 4),  *((u8 * )PicLayerTable->Picture[0].buf + 5));
 		PicLayerTable->Picture[0].buf += 3;
-		os_printf(" R%d G%d B%d%n", *(u8 * )PicLayerTable->Picture[0].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
+		os_printf(" R%d G%d B%d%n", *(u8 * )PicLayerTable->Picture[1].buf + 6, *((u8 * )PicLayerTable->Picture[0].buf + 7),  *((u8 * )PicLayerTable->Picture[0].buf + 8));
+
+		input_fifo_msg input_msg;
+
+		while( 1)
+		{
+			if(input->count == 0 )
+				continue;
+			input_msg =  fifo_get(input) ;
+			if( input_msg != fifo_mouse)
+				continue;
+			MousePic.Position.left += (s8)input_status.x;
+			MousePic.Position.top -= (s8)input_status.y;
+			//os_printf("<%d-%d>%n", MousePic.Position.top, MousePic.Position.left);
+			//uart_putc(input_status.x + '0');
+			draw_to_screen(MousePic);
+			//pic_layer_reflash();
+		}
+
 }

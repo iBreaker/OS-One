@@ -16,8 +16,7 @@
 
 /*这里不加volatile LED不会闪烁 Why？*/
 volatile unsigned int tmp = 0;
-
-
+	
 /*程序的主函数，永远不返回*/
 void os_main(void)
 {
@@ -30,10 +29,10 @@ void os_main(void)
 	PicLayerTable = PicLayerTable_init();  //初始化图层表
 	//init_screen(screen_width, screen_high, color_deep);
 	init_screen_layer();
-	//uart_init();
+	uart_init();
 	//task_init();
 	//init_arm_timer(Kernrl_100Hz);
-	// _enable_interrupts();
+	 _enable_interrupts();
 	
 	/* debug */
 	

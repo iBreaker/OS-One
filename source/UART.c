@@ -104,6 +104,7 @@ void UART_irq_handler ( void )
      	 		 		 	 break;
      	 		 	 	 }
          	 		 	 input_status.key  = rx;
+         	 		 	fifo_put(input, fifo_key);
          	 		 	 break;
          	 	 case 1:		//button
          	 		 	 if( (rx < 0) ||  (rx > 3) )			//非法值, 出错重来
@@ -119,11 +120,12 @@ void UART_irq_handler ( void )
           	 		 	mouse_status = 3;
          	 	 	 	 break;
          	 	 case 3:		//y
-     	 		 	 	 input_status.y = rx;
+     	 		 	 	input_status.y = rx;
           	 		 	mouse_status = 0;
+          	 		 	fifo_put(input, fifo_mouse);
          	 	 	 	 break;
          }
-         //fifo_put(input, rx);															//加入fifo
+         //															//加入fifo
 
          if(error == true)
          {

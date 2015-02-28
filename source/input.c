@@ -7,6 +7,9 @@
 */
 
 #include "input.h"
+#include "stdtype.h"
+#include "Global.h"
+#include "Graphic.h"
 #include "UART.h"
 
 /*
@@ -90,24 +93,53 @@ void init_mouse_cursor(RGB_24Bit * to_addr, u32 top, u32 left)
 		{
 			if (cursor[y][x] == '.')
 			{
-				DrawDot(to_addr, colorB, top + y, left + x);
-				//mouse[y * 16 + x] = backcolor;
+				DrawDot_to_layer(to_addr, colorB, 16, y, x);
 			}
 			else if (cursor[y][x] == '*')
 			{
-				DrawDot(to_addr, colorWrite, top + y, left + x);
-				//mouse[y * 16 + x] = COL8_FFFFFF;
+				DrawDot_to_layer(to_addr, colorWrite,16, y, x);
 			}
 			else if (cursor[y][x] == 'O')
 			{
-				DrawDot(to_addr, colorBlack, top + y, left + x);
-				//mouse[y * 16 + x] = COL8_000000;
+				DrawDot_to_layer(to_addr, colorBlack, 16, y, x);
 			}
 		}
 	}
 }
-void input_mouse(void)
+void input_mouse_init(void)
 {
+		MousePic.Position.top =  (screen_high / 2) - 16;
+		MousePic.Position.left =  (screen_width / 2) - 16;
+		MousePic.Position.width = 16;
+		MousePic.Position.hight = 16;
+		init_mouse_cursor((RGB_24Bit * )mcursor, 0, 0);
+		MousePic.buf =  mcursor;
 
+		MouseHaldle = add_pic(MousePic);
+		if(MouseHaldle != -1)
+		{
+			add_pic_to_layer(MouseHaldle);
+			pic_layer_reflash();
+		}
+
+		struct picture Pic;
+		Pic.Position.top =  400;
+		Pic.Position.left =  400;
+		Pic.Position.width = 100;
+		Pic.Position.hight = 100;
+		char * p =  os_malloc(100 * 100 * 3);
+		Pic.buf = (RGB_24Bit *)p;
+		int i;
+		for(i = 0; i < 30000; i++ )
+		{
+			p[i]  = 0xff;
+		}
+
+		u32 Haldle = add_pic(Pic);
+		if(Haldle != -1)
+		{
+			add_pic_to_layer(Haldle);
+			pic_layer_reflash();
+		}
 }
 

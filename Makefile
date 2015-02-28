@@ -33,9 +33,9 @@ TARGET ?= kernel
 
 GNU = arm-none-eabi-
 CFLAGS +=   -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
-			-nostartfiles -fshort-wchar  -g -Wl,--verbose -c -I ${DIR_INC} 
+			-nostartfiles   -g -Wl,--verbose -c -I ${DIR_INC} 
 LFLAGS +=    -mfpu=vfp -mfloat-abi=hard -march=armv6zk -mtune=arm1176jzf-s \
-			-nostartfiles  -fshort-wchar  -g -Wl,-T,${DIR_SRC}/pi.x -Wl,-Map,${TARGET}.map 
+			-nostartfiles    -g -Wl,-T,${DIR_SRC}/pi.x -Wl,-Map,${TARGET}.map 
 
 
 SRC = $(wildcard  ${DIR_SRC}/*.c)

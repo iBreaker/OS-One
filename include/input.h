@@ -10,11 +10,17 @@
 #define _INPUT_H
 
 #include "stdtype.h"
-#include "UART.h"
 #include "Global.h"
 #include "Graphic.h"
+#include "UART.h"
 
 #define input_size 64
+
+typedef enum{
+	fifo_null,
+	fifo_key,
+	fifo_mouse
+}input_fifo_msg;
 
 typedef struct{
 	u8 key;
@@ -25,7 +31,12 @@ typedef struct{
 
 input_status_s input_status;
 
+struct picture MousePic;
+RGB_24Bit mcursor[256];
+
 void input_fifo_dispose(void);
 void init_mouse_cursor(RGB_24Bit * to_addr, u32 top, u32 left);
+void input_mouse_init(void);
+
 
 #endif

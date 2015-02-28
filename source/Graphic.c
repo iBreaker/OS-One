@@ -86,8 +86,9 @@ void init_screen_layer()
 	if(DesktopHandle != -1)
 	{
 		add_pic_to_layer(DesktopHandle);
+		//pic_layer_reflash();
 	}
-	pic_layer_reflash();
+
 }
 
 /*****************************************************
@@ -172,6 +173,24 @@ void DrawDot(RGB_24Bit * to_addr, RGB_24Bit color, int top, int left)
 	//*(volatile unsigned char *)((unsigned int)GpuBufAddr + (((((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth) * top + left) * 3 + 1))= color.G;	
 	//*(volatile unsigned char *)((unsigned int)GpuBufAddr + (((((struct FrameBufferInfoS *)GpuInfoAddr)->phyWidth)* top + left) * 3 + 2))= color.B;	
 	u8 * base_addr  = (u8 *)((screen_width * top + left)  + to_addr);
+	*(u8 *)base_addr = color.R;
+	*((u8 *)base_addr + 1) = color.G;
+	*((u8 *)base_addr + 2)= color.B;
+}
+
+/*****************************************************
+*	2014年12月29日16:57:16
+*	V1.0 	By Breaker
+*
+*	    void DrawDot_to_layer(RGB_24Bit * to_addr, RGB_24Bit color ,int width, int top, int left)
+*   	画点
+*	return void 超出显示范围退出
+*/
+
+void DrawDot_to_layer(RGB_24Bit * to_addr, RGB_24Bit color ,int width, int top, int left)
+{
+
+	u8 * base_addr  = (u8 *)((width * top + left)  + to_addr);
 	*(u8 *)base_addr = color.R;
 	*((u8 *)base_addr + 1) = color.G;
 	*((u8 *)base_addr + 2)= color.B;
@@ -563,8 +582,27 @@ void os_printf(char *fmt, ...)
 */
 void draw_to_screen(struct picture NewPicture)
 {
-	os_memcpy((u32)NewPicture.buf , (u32) GpuBufAddr  , (screen_high * screen_width * color_deep) / 8);
-	return;
+		//u32 to_addr = (u32) GpuBufAddr  + ( ( NewPicture.Position.top * screen_width +  NewPicture.Position.left ) * ( color_deep / 8));
+		//u32 size = NewPicture.Position.hight *  NewPicture.Position.width * (( color_deep / 8));
+		//os_memcpy((u32)NewPicture.buf , to_addr  , size);
+
+		int top, left ;
+		RGB_24Bit temp_color;
+		u32 i = 0;
+		char * base_addr = (char *) NewPicture.buf;
+		for(top = 0; top < NewPicture.Position.hight; top++)
+		{
+			for(left = 0; left < NewPicture.Position.width; left++)
+			{
+				temp_color.R = base_addr[i];
+				temp_color.G = base_addr[i+1];
+				temp_color.B = base_addr[i +2];
+				DrawDot((RGB_24Bit *)GpuBufAddr, temp_color, NewPicture.Position.top + top, NewPicture.Position.left + left) ;
+				i += 3;
+			}
+		}
+
+		return;
 }
 
 /*
@@ -781,17 +819,18 @@ int set_picture_position(unsigned char PicIndex, struct position Position)
 *	int pic_layer_reflash();
 *	return  是否成功 
 */
-int pic_layer_reflash()
+void pic_layer_reflash()
 {
+	blink_GPIO19();
 	int i;
 	unsigned char PicIndex;
 	for(i=0; i < PicLayerTable->LayerCount; i++)
 	{
-		os_printf("%d%n", PicLayerTable->LayerCount);
 		PicIndex = get_PicIndex_by_LayerIndex(i);
 		if(PicLayerTable->Picture[PicIndex].Empty == 0)
 		{
 			draw_to_screen(PicLayerTable->Picture[PicIndex]);
+			//os_printf("PicIndex :<%d>", PicIndex);
 			
 		}
 	}
