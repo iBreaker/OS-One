@@ -9,4 +9,5 @@ void  deb_linedlist(void);
 void dbg_UART(void);
 void dbg_memory(void);
 void dbg_input(void);
+void dbg_bmp(void);
 

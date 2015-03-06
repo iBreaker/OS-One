@@ -356,6 +356,7 @@ void dbg_input(void)
 
 		input_fifo_msg input_msg;
 
+
 		while( 1)
 		{
 			if(input->count == 0 )
@@ -372,4 +373,31 @@ void dbg_input(void)
 			//pic_layer_reflash_rect(0,0,1440,900);
 		}
 
+}
+
+/*****************************************************
+*	2015年03月06日17:59:26
+*	V1.0 	By Breaker
+*
+*	 void  dbg_bmp(void)
+*      bmp文件
+*	return   void
+*/
+void dbg_bmp(void)
+{
+	extern char bmp;
+	struct picture bmp_pic;
+
+	bmp_pic.Position.hight = 16;
+	bmp_pic.Position.width = 16;
+	bmp_pic.Position.top = 300;
+	bmp_pic.Position.left = 300;
+
+	u32 to = (u32)os_malloc(16 * 16 * 3);
+	copy_bmp_to_piclayer((u32)&bmp, to);
+
+	bmp_pic.buf = (RGB_24Bit *)to;
+	u32 handle = add_pic(bmp_pic);
+	add_pic_to_layer(handle);
+	pic_layer_reflash_rect(bmp_pic.Position.top,bmp_pic.Position.left,bmp_pic.Position.width, bmp_pic.Position.hight);
 }

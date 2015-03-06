@@ -103,6 +103,9 @@ int set_pic_to_top(unsigned char PicIndex);
 void pic_layer_reflash_rect(s32 top, s32 left, s32 width, s32 hight);
 void pic_layer_reflash();
 void move_pic_layer(u32 top, u32 left, u32 haldle, move_type mt);
+bool is_inside (int topa, int lefta, int widtha, int higha, int x, int y);
+rect inside_rect(int topa, int lefta, int widtha, int higha, int topb, int leftb, int widthb, int highb);
+void copy_bmp_to_piclayer(u32 bmp_, u32 to);
 
 #endif
 

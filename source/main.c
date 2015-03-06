@@ -46,7 +46,8 @@ void os_main(void)
 	//dbg_UART();
 	//dbg_memory();
 	
-	dbg_input();
+	//dbg_input();
+	 dbg_bmp();
 	while(1)
 	{
 		sleep(1000);

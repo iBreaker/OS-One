@@ -155,9 +155,9 @@ int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth)
 	colorF.G = 0xFF;
 	colorF.B = 0xFF;
 	
-	colorB.R = 0x28;
-	colorB.G = 0x82;
-	colorB.B = 0xE6;
+	colorB.R = 0x28;	//40
+	colorB.G = 0x82;	//130
+	colorB.B = 0xE6;	//230
 	
 	DrawBlock((RGB_24Bit *) GpuBufAddr,  colorB, 0, 0, screen_width, screen_high);
 	return 0;
@@ -1253,7 +1253,14 @@ rect inside_rect(int topa, int lefta, int widtha, int higha, int topb, int leftb
 	}
 }
 
-
+/*
+*	2015年03月06日19:13:38
+*	V1.0 	By Breaker
+*
+*	移动图层并且刷新
+*	void move_pic_layer(u32 top, u32 left, u32 haldle, move_type mt)
+*	return  rect
+*/
 void move_pic_layer(u32 top, u32 left, u32 haldle, move_type mt)
 {
 	rect new_rect;
@@ -1306,4 +1313,31 @@ void move_pic_layer_sub(u32 haldle)
 
 		return;
 }
+
+/*
+*	2015年03月06日19:14:27
+*	V1.0 	By Breaker
+*
+*	将bmp复制到所给图层
+*	void copy_bmp_to_piclayer(u32 bmp, u32 to)
+*	return  rect
+*/
+void copy_bmp_to_piclayer(u32 bmp_, u32 to)
+{
+	u32  from =  bmp_ + 0x36;
+	u32 width = * (u32 *) ( bmp_ + 0x12);
+	u32 hight = * (u32 *) ( bmp_ + 0x16);
+
+	int i, j;
+	for(i=0; i <  16 ; i++)
+	{
+		for(j=0; j <  16 ; j++)
+		{
+			 *(char *)(to + (width * (width - 1  - i ) + j) * 3 + 2) =  *(char *) (from + (width * i + j) * 3) ;
+			 *(char *)(to + (width * (width - 1 - i ) + j) * 3 + 1 )  =  *(char *) (from + (width * i + j) * 3 + 1);
+			 *(char *)(to + (width * (width - 1 - i ) + j) *3 )  =  *(char *) (from + (width * i + j) * 3 + 2);
+		}
+	}
+}
+
 
