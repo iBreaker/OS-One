@@ -21,8 +21,8 @@ volatile unsigned int tmp = 0;
 void os_main(void)
 {
 	/* init */
-	momory_init(0x100000, 500 * (1024 * 1024));		//堆内存从1M开始,共500M
-	os_free(0x100000, 500 * (1024 *1024));
+	momory_init(20 * (1024 * 1024), 490 * (1024 * 1024));		//堆内存从1M开始,共500M
+	os_free(20 * (1024 * 1024), 490 * (1024 *1024));
 	gpio_init();
 	
 	// 2014年12月13日18:13:10  刚才还没有初始化就开始使用图层表，结果发生了不可预知的错误，第二次犯这样的错误了。
@@ -46,8 +46,9 @@ void os_main(void)
 	//dbg_UART();
 	//dbg_memory();
 	
-	//dbg_input();
+	//
 	 dbg_bmp();
+	 dbg_input();
 	while(1)
 	{
 		sleep(1000);

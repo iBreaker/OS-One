@@ -96,8 +96,10 @@ void init_screen_layer()
 	//灰色阴影
 	//boxfill8(buf, NewPicture.Position.width, COL8_2882E6, 26, NewPicture.Position.hight - 11, 26, NewPicture.Position.hight - 1);
 
-	
-	DrawBlock((RGB_24Bit *) buf,  colorB, 0, 0, screen_width, screen_high);
+	extern char bg_bmp;
+	//DrawBlock((RGB_24Bit *) buf,  colorB, 0, 0, screen_width, screen_high);
+
+	copy_bmp_to_piclayer((u32)&bg_bmp, (u32)NewPicture.buf);
 	DesktopHandle = add_pic(NewPicture);
 	if(DesktopHandle != -1)
 	{
@@ -1327,17 +1329,19 @@ void copy_bmp_to_piclayer(u32 bmp_, u32 to)
 	u32  from =  bmp_ + 0x36;
 	u32 width = * (u32 *) ( bmp_ + 0x12);
 	u32 hight = * (u32 *) ( bmp_ + 0x16);
-
+	os_printf("%d %d %n", hight, width);
 	int i, j;
-	for(i=0; i <  16 ; i++)
+	for(i=0; i <  hight ; i++)
 	{
-		for(j=0; j <  16 ; j++)
+		for(j=0; j <  width ; j++)
 		{
-			 *(char *)(to + (width * (width - 1  - i ) + j) * 3 + 2) =  *(char *) (from + (width * i + j) * 3) ;
-			 *(char *)(to + (width * (width - 1 - i ) + j) * 3 + 1 )  =  *(char *) (from + (width * i + j) * 3 + 1);
-			 *(char *)(to + (width * (width - 1 - i ) + j) *3 )  =  *(char *) (from + (width * i + j) * 3 + 2);
+			 *(char *)(to + (width * (hight - 1  - i ) + j) * 3 + 2) =  *(char *) (from + (width * i + j) * 3) ;
+			 *(char *)(to + (width * (hight - 1 - i ) + j) * 3 + 1 )  =  *(char *) (from + (width * i + j) * 3 + 1);
+			 *(char *)(to + (width * (hight - 1 - i ) + j) *3 )  =  *(char *) (from + (width * i + j) * 3 + 2);
 		}
 	}
+
+
 }
 
 
