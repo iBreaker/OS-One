@@ -22,6 +22,7 @@ RGB_24Bit colorWrite;
 RGB_24Bit colorRed;
 RGB_24Bit colorGreen;
 RGB_24Bit colorBule;
+RGB_24Bit  transparent;
 
 s32 os_top = 0;					//全局位置指针（屏幕显示）
 s32 os_left = 0;

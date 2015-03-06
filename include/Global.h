@@ -29,6 +29,7 @@ extern RGB_24Bit colorWrite;
 extern RGB_24Bit colorRed;
 extern RGB_24Bit colorGreen;
 extern RGB_24Bit colorBule;
+extern RGB_24Bit  transparent;
 
 extern s32 os_top ;					//全局位置指针（屏幕显示）
 extern s32 os_left ;

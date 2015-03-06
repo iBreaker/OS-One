@@ -363,12 +363,13 @@ void dbg_input(void)
 			input_msg =  fifo_get(input) ;
 			if( input_msg != fifo_mouse)
 				continue;
-			MousePic.Position.left += (s8)input_status.x;
-			MousePic.Position.top -= (s8)input_status.y;
+			//MousePic.Position.left += (s8)input_status.x;
+			//MousePic.Position.top -= (s8)input_status.y;
 			//os_printf("<%d-%d>%n", MousePic.Position.top, MousePic.Position.left);
 			//uart_putc(input_status.x + '0');
-			draw_to_screen(MousePic);
-			//pic_layer_reflash();
+			//draw_to_screen(MousePic);
+			move_pic_layer( -(s8)input_status.y, (s8)input_status.x, MouseHaldle, relative);
+			//pic_layer_reflash_rect(0,0,1440,900);
 		}
 
 }

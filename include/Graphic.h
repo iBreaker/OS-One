@@ -46,26 +46,27 @@ void os_printf(char *fmt, ...);
 #define MaxPicLayer 256
 
 
-struct position 	//位置
-{
+//矩形
+typedef struct{
 	int top;
 	int left;
 	int width;
-	int hight;  
-};
+	int hight;
+}rect;
+
 
 struct pic_layer	//每一个图层结构
 {
-	unsigned char PicIndex;
-	//unsigned char Empty;	//pic_layer 是有序线性组，所以不需要标志位，LayerCount 就可以存储队尾信息
+	unsigned char PicIndex;				//对应的图片号
+	unsigned char Empty;					//是否被占用
 };
 
 struct picture		//每一个图片结构
 {
-	unsigned char LayerIndex;
-	struct position Position;
-	RGB_24Bit *buf;
-	unsigned char Empty;
+	unsigned char LayerIndex;		//对应的图层号
+	rect Position;										//位置大小
+	RGB_24Bit *buf;									//颜色
+	unsigned char Empty;					//是否被占用
 };
 
 struct pic_layer_table 		//图层表
@@ -76,15 +77,32 @@ struct pic_layer_table 		//图层表
 	struct picture Picture[MaxPicLayer];
 };
 
+
+
+//点是否在矩形中以及点的坐标
+typedef struct{
+	int x;
+	int y;
+	char is_in;
+}point_msg;
+
+typedef enum{
+	null,
+	absolute,
+	relative
+}move_type;
+
 struct pic_layer_table  *PicLayerTable_init();  //图层表初始化
-unsigned char add_pic(struct picture NewPicture);	//添加图片
-unsigned char add_pic_to_layer(unsigned char PicIndex) ; //放在当前最上层  
+int add_pic(struct picture NewPicture);	//添加图片
+int add_pic_to_layer(unsigned char PicIndex) ; //放在当前最上层
 int rm_picture(unsigned char PicIndex);		//将图片从图层中移除
 int rm_from_layer(unsigned char PicIndex);	//删除图像
 unsigned char get_LayerIndex_by_PicIndex(unsigned char PicIndex);	//通过 LayerIndex获取 PicIndex
 unsigned char get_PicIndex_by_LayerIndex(unsigned char LayerIndex);  //通过 PicIndex LayerIndex获取
-int set_pic_layer(unsigned char PicIndex,unsigned char LayerIndex);	//改变图片图层
+int set_pic_to_top(unsigned char PicIndex);
+void pic_layer_reflash_rect(s32 top, s32 left, s32 width, s32 hight);
 void pic_layer_reflash();
+void move_pic_layer(u32 top, u32 left, u32 haldle, move_type mt);
 
 #endif
 

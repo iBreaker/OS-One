@@ -68,6 +68,7 @@ void input_keyboard(void)
 
 void init_mouse_cursor(RGB_24Bit * to_addr, u32 top, u32 left)
 {
+
 	char cursor[16][16] = {
 		"**..............",
 		"*O*.............",
@@ -93,7 +94,7 @@ void init_mouse_cursor(RGB_24Bit * to_addr, u32 top, u32 left)
 		{
 			if (cursor[y][x] == '.')
 			{
-				DrawDot_to_layer(to_addr, colorB, 16, y, x);
+				DrawDot_to_layer(to_addr, transparent, 16, y, x);
 			}
 			else if (cursor[y][x] == '*')
 			{
@@ -115,12 +116,18 @@ void input_mouse_init(void)
 		init_mouse_cursor((RGB_24Bit * )mcursor, 0, 0);
 		MousePic.buf =  mcursor;
 
+		int layer_index ;
 		MouseHaldle = add_pic(MousePic);
 		if(MouseHaldle != -1)
 		{
-			add_pic_to_layer(MouseHaldle);
-			pic_layer_reflash();
+			layer_index = add_pic_to_layer(MouseHaldle);
+			os_printf("%n%d%n",layer_index );
+			//pic_layer_reflash();
 		}
+
+		//set_pic_layer(MouseHaldle, MaxPicLayer - 3);
+		//PicLayerTable->PicLayer[PicLayerTable->LayerCount].Empty = 0;
+		//PicLayerTable->LayerCount++;
 
 		struct picture Pic;
 		Pic.Position.top =  400;
@@ -139,7 +146,10 @@ void input_mouse_init(void)
 		if(Haldle != -1)
 		{
 			add_pic_to_layer(Haldle);
-			pic_layer_reflash();
+			set_pic_to_top(MouseHaldle);
+			//pic_layer_reflash();
 		}
+
+
 }
 
