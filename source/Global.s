@@ -8,7 +8,7 @@
 */
 
 .align 4
-.global font , bmp, bg_bmp
+.global font , bmp, bg_bmp, color_bmp
 .global tasktable, taskstack
 font:			/*字体首地址*/
 .incbin "./source/font0.bin"
@@ -19,3 +19,5 @@ bmp:
 bg_bmp:
 .incbin "./source/bg.bmp"
 
+color_bmp:
+.incbin "./source/color.bmp"

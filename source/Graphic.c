@@ -104,7 +104,7 @@ void init_screen_layer()
 	if(DesktopHandle != -1)
 	{
 		add_pic_to_layer(DesktopHandle);
-		pic_layer_reflash();
+		//pic_layer_reflash();
 	}
 
 }
@@ -638,7 +638,7 @@ void draw_to_screen_rect(struct picture NewPicture, rect new_rect)
 		RGB_24Bit temp_color;
 		u32 i = 0;
 		s32 width = NewPicture.Position.width - new_rect.width;
-		char * base_addr = (char *)( NewPicture.buf + (NewPicture.Position.width  * ( new_rect.top - NewPicture.Position.top) + width) );
+		char * base_addr = (char *)( NewPicture.buf + (NewPicture.Position.width  * ( new_rect.top - NewPicture.Position.top) + (new_rect.left - NewPicture.Position.left)) );
 		for(top = 0 ; top < new_rect.hight; top++)
 		{
 			for(left = 0 ; left < new_rect.width; left++)

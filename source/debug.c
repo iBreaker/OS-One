@@ -342,21 +342,11 @@ void dbg_input(void)
 		
 
 		input_mouse_init();
-		os_printf(" R%d G%d B%d", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
-		GpuBufAddr += 3;
-		os_printf(" R%d G%d B%d", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
-		GpuBufAddr += 3;
-		os_printf(" R%d G%d B%d%n", *(u8 * )GpuBufAddr, *((u8 * )GpuBufAddr + 1), *((u8 * )GpuBufAddr + 2));
-		
-		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[1].buf, *((u8 * )PicLayerTable->Picture[0].buf + 1),  *((u8 * )PicLayerTable->Picture[0].buf + 2));
-		PicLayerTable->Picture[0].buf += 3;
-		os_printf(" R%d G%d B%d", *(u8 * )PicLayerTable->Picture[1].buf + 3, *((u8 * )PicLayerTable->Picture[0].buf + 4),  *((u8 * )PicLayerTable->Picture[0].buf + 5));
-		PicLayerTable->Picture[0].buf += 3;
-		os_printf(" R%d G%d B%d%n", *(u8 * )PicLayerTable->Picture[1].buf + 6, *((u8 * )PicLayerTable->Picture[0].buf + 7),  *((u8 * )PicLayerTable->Picture[0].buf + 8));
+
 
 		input_fifo_msg input_msg;
 
-
+		pic_layer_reflash_rect(0, 0, 1440, 900);
 		while( 1)
 		{
 			if(input->count == 0 )
@@ -369,6 +359,11 @@ void dbg_input(void)
 			//os_printf("<%d-%d>%n", MousePic.Position.top, MousePic.Position.left);
 			//uart_putc(input_status.x + '0');
 			//draw_to_screen(MousePic);
+			if(input_status.button == 1)
+			{
+				pic_layer_reflash_rect(0, 0, 1440, 900);
+				input_status.button = 0;
+			}
 			move_pic_layer( -(s8)input_status.y, (s8)input_status.x, MouseHaldle, relative);
 			//pic_layer_reflash_rect(0,0,1440,900);
 		}

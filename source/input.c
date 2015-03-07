@@ -137,16 +137,19 @@ void input_mouse_init(void)
 		char * p =  os_malloc(100 * 100 * 3);
 		Pic.buf = (RGB_24Bit *)p;
 		int i;
-		for(i = 0; i < 30000; i++ )
+		//for(i = 0; i < 30000; i++ )
 		{
-			p[i]  = 0xff;
+			//p[i]  = 0xff;
 		}
+		extern char color_bmp;
+		copy_bmp_to_piclayer((u32)&color_bmp,(u32) Pic.buf);
 
 		u32 Haldle = add_pic(Pic);
 		if(Haldle != -1)
 		{
 			add_pic_to_layer(Haldle);
 			set_pic_to_top(MouseHaldle);
+			pic_layer_reflash_rect(0, 0, 1440, 900);
 			//pic_layer_reflash();
 		}
 
