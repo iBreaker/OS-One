@@ -47,7 +47,8 @@ void os_main(void)
 	//dbg_memory();
 	
 	//
-	 dbg_bmp();
+	 //dbg_bmp();
+	 dbg_form();
 	 dbg_input();
 	while(1)
 	{

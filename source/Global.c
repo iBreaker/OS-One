@@ -37,6 +37,8 @@ os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
 
 /*debug.c*/
 
+u32 form1_handle;
+
 /*task.c*/
 TASK_GLOBAL task_global;
 

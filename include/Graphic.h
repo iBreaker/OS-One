@@ -29,14 +29,22 @@ typedef struct RGB_24Bit_S
 
 int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth);
 void DrawDot(RGB_24Bit * to_addr, RGB_24Bit color, int top, int left);
+void DrawDot_to_layer(RGB_24Bit * to_addr, RGB_24Bit color ,int width, int top, int left);
 void DrawBlock(RGB_24Bit * to_addr, RGB_24Bit color, int top, int left, unsigned int width, unsigned int height);
+void DrawBlock_to_layer(RGB_24Bit * to_addr, RGB_24Bit color, unsigned int layer_width, int top, int left, unsigned int width, unsigned int height);
 void drawCharacter(RGB_24Bit * to_addr,unsigned char ASC2, RGB_24Bit color, int *top, int *left);
+void drawCharacter_to_layer(RGB_24Bit * to_addr, unsigned char ASC2, RGB_24Bit color, u32 width, int *top, int *left);
 void drawString(RGB_24Bit * to_addr, char *string, RGB_24Bit color, int *top, int *left);
+void drawString_to_layer(RGB_24Bit * to_addr, char *string, RGB_24Bit color,u32 width,  int *top, int *left);
 void drawStringF(RGB_24Bit * to_addr, char *fmt, RGB_24Bit color, int top, int left, ...);
+void drawStringF_to_layer(RGB_24Bit * to_addr, char *fmt, RGB_24Bit color, u32 width, int top, int left, ...);
+
 
 void drawDec(RGB_24Bit * to_addr, int dec, RGB_24Bit color, int *top, int *left);
+void drawDec_to_layer(RGB_24Bit * to_addr, int dec, RGB_24Bit color, u32 width, int *top, int *left);
 void drawFlt(float  flt, RGB_24Bit color, int *x, int *y);
 void drawHex(RGB_24Bit * to_addr, int hex, RGB_24Bit color, char IS_Big,int *top, int *left);
+void drawHex_to_layer(RGB_24Bit * to_addr, int hex, RGB_24Bit color, char IS_Big, u32 width, int *top, int *left);
 void drawBin(RGB_24Bit * to_addr, int bin, RGB_24Bit color, char IS_Big,int *top, int *left);
 void os_printf(char *fmt, ...);
 

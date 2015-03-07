@@ -20,6 +20,7 @@ typedef enum{
 	fifo_null,
 	fifo_key,
 	fifo_mouse
+
 }input_fifo_msg;
 
 typedef struct{

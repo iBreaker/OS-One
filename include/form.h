@@ -11,7 +11,7 @@
 
 #include "stdtype.h"
 #include "Graphic.h"
+#include "Global.h"
 
-
-
+void form1();
 #endif

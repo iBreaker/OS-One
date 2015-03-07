@@ -14,10 +14,10 @@ font:			/*字体首地址*/
 .incbin "./source/font0.bin"
 
 bmp:
-.incbin "./source/test.bmp"
+.incbin "./bmp/test.bmp"
 
 bg_bmp:
-.incbin "./source/bg.bmp"
+.incbin "./bmp/bg.bmp"
 
 color_bmp:
-.incbin "./source/color.bmp"
+.incbin "./bmp/color.bmp"

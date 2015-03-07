@@ -44,7 +44,7 @@ extern os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
 extern arm_timer_t *ArmTimer;
 
 /*debug.c*/
-
+extern u32 form1_handle ;
 /*task.c*/
 
 extern TASK_GLOBAL task_global;

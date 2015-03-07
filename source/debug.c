@@ -18,6 +18,7 @@
 #include "UART.h"
 #include "memory.h"
 #include "input.h"
+#include "form.h"
 
 void deb_linedlist_reflash(LinkedList *Task);
 void task1();
@@ -339,14 +340,9 @@ void dbg_memory(void)
 */
 void dbg_input(void)
 {
-		
-
 		input_mouse_init();
-
-
 		input_fifo_msg input_msg;
 
-		pic_layer_reflash_rect(0, 0, 1440, 900);
 		while( 1)
 		{
 			if(input->count == 0 )
@@ -354,17 +350,12 @@ void dbg_input(void)
 			input_msg =  fifo_get(input) ;
 			if( input_msg != fifo_mouse)
 				continue;
-			//MousePic.Position.left += (s8)input_status.x;
-			//MousePic.Position.top -= (s8)input_status.y;
-			//os_printf("<%d-%d>%n", MousePic.Position.top, MousePic.Position.left);
-			//uart_putc(input_status.x + '0');
-			//draw_to_screen(MousePic);
-			if(input_status.button == 1)
+			//if(input_status.button == 1)
 			{
-				pic_layer_reflash_rect(0, 0, 1440, 900);
-				input_status.button = 0;
+				//input_status.button = 0;
 			}
 			move_pic_layer( -(s8)input_status.y, (s8)input_status.x, MouseHaldle, relative);
+			form1_dispose();
 			//pic_layer_reflash_rect(0,0,1440,900);
 		}
 
@@ -395,4 +386,21 @@ void dbg_bmp(void)
 	u32 handle = add_pic(bmp_pic);
 	add_pic_to_layer(handle);
 	pic_layer_reflash_rect(bmp_pic.Position.top,bmp_pic.Position.left,bmp_pic.Position.width, bmp_pic.Position.hight);
+}
+
+
+
+
+/*****************************************************
+*	2015年03月07日16:54:05
+*	V1.0 	By Breaker
+*
+*	 void  dbg_form(void)
+*      窗口
+*	return   void
+*/
+void dbg_form(void)
+{
+	form1();
+	pic_layer_reflash_rect(0,0,1440, 900);
 }
