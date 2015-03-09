@@ -11,7 +11,7 @@
 .global _start
 .global _get_stack_pointer
 .global _exception_table
-.global _enable_interrupts
+.global _enable_interrupts, _disable_interrupts
  
 .equ    CPSR_MODE_USER,         		0x10
 .equ    CPSR_MODE_FIQ,          		0x11
@@ -43,8 +43,8 @@ _software_interrupt_vector_h:			.word		software_interrupt_vector
 _prefetch_abort_vector_h:				.word		prefetch_abort_vector
 _data_abort_vector_h:					.word		data_abort_vector
 _unused_hander_h:						.word		_reset_
-_interrupt_vector_h:					.word		interrupt_vector
-//_interrupt_vector_h:					.word 		_interrupt_vector_
+//_interrupt_vector_h:					.word		interrupt_vector
+_interrupt_vector_h:					.word 		_interrupt_vector_
 _fast_interrupt_vector_h:				.word		fast_interrupt_vector
 
 _reset_:
@@ -96,6 +96,13 @@ _get_stack_pointer:
 _enable_interrupts:
     mrs	r0, cpsr
     bic	r0, r0, #0x80
+    msr	cpsr_c, r0
+
+    mov     pc, lr
+
+_disable_interrupts:
+    mrs	r0, cpsr
+    orr	r0, r0, #0x80
     msr	cpsr_c, r0
 
     mov     pc, lr

@@ -32,6 +32,7 @@ typedef struct {
 }irq_controller_t;
 
 void _enable_interrupts(void);
+void _disable_interrupts(void);
 
 	
 	

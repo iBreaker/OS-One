@@ -7,6 +7,9 @@
 */
 #include "form.h"
 
+int xx, yy; //滑动按钮的位置
+int xx_, yy_; //滑动条的位置
+
 /*****************************************************************
 *	2015年03月06日16:04:50
 *	V1.0 	By Breaker
@@ -69,6 +72,9 @@ void form1()
 				}
 		}
 	}
+
+
+
 	//pic_layer_reflash_rect(200, 200, 300, 200);
 	//while(is_inside(frect.top, frect.left, frect.width, frect.hight, input_status.y, input_status.x))
 }
@@ -88,9 +94,8 @@ void form1_dispose()
 			mouse_status = 0;
 	}
 
-	bool is = is_inside (PicLayerTable->Picture[form1_handle].Position.top, PicLayerTable->Picture[form1_handle].Position.left, PicLayerTable->Picture[form1_handle].Position.width, PicLayerTable->Picture[form1_handle].Position.hight, PicLayerTable->Picture[MouseHaldle].Position.left, PicLayerTable->Picture[MouseHaldle].Position.top );
-
-	if(is)
+	bool is = is_inside (PicLayerTable->Picture[form1_handle].Position.top, PicLayerTable->Picture[form1_handle].Position.left, PicLayerTable->Picture[form1_handle].Position.width, 30, PicLayerTable->Picture[MouseHaldle].Position.left, PicLayerTable->Picture[MouseHaldle].Position.top );
+	if(is) //鼠标在窗体标题栏上
 	{
 		//os_printf("%d %d %d %d %d %d %d %d %n", is, PicLayerTable->Picture[form1_handle].Position.top, PicLayerTable->Picture[form1_handle].Position.left, PicLayerTable->Picture[form1_handle].Position.width, PicLayerTable->Picture[form1_handle].Position.hight, PicLayerTable->Picture[MouseHaldle].Position.left, PicLayerTable->Picture[MouseHaldle].Position.top, input_status.button);
 			if(input_status.button == 1)
@@ -104,8 +109,9 @@ void form1_dispose()
 				}
 				mouse_status = 1 ;
 			}
-
 	}
+
+
 }
 
 bool textbox()

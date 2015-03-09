@@ -61,14 +61,15 @@ _interrupt_vector_:
 	str		r1, [r0, #(17 * 4)]			//spsr
 	
 //==========================================
-	mov	r2, #1					//清除timer irq
-	.word	0x2000B400
-	ldr		r3, [pc, #-12]
-	str		r2, [r3, #12]
+	//mov	r2, #1					//清除timer irq
+	//.word	0x2000B400
+	//ldr		r3, [pc, #-12]
+	//str		r2, [r3, #12]
 
-	bl		UART_irq_handler			//UART中断
+	//bl		UART_irq_handler			//UART中断
 	//bl		os_timer_ctrl_reflash		//系统时钟
 	//bl		task_schedule					//任务调度
+	bl 		irq_dispose
 
 	//在这里添加任务调度函数              
 	//终于把任务切换调好了  ;-)  2015年02月11日20:59:00
@@ -76,6 +77,11 @@ _interrupt_vector_:
 //==========================================
 	.word	task_global			//加载任务状态内存基地址
 	ldr		r1, [pc, #-12]
+
+	//ldr      r0,[r1, #48]				//（读取task_global.is_uart_irq）如果是UART中断，返回方式和任务切换中断的方式不同
+	//cmps r0, #0;
+	//bne    uart_irq_return		//UART中断
+
 	ldr		r0, [r1]
       
     ldr		r2, [r0, #(2 * 4)]			//r2
@@ -104,6 +110,7 @@ _interrupt_vector_:
 	ldr		pc,[sp, #-4]				//最后恢复pc,跳转
 
 
+uart_irq_return:
 
 
 

@@ -69,12 +69,12 @@ clean:
 
 install:kernel.img
 	sudo mkdir /media/breaker/boot
-	sudo mount /dev/sdb1 /media/breaker/boot
+	sudo mount /dev/sdd1 /media/breaker/boot
 	sudo cp kernel.img /media/breaker/boot
-	sudo umount /dev/sdb1
+	sudo umount /dev/sdd1
 	sudo rm -r /media/breaker/boot 
 rm:
-	sudo rm -rf /media/breaker/boot/
+	sudo rm -rf /media/breaker/boot
 
 
 

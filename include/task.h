@@ -79,6 +79,7 @@ typedef struct {
 		u32	current_tasktable;
 		u8	current_TID;
 		u8 	schedule_lock ;
+		u8  is_uart_irq;
 }TASK_GLOBAL;
 
 u8 task_create(u8 rank, u32 task_func);

@@ -62,7 +62,18 @@ void __attribute__((interrupt("IRQ"))) interrupt_vector(void)
 	
 	//ArmTimer->IRQClear = 1;
 	//os_timer_ctrl_reflash();
-	UART_irq_handler();
+
+	if(  * (u32*) IRQ_BASIC & 1 != 0 ) //timer
+	{
+		ArmTimer->IRQClear = 1;
+		os_timer_ctrl_reflash();
+		task_schedule();
+	}
+	else if( ((* (u32*) IRQ_PEND1) & ( 1 << 29)) != 0 )
+	{
+		//os_printf("! ");
+		UART_irq_handler();
+	}
 		//GPIO_SET_GPCLR(16);
 		//sleep(50);
 	
@@ -83,3 +94,44 @@ void  __attribute__((interrupt("FIQ")))fast_interrupt_vector(void)
 	}
 }
 
+void irq_dispose()
+{
+	static int  irqqqqq = 0, timerrrr=0, uarttttt=0, irq_enddd=0;
+
+
+	irqqqqq ++;
+
+	DrawBlock((RGB_24Bit *) GpuBufAddr,colorBlack , 50, 50, 200, 16);
+	drawStringF((RGB_24Bit *) GpuBufAddr, "%d %d %d %d", colorWrite , 50, 50,  irqqqqq, timerrrr , uarttttt, irq_enddd);
+	if(  * (u32*) IRQ_BASIC & 1 != 1 ) //timer
+	{
+		timerrrr ++;
+		ArmTimer->IRQClear = 1;
+		os_timer_ctrl_reflash();
+		task_schedule();
+		task_global.is_uart_irq = false;
+	}
+	else if( ((* (u32*) IRQ_PEND1) & ( 1 << 29)) != 0 )
+	{
+		uarttttt++;
+		//UART_irq_handler();
+		task_global.is_uart_irq = true;
+
+	   // os_printf("+");
+	    while((GET32(AUX_MU_IIR_REG)&6) == 4) //resolve all interrupts to uart
+	    {
+	    	//os_printf("- ");
+	            //receiver holds a valid byte
+	         GET32(AUX_MU_IO_REG); //read byte from rx fifo
+	    }
+	    sleep(500);
+	}
+	irq_enddd ++;
+
+}
+
+void uart_test()
+{
+	if(task_global.is_uart_irq == true)
+		os_printf(".");
+}

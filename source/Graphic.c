@@ -1588,7 +1588,7 @@ void copy_bmp_to_piclayer(u32 bmp_, u32 to)
 	u32  from =  bmp_ + 0x36;
 	u32 width = * (u32 *) ( bmp_ + 0x12);
 	u32 hight = * (u32 *) ( bmp_ + 0x16);
-	os_printf("%d %d %n", hight, width);
+	//os_printf("%d %d %n", hight, width);
 	int i, j;
 	for(i=0; i <  hight ; i++)
 	{
