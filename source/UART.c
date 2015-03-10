@@ -79,11 +79,12 @@ void UART_irq_handler ( void )
     u8  rx;
 
     //an interrupt has occurred, find out why
+    //os_printf("- ");
     rb=GET32(AUX_MU_IIR_REG);
    // os_printf("+");
     while((rb&6) == 4) //resolve all interrupts to uart
     {
-    	//os_printf("- ");
+
             //receiver holds a valid byte
          rc=GET32(AUX_MU_IO_REG); //read byte from rx fifo
          rx = rc&0xFF;

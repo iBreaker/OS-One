@@ -26,20 +26,15 @@ void os_main(void)
 	gpio_init();
 	uart_init();
 	task_init();
-	//init_arm_timer(Kernrl_100Hz);
+	init_arm_timer(Kernrl_100Hz);
 
 
 	// 2014年12月13日18:13:10  刚才还没有初始化就开始使用图层表，结果发生了不可预知的错误，第二次犯这样的错误了。
 	//init_screen(screen_width, screen_high, color_deep);
 	PicLayerTable = PicLayerTable_init();  //初始化图层表
 	init_screen_layer();
-	os_printf("init_screen_layer ");
 	_enable_interrupts();
-	while(1)
-	{
-		sleep(1000);
-		blink_GPIO16();
-	}
+
 
 	/* debug */
 	

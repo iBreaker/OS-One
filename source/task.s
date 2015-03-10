@@ -20,7 +20,19 @@
 _interrupt_vector_:
 
 	sub		lr, lr, #4
-	
+
+	push	{r0, r1, r2, r3, r4, fp, ip, lr}
+	.word 0x20215048
+	ldr   r0, [pc, #-12]
+	ldr   r0, [r0]
+	and r0, r0, #0x06
+	cmp r0, #0x04
+	bne task_change
+	bl UART_irq_handler
+	ldm	sp!, {r0, r1, r2, r3, r4, fp, ip, pc}^
+
+task_change:
+	ldm	sp!,	{r0, r1, r2, r3, r4, fp, ip, lr}
 	//保存所有的寄存器状态,要把寄存器保存到内存中.先用sp作为临时的基地址
 	str		r0, [sp, #-4]
 	str		r1, [sp, #-8]
@@ -61,15 +73,15 @@ _interrupt_vector_:
 	str		r1, [r0, #(17 * 4)]			//spsr
 	
 //==========================================
-	//mov	r2, #1					//清除timer irq
-	//.word	0x2000B400
-	//ldr		r3, [pc, #-12]
-	//str		r2, [r3, #12]
+	mov	r2, #1					//清除timer irq
+	.word	0x2000B400
+	ldr		r3, [pc, #-12]
+	str		r2, [r3, #12]
 
 	//bl		UART_irq_handler			//UART中断
-	//bl		os_timer_ctrl_reflash		//系统时钟
-	//bl		task_schedule					//任务调度
-	bl 		irq_dispose
+	bl		os_timer_ctrl_reflash		//系统时钟
+	bl		task_schedule					//任务调度
+	//bl 		irq_dispose
 
 	//在这里添加任务调度函数              
 	//终于把任务切换调好了  ;-)  2015年02月11日20:59:00
@@ -102,12 +114,14 @@ _interrupt_vector_:
 	str		r1, [sp, #-4]
 		
 	ldr		r1, [r0, #(16 * 4)]			//cpsr
+	str		r1, [sp, #-8]
 	msr		cpsr, r1					//这里也就打开中断了
 
 	ldr		r1, [r0, #(1 * 4)]			//r1
 	ldr		r0, [r0, #(0 * 4)]			//r2			//之前将r0 先回复,r1后恢复.将代码放到ads中才发现这个错误
 		
 	ldr		pc,[sp, #-4]				//最后恢复pc,跳转
+	//ldmib     sp, {pc, }
 
 
 uart_irq_return:

@@ -160,7 +160,10 @@ u8  task_run(u8 TID)
 */
 void  task_schedule(void)
 {
+	//static int i =0;
 		//os_printf("+");
+
+
 		u8 current_TID , current_TRID;
 		current_TRID = task_info[task_global.current_TID].TRID;										//获取当前TRID
 

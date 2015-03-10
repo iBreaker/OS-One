@@ -97,12 +97,11 @@ void  __attribute__((interrupt("FIQ")))fast_interrupt_vector(void)
 void irq_dispose()
 {
 	static int  irqqqqq = 0, timerrrr=0, uarttttt=0, irq_enddd=0;
-
+	 //os_printf("+");
 
 	irqqqqq ++;
 
-	DrawBlock((RGB_24Bit *) GpuBufAddr,colorBlack , 50, 50, 200, 16);
-	drawStringF((RGB_24Bit *) GpuBufAddr, "%d %d %d %d", colorWrite , 50, 50,  irqqqqq, timerrrr , uarttttt, irq_enddd);
+
 	if(  * (u32*) IRQ_BASIC & 1 != 1 ) //timer
 	{
 		timerrrr ++;
@@ -117,21 +116,25 @@ void irq_dispose()
 		//UART_irq_handler();
 		task_global.is_uart_irq = true;
 
-	   // os_printf("+");
+
+		 //os_printf("%d", GET32(AUX_MU_IIR_REG));
 	    while((GET32(AUX_MU_IIR_REG)&6) == 4) //resolve all interrupts to uart
 	    {
-	    	//os_printf("- ");
 	            //receiver holds a valid byte
 	         GET32(AUX_MU_IO_REG); //read byte from rx fifo
+	        // PUT32(AUX_MU_IIR_REG,0xC6);
+	         os_printf("*%d", GET32(AUX_MU_IIR_REG));
 	    }
 	    sleep(500);
 	}
 	irq_enddd ++;
-
+	DrawBlock((RGB_24Bit *) GpuBufAddr,colorBlack , 50, 50, 200, 16);
+	drawStringF((RGB_24Bit *) GpuBufAddr, "%d %d %d %d", colorWrite , 50, 50,  irqqqqq, timerrrr , uarttttt, irq_enddd);
+	//os_printf("-");
 }
 
 void uart_test()
 {
-	if(task_global.is_uart_irq == true)
+	//if(task_global.is_uart_irq == true)
 		os_printf(".");
 }
