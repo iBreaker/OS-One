@@ -121,7 +121,7 @@ void input_mouse_init(void)
 		if(MouseHaldle != -1)
 		{
 			layer_index = add_pic_to_layer(MouseHaldle);
-			os_printf("%n%d%n",layer_index );
+			//os_printf("%n%d%n",layer_index );
 			//pic_layer_reflash();
 		}
 

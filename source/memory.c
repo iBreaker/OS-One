@@ -9,6 +9,10 @@
 #include "memory.h"
 #include "Global.h"
 
+/*memory.c*/
+struct free_memory_table_s  FreeMemoryTables_p;
+struct free_memory_table_s  *FreeMemoryTables = &FreeMemoryTables_p;
+
 /*
 *	2014年12月6日18:16:02
 *	V1.0 	By Breaker

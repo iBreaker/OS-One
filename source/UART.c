@@ -21,6 +21,13 @@ extern void dummy ( unsigned int );
 //alt function 0 for uart0
 
 //((250,000,000/115200)/8)-1 = 270
+
+/*UART.c*/
+char input_buf_p[input_size];
+char * input_buf = input_buf_p;
+FIFO8  input_p;
+FIFO8  * input = & input_p;
+
 //------------------------------------------------------------------------
 void uart_init ( void )
 {

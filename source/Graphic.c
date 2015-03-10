@@ -17,6 +17,27 @@ bool is_inside (int topa, int lefta, int widtha, int higha, int x, int y);
 rect inside_rect(int topa, int lefta, int widtha, int higha, int topb, int leftb, int widthb, int highb);
 void move_pic_layer_sub(u32 haldle);
 
+/*Graphic.c  全局变量*/
+unsigned int GpuInfoAddr;  		/*GPU信息首地址*/
+volatile unsigned char *GpuBufAddr;  	/*GPU缓存首地址*/
+
+RGB_24Bit colorF;
+RGB_24Bit colorB;
+
+RGB_24Bit colorBlack;
+RGB_24Bit colorWrite;
+RGB_24Bit colorRed;
+RGB_24Bit colorGreen;
+RGB_24Bit colorBule;
+RGB_24Bit  transparent;
+
+s32 os_top = 0;					//全局位置指针（屏幕显示）
+s32 os_left = 0;
+
+struct pic_layer_table *PicLayerTable;
+ int MouseHaldle;
+ int DesktopHandle;
+
 /*****************************************************
 *	2015年03月04日12:47:08
 *	V2.0 	By Breaker
@@ -100,6 +121,7 @@ void init_screen_layer()
 	//DrawBlock((RGB_24Bit *) buf,  colorB, 0, 0, screen_width, screen_high);
 
 	copy_bmp_to_piclayer((u32)&bg_bmp, (u32)NewPicture.buf);
+	DrawBlock((RGB_24Bit *) buf,  colorB, 0, 0, screen_width, 16);
 	DesktopHandle = add_pic(NewPicture);
 	if(DesktopHandle != -1)
 	{
@@ -907,7 +929,7 @@ void draw_to_screen_rect(struct picture NewPicture, rect new_rect)
 				temp_color.B = base_addr[i +2];
 				if( temp_color.R != transparent.R  ||  temp_color.G !=  transparent.G ||  temp_color.B != transparent.B )
 				{
-					DrawDot((RGB_24Bit *)GpuBufAddr, temp_color, new_rect.top + top, new_rect.left + left) ;
+						DrawDot((RGB_24Bit *)GpuBufAddr, temp_color, new_rect.top + top, new_rect.left + left) ;
 				}
 				i += 3;
 			}
@@ -1115,10 +1137,10 @@ int set_pic_to_top(unsigned char PicIndex)
 {
 	int i,LayerIndex, temp_pic_index;
 
-	os_printf("%n PicIndex %d ", PicIndex);
-	os_printf("%n PicIndex %d ", PicLayerTable->Picture[PicIndex].LayerIndex);
+	//os_printf("%n PicIndex %d ", PicIndex);
+	//os_printf("%n PicIndex %d ", PicLayerTable->Picture[PicIndex].LayerIndex);
 	LayerIndex = get_LayerIndex_by_PicIndex(PicIndex);
-	os_printf("LayerIndex %d ", LayerIndex);
+	//os_printf("LayerIndex %d ", LayerIndex);
 	if((LayerIndex < 0) || (LayerIndex >=  MaxPicLayer) ) 					//PicIndex非法
 	{
 		return -1;
@@ -1132,10 +1154,10 @@ int set_pic_to_top(unsigned char PicIndex)
 		PicLayerTable->PicLayer[i-1].Empty = PicLayerTable->PicLayer[i].Empty;	//前移
 		PicLayerTable->PicLayer[i-1].PicIndex = PicLayerTable->PicLayer[i].PicIndex;
 		PicLayerTable->Picture[temp_pic_index].LayerIndex = i - 1;	//更改picture的LayerIndex
-		os_printf(" - ");
+		//os_printf(" - ");
 	}
 	
-	os_printf("LayerIndex %d %n", i - 1);
+	//os_printf("LayerIndex %d %n", i - 1);
 	PicLayerTable->Picture[PicIndex].LayerIndex = i - 1;
 	PicLayerTable->PicLayer[i - 1].PicIndex = PicIndex;
 

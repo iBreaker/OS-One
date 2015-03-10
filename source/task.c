@@ -25,6 +25,9 @@ void task_delete();
 void task_idle(void);
 void MSG_dispose();
 
+/*task.c*/
+TASK_GLOBAL task_global;
+
 /*****************************************************************
 *	2015-02-16 18:34:32
 *	V1.0 	By Breaker
@@ -53,9 +56,6 @@ void task_init()
 		task_global.schedule_lock = false;
 		task_global.current_TID = TID;
 		task_global.current_tasktable = (u32) &task_table[TID];
-
-
-
 }
 
 void task_idle(void)
@@ -301,13 +301,13 @@ void MSG_dispose()
 			case MSG_SEND:
 				if(task_info[to].status != WAIT4MSG)
 				{
-						os_printf(" %n status != WAIT4MSG  TASK%d   MSG_ID:%d  ", to, MSG_ID);
+						//os_printf(" %n status != WAIT4MSG  TASK%d   MSG_ID:%d  ", to, MSG_ID);
 						break;
 				}
 				task_info[to].MSG = MSG[MSG_ID];
 				task_info[to].status = READY;
 
-				 os_printf("%n SEND to %d    ", to);
+				// os_printf("%n SEND to %d    ", to);
 				break;
 
 			case MSG_WAIT4MSG:

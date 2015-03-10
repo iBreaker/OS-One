@@ -107,6 +107,10 @@ _disable_interrupts:
 
     mov     pc, lr
 
+.globl reboot
+reboot:
+	mov	pc, #0x00
+
 .globl PUT32
 PUT32:
     str r1,[r0]

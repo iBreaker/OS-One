@@ -16,6 +16,14 @@ void os_timer_insert_pointer(unsigned int value, unsigned char os_timer_id);
 void os_timer_remove_pointer(void);
 void time_out_msg (unsigned char os_timer_id);
 
+/*timer.c*/
+arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		//ArmTimer首地址
+os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
+
+char timer_time_out_p[5];
+char * timer_time_out = timer_time_out_p;
+FIFO8  time_out_p;
+FIFO8  * time_out = & time_out_p;
 
 /*
 *	2014年12月25日21:01:06
@@ -73,6 +81,7 @@ void init_arm_timer(unsigned int Load)
 							ARMTIMER_CTRL_ENABLE |
 							ARMTIMER_CTRL_INT_ENABLE |
 							ARMTIMER_CTRL_PRESCALE_1;
+	fifo_init(time_out, timer_time_out, 5);
  }
  
  /*****************************************************************
@@ -290,7 +299,12 @@ void os_timer_remove_pointer(void)
 */
 void time_out_msg (unsigned char os_timer_id)
 {
-	blink_GPIO16();
+	//用户可以更改这里
+	//blink_GPIO16();
+	//DrawBlock_to_layer(PicLayerTable->Picture[DesktopHandle].buf  , colorB, screen_width, 0,  screen_width - 150, 150, 16);
+	//drawStringF_to_layer(PicLayerTable->Picture[DesktopHandle].buf , "Timer%d Time Out" , colorRed , screen_width, 0, screen_width - 150, os_timer_id);
+	//pic_layer_reflash_rect(0, screen_width - 150, 150, 32);
+	fifo_put(time_out, os_timer_id);
 }
   
 

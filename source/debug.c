@@ -25,6 +25,9 @@ void task1();
 void task2();
 void task3();
 
+/*debug.c*/
+u32 form1_handle;
+
 /*
 *	2014年12月31日16:12:49
 *	V1.0 	By Breaker
@@ -402,5 +405,5 @@ void dbg_bmp(void)
 void dbg_form(void)
 {
 	form1();
-	pic_layer_reflash_rect(0,0,1440, 900);
+
 }

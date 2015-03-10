@@ -43,10 +43,15 @@ extern int TimerCounter;					//ArmTimer首地址
 extern os_timer_ctrl_st os_timer_ctrl;		//timer ctrl
 extern arm_timer_t *ArmTimer;
 
+extern char timer_time_out_p[5];
+extern char * timer_time_out ;
+extern FIFO8  time_out_p;
+extern FIFO8  * time_out ;
+
 /*debug.c*/
 extern u32 form1_handle ;
-/*task.c*/
 
+/*task.c*/
 extern TASK_GLOBAL task_global;
 
 /*UART.c*/
