@@ -50,7 +50,7 @@ void os_main(void)
 	//dbg_memory();
 	
 	pic_layer_reflash_rect(0,0,screen_width, screen_high);
-
+	os_printf("%nOKOK");
 	u8 rank = 3;
 	u32 func = (u32) dbg_form;
 	u8 TID = task_create(rank , func);

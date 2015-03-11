@@ -25,38 +25,9 @@ void input_fifo_dispose(void)
 {
 	while(1)
 	{
-			/*
-			while(input->count <= 0){}
-			char rx =  fifo_get(input);
-
-			//若0 =< temp <= 3 则为鼠标button 后两个为x y
-			if( rx == 255)
-			{
-					while(input->count <= 0){}
-					input_status.button =  fifo_get(input);
-
-					while(input->count <=  0){}
-					input_status.x = fifo_get(input);
-
-					while(input->count <=  0){}
-					input_status.y = fifo_get(input);
-
-					DrawBlock(colorB,26, 0, 400,16);
-					drawStringF("btn:%d x:%d y:%d key:%d ", colorF, 26, 10, input_status.button, input_status.x, input_status.y, input_status.key, input->count);
-			}
-			//否则是键盘数据
-			else
-			{
-					input_status.key = rx;
-					uart_putc(rx);
-			}
-			DrawBlock(colorB,26, 0, 400,16);
-			drawStringF("btn:%d x:%d y:%d key:%d count:%d", colorF, 26, 10, input_status.button, input_status.x, input_status.y, input_status.key);
-			*/
 		sleep(100);
-		DrawBlock((RGB_24Bit * )GpuBufAddr, colorB,26, 0, 300,16);
-		drawStringF((RGB_24Bit * )GpuBufAddr, "btn:%d x:%d y:%d key:%d ", colorF, 26, 10, input_status.button, input_status.x, input_status.y,  input_status.key);
-		//fifo_get(input);
+		DrawBlock(colorB,26, 0, 300,16);
+		drawStringF("btn:%d x:%d y:%d key:%d ", colorF, 26, 10, input_status.button, input_status.x, input_status.y,  input_status.key);
 	}
 }
 
@@ -121,13 +92,6 @@ void input_mouse_init(void)
 		if(MouseHaldle != -1)
 		{
 			layer_index = add_pic_to_layer(MouseHaldle);
-			//os_printf("%n%d%n",layer_index );
-			//pic_layer_reflash();
 		}
-
-		//set_pic_layer(MouseHaldle, MaxPicLayer - 3);
-		//PicLayerTable->PicLayer[PicLayerTable->LayerCount].Empty = 0;
-		//PicLayerTable->LayerCount++;
-
 }
 

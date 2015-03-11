@@ -21,3 +21,7 @@ bg_bmp:
 
 color_bmp:
 .incbin "./bmp/color.bmp"
+
+//在这里添加bmp图片
+
+

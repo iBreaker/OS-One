@@ -21,6 +21,7 @@ _interrupt_vector_:
 
 	sub		lr, lr, #4
 
+	//首先判断是UART中断还是timer 中断
 	push	{r0, r1, r2, r3, r4, fp, ip, lr}
 	.word 0x20215048
 	ldr   r0, [pc, #-12]
@@ -29,7 +30,9 @@ _interrupt_vector_:
 	cmp r0, #0x04
 	bne task_change
 	bl UART_irq_handler
-	ldm	sp!, {r0, r1, r2, r3, r4, fp, ip, pc}^
+	ldm	sp!, {r0, r1, r2, r3, r4, fp, ip, pc}^  //UART中断直接返回,下面的代码不执行
+
+//timer中断
 
 task_change:
 	ldm	sp!,	{r0, r1, r2, r3, r4, fp, ip, lr}
@@ -122,9 +125,6 @@ task_change:
 		
 	ldr		pc,[sp, #-4]				//最后恢复pc,跳转
 	//ldmib     sp, {pc, }
-
-
-uart_irq_return:
 
 
 

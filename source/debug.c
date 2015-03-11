@@ -12,7 +12,6 @@
 #include "time.h"
 #include "Graphic.h"
 #include "Global.h"
-#include "csud.h"
 #include "linkedlist.h"
 #include "task.h"
 #include "UART.h"
@@ -20,12 +19,12 @@
 #include "input.h"
 #include "form.h"
 
+
 void deb_linedlist_reflash(LinkedList *Task);
 void task1();
 void task2();
-void task3();
 
-/*debug.c*/
+/*debug.c 全局变量*/
 u32 form1_handle;
 
 /*
@@ -38,6 +37,7 @@ u32 form1_handle;
 */
 void  deb_GPIO(void)
  {
+	//使LED灯闪烁
 	 while(1)
 	{
 		sleep(1000);
@@ -57,72 +57,60 @@ void  deb_GPIO(void)
 */
 void  deb_screen(void)
  {
-	RGB_24Bit color;
+	RGB_24Bit color; //定义颜色
 	color.R = 0xFF;
 	color.G = 0x00;
 	color.B = 0x00;
-	float A = 3.14;
+
 	int top,left;
 	top = 40;
 	left = 20;
-	DrawBlock((RGB_24Bit * )GpuBufAddr, color,0,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth) ,1);
-	DrawBlock((RGB_24Bit * )GpuBufAddr, color,0,0,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight) );
-	DrawBlock((RGB_24Bit * )GpuBufAddr, color,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth)-1,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight));
-	DrawBlock((RGB_24Bit * )GpuBufAddr, color,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight)-1,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth),1);
+	DrawBlock(color,0,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth) ,1);
+	DrawBlock(color,0,0,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight) );
+	DrawBlock(color,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth)-1,1,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight));
+	DrawBlock( color,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyHeight)-1,0,(((struct FrameBufferInfoS *)GpuInfoAddr) -> phyWidth),1);
 	
 	color.R = 0xFF;
 	color.G = 0xFF;
 	color.B = 0xFF;
 	
 	/*2015年01月01日22:59:23  真是一个奇怪的bug，函数参数不能有double类型。Why*/
-	drawStringF((RGB_24Bit * )GpuBufAddr, "123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
+	drawStringF("123:%%d%d,%%x%x,%%b%b",color,  top, left ,123,123,123);
 
 }
  
+/*
+*	2014年1月3日16:21:44
+*	V1.0 	By Breaker
+*
+*	void  deb_os_printf(void)
+*      格式化输出
+*	return   void
+*/
  void  deb_os_printf (void)
  {
 	 os_printf ("123:%%d%d,%%x%x,%%b%b",123,123,123);
 	 os_printf ("%n");
 	os_printf ("123:%%d%d,%%x%x,%%b%b",123,123,123); 
  }
-/*****************************************************
-*	2015年01月03日14:38:20
-*	V1.0 	By Breaker
-*
-*	 void  deb_keyboard(void)
-*      usb键盘
-*	return   void
-**/
- void  deb_keyboard(void)
- {
-	RGB_24Bit color;
-	color.R = 0xFF;
-	color.G = 0x00;
-	color.B = 0x00;
-	unsigned int top, left;
-	top = 400;
-	left = 0;
-	while(1)
-	 {
 
-	 }
- }
+
  
 /*****************************************************
 *	2015年01月14日14:24:53
 *	V1.0 	By Breaker
 *
 *	 void  deb_timer(void)
-*      画出图案
+*      定时器
 *	return   void
 **/
 void  deb_timer(void)
 {
 	init_os_timer_ctrl();
-	set_os_timer(2000,1100);
-	set_os_timer(1100,1200);
-	set_os_timer(2000,0);
-	set_os_timer(1100,0);
+	set_os_timer(2000,1100);						//首次20秒, 之后每隔11秒
+	set_os_timer(1100,1200);						//首次11秒, 之后每隔12秒
+	set_os_timer(2000,0);							//一次性定时器, 20秒
+	set_os_timer(1100,0);							//一次性定时器, 11秒
 }
 
 void deb_timer_refalsh(void)
@@ -132,7 +120,7 @@ void deb_timer_refalsh(void)
 	color_b.G = 0x82;
 	color_b.B = 0xE6;
 	
-	DrawBlock((RGB_24Bit * )GpuBufAddr, color_b, 0, 0 , 1440, 900);
+	DrawBlock( color_b, 0, 0 , 1440, 900);
 	
 	RGB_24Bit color;
 	color.R = 0xFF;
@@ -143,17 +131,17 @@ void deb_timer_refalsh(void)
 	int left,top;
 	left = 0; top = 0;
 	
-	drawStringF((RGB_24Bit * )GpuBufAddr, "value:%d", color, 0, 700, os_timer_ctrl.value);
+	drawStringF("value:%d", color, 0, 700, os_timer_ctrl.value);
 	
 	for(i=0; i<256; i++)
 	{
-		drawStringF((RGB_24Bit * )GpuBufAddr, "> %d", color, top, left, i);
+		drawStringF( "> %d", color, top, left, i);
 		left += 48;
-		drawStringF((RGB_24Bit * )GpuBufAddr, "%d", color,top, left, os_timer_ctrl.os_timer_t[i].value);
+		drawStringF("%d", color,top, left, os_timer_ctrl.os_timer_t[i].value);
 		left += 64;
-		drawStringF((RGB_24Bit * )GpuBufAddr, "%d", color,top, left , os_timer_ctrl.os_timer_t[i].load);
+		drawStringF("%d", color,top, left , os_timer_ctrl.os_timer_t[i].load);
 		left += 64;
-		drawStringF((RGB_24Bit * )GpuBufAddr, "%d", color,top, left, os_timer_ctrl.os_timer_t[i].next_os_timer_id);
+		drawStringF( "%d", color,top, left, os_timer_ctrl.os_timer_t[i].next_os_timer_id);
 		
 		left = 0;
 		top += 16;
@@ -170,19 +158,19 @@ void deb_timer_refalsh(void)
 */
  void  deb_linedlist(void)
  {
-	 LinkedList task;
+	 LinkedList task;										//定义一个名为task的链表
 	 LinkedList *Task = & task;
-	 ll_init(Task);
+	 ll_init(Task);												//初始化
 	 
-	 ll_add_to_head(Task,1);
+	 ll_add_to_head(Task,1);						//像task链表头部加入1
 	 ll_add_to_head(Task, 2);
 	 ll_add_to_head(Task, 3);
 	 ll_add_to_head(Task, 5);
-	 ll_add_to_tail(Task, 6);
+	 ll_add_to_tail(Task, 6);							//像task链表尾部加入6
 	 ll_add_to_tail(Task, 7);
 	 
 	 ll_add_by_order(Task, 8, 4);
-	 ll_add_after_id(Task, 9, 3);
+	 ll_add_after_id(Task, 9, 3);					//加到9号后面
 	 
 	 ll_add_to_head(Task, 0);
 	 ll_add_to_head(Task, 0);
@@ -221,21 +209,14 @@ void  deb_task(void)
 {
 		u8 rank = 3;
 		u32 func = (u32) dbg_UART;
-		u8 TID = task_create(rank , func);
-		task_run(TID);
-		os_printf("dbg_UART%n");
+		u8 TID = task_create(rank , func);					//获取TID
+		task_run(TID);														//加入就绪表
+
 
 		func = (u32) deb_GPIO;
 		TID = task_create(rank , func);
 		task_run(TID);
-		os_printf("deb_GPIO%n");
 
-		//func = (u32) task3;
-		//TID = task_create(rank , func);
-		//task_run(TID);
-
-		//task3();
-		//task_manager();
 		while(1);
 }
 
@@ -286,14 +267,9 @@ void task2()
 				MSG_s  _MSG = task_recevie_msg();
 				os_printf("-receive end-");
 				task2u32 = _MSG.value ;
-				DrawBlock((RGB_24Bit * )GpuBufAddr, colorB,10, 0, 200,16);
-				drawStringF((RGB_24Bit * )GpuBufAddr, "Task1:%d", colorF, 10, 10, task2u32 );
+				DrawBlock(colorB,10, 0, 200,16);
+				drawStringF( "Task1:%d", colorF, 10, 10, task2u32 );
 		}
-}
-
-void task3()
-{
-
 }
 
 
@@ -353,13 +329,8 @@ void dbg_input(void)
 			input_msg =  fifo_get(input) ;
 			if( input_msg != fifo_mouse)
 				continue;
-			//if(input_status.button == 1)
-			{
-				//input_status.button = 0;
-			}
-			move_pic_layer( -(s8)input_status.y, (s8)input_status.x, MouseHaldle, relative);
-			form1_dispose();
-			//pic_layer_reflash_rect(0,0,1440,900);
+			move_pic_layer( -(s8)input_status.y, (s8)input_status.x, MouseHaldle, relative);				//移动鼠标
+			form1_dispose();   //将鼠标信号传入form1,让form1处理
 		}
 
 }
@@ -369,7 +340,7 @@ void dbg_input(void)
 *	V1.0 	By Breaker
 *
 *	 void  dbg_bmp(void)
-*      bmp文件
+*      显示bmp文件
 *	return   void
 */
 void dbg_bmp(void)
@@ -405,5 +376,4 @@ void dbg_bmp(void)
 void dbg_form(void)
 {
 	form1();
-
 }

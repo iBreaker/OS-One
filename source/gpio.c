@@ -19,11 +19,14 @@ void bcm2835_peri_set_bits(volatile u32 * paddr, u32  value, u32  mask);
 void bcm2835_peri_write(volatile u32 * paddr, u32  value);
 u32  bcm2835_peri_read(volatile u32 * paddr);
 
+//初始化GPIO
 void gpio_init(void)
 {
 		GPIO_SET_GPFSEL(16, 1);
 		GPIO_SET_GPFSEL(19, 1);
 }
+
+
 /*
 *	2014年12月24日14:27:29
 *	V1.0 	By Breaker
@@ -32,11 +35,10 @@ void gpio_init(void)
 *   设置第pin个GPIO的功能(func)
 *	return 0 成功  -1 失败	
 */
-
-
 void GPIO_SET_GPFSEL(u8 pin, u8 mode)
 {
 	//函数有错误 ,暂时不改   2015年02月08日18:59:50
+	//已解决 2015年03月11日18:56:25
     // Function selects are 10 pins per 32 bit word, 3 bits per pin
     volatile u32 * paddr = ( volatile u32 * ) GPFSEL0  + (pin/10);
     u8   shift = (pin % 10) * 3;

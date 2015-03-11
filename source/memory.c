@@ -329,5 +329,4 @@ void os_memcpy(u32 from_addr, u32 to_addr, u32 size)
 	{
 		to_addr_p[i] = from_addr_p[i];
 	}
-	
 }

@@ -15,12 +15,6 @@
 extern void PUT32 ( unsigned int, unsigned int );
 extern unsigned int GET32 ( unsigned int );
 extern void dummy ( unsigned int );
-//GPIO14  TXD0 and TXD1
-//GPIO15  RXD0 and RXD1
-//alt function 5 for uart1
-//alt function 0 for uart0
-
-//((250,000,000/115200)/8)-1 = 270
 
 /*UART.c*/
 char input_buf_p[input_size];

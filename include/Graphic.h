@@ -28,24 +28,24 @@ typedef struct RGB_24Bit_S
 
 
 int init_screen(unsigned int width, unsigned int height, unsigned int bitDepth);
-void DrawDot(RGB_24Bit * to_addr, RGB_24Bit color, int top, int left);
+void DrawDot(RGB_24Bit color, int top, int left);
 void DrawDot_to_layer(RGB_24Bit * to_addr, RGB_24Bit color ,int width, int top, int left);
-void DrawBlock(RGB_24Bit * to_addr, RGB_24Bit color, int top, int left, unsigned int width, unsigned int height);
+void DrawBlock(RGB_24Bit color, int top, int left, unsigned int width, unsigned int height);
 void DrawBlock_to_layer(RGB_24Bit * to_addr, RGB_24Bit color, unsigned int layer_width, int top, int left, unsigned int width, unsigned int height);
-void drawCharacter(RGB_24Bit * to_addr,unsigned char ASC2, RGB_24Bit color, int *top, int *left);
+void drawCharacter(unsigned char ASC2, RGB_24Bit color, int *top, int *left);
 void drawCharacter_to_layer(RGB_24Bit * to_addr, unsigned char ASC2, RGB_24Bit color, u32 width, int *top, int *left);
-void drawString(RGB_24Bit * to_addr, char *string, RGB_24Bit color, int *top, int *left);
+void drawString(char *string, RGB_24Bit color, int *top, int *left);
 void drawString_to_layer(RGB_24Bit * to_addr, char *string, RGB_24Bit color,u32 width,  int *top, int *left);
-void drawStringF(RGB_24Bit * to_addr, char *fmt, RGB_24Bit color, int top, int left, ...);
+void drawStringF(char *fmt, RGB_24Bit color, int top, int left, ...);
 void drawStringF_to_layer(RGB_24Bit * to_addr, char *fmt, RGB_24Bit color, u32 width, int top, int left, ...);
 
 
-void drawDec(RGB_24Bit * to_addr, int dec, RGB_24Bit color, int *top, int *left);
+void drawDec( int dec, RGB_24Bit color, int *top, int *left);
 void drawDec_to_layer(RGB_24Bit * to_addr, int dec, RGB_24Bit color, u32 width, int *top, int *left);
 void drawFlt(float  flt, RGB_24Bit color, int *x, int *y);
-void drawHex(RGB_24Bit * to_addr, int hex, RGB_24Bit color, char IS_Big,int *top, int *left);
+void drawHex( int hex, RGB_24Bit color, char IS_Big,int *top, int *left);
 void drawHex_to_layer(RGB_24Bit * to_addr, int hex, RGB_24Bit color, char IS_Big, u32 width, int *top, int *left);
-void drawBin(RGB_24Bit * to_addr, int bin, RGB_24Bit color, char IS_Big,int *top, int *left);
+void drawBin(int bin, RGB_24Bit color, char IS_Big,int *top, int *left);
 void os_printf(char *fmt, ...);
 
 /*-----------------------------------------------图层处理 Layer-----------------------------------------------------------------------*/
@@ -114,6 +114,8 @@ void move_pic_layer(u32 top, u32 left, u32 haldle, move_type mt);
 bool is_inside (int topa, int lefta, int widtha, int higha, int x, int y);
 rect inside_rect(int topa, int lefta, int widtha, int higha, int topb, int leftb, int widthb, int highb);
 void copy_bmp_to_piclayer(u32 bmp_, u32 to);
+
+extern char bg_bmp;
 
 #endif
 

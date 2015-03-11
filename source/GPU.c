@@ -10,6 +10,7 @@
 #include "GPU.h"
 #include "Global.h"
 
+//初始化
 unsigned int init_GPU(unsigned int width, unsigned int height, unsigned int bitDepth)
 {
 	volatile unsigned int GPU_MSG = 0;

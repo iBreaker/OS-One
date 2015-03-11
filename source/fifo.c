@@ -8,6 +8,23 @@
 
 #include "fifo.h"
 
+/*****************************************************
+*	2015年03月11日16:58:41
+*	V1.0 	By Breaker
+*
+*	 void fifo_init( FIFO8 * fifo8,char * buf,int size)
+*      fifo初始化
+*	return   void
+*/
+
+/*****************************************************
+*	2015年03月11日16:58:41
+*	V1.0 	By Breaker
+*
+*	 void fifo_init( FIFO8 * fifo8,char * buf,int size)
+*      fifo初始化
+*	return   void
+*/
 void fifo_init( FIFO8 * fifo8,char * buf,int size)
 {
 	fifo8->buf = buf;
@@ -17,6 +34,15 @@ void fifo_init( FIFO8 * fifo8,char * buf,int size)
 	fifo8->count = 0;
 	fifo8->free = fifo8->size - fifo8->count;
 }
+
+/*****************************************************
+*	2015年03月11日16:58:41
+*	V1.0 	By Breaker
+*
+*	 void fifo_put( FIFO8 * fifo8,char * buf,int size)
+*      放入队列
+*	return   void
+*/
 void fifo_put( FIFO8 * fifo8,char  data)
 {
 	//binfo = (struct BOOTINFO *) ADR_BOOTINFO;
@@ -40,6 +66,14 @@ void fifo_put( FIFO8 * fifo8,char  data)
 
 }
 
+/*****************************************************
+*	2015年03月11日16:58:41
+*	V1.0 	By Breaker
+*
+*	 void fifo_get( FIFO8 * fifo8)
+*      获取一个char类型的值
+*	return   void
+*/
 char fifo_get( FIFO8 * fifo8)
 {
 	if(fifo8->count <= 0)	//队列空则返回0，调用get函数值钱必须检查count是否为零，否则会一直返回
