@@ -46,7 +46,7 @@ INC = $(wildcard ${DIR_INC}/*.h)
 
 all: 
 	make kernel.img
-	make disasm
+	#make disasm
 	
 ${DIR_OBJ}/%.o: ${DIR_SRC}/%.c  Makefile
 	${GNU}gcc ${CFLAGS} -c $< -o $@
