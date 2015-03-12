@@ -13,18 +13,31 @@
 
 
 
-#define	MAX_rank	3		//	共四个优先级: 0 1 2 3
+#define	MAX_rank	 3		//	共四个优先级: 0 1 2 3
 
+//任务状态
 typedef enum
 {
-	STATUS_NULL ,READY , RUN, WAIT4MSG, WAIT, SUSPEND, DEAD
+	STATUS_NULL ,		//空
+	READY,						//就绪
+	RUN, 							//正在运行
+	WAIT4MSG, 				//wite for MSG 等待消息
+	WAIT,							//阻塞
+	SUSPEND,				//挂起
+	DEAD							//未加入调度函数管理
 }TASK_STATUS_ENUM;
 
 typedef enum
 {
-	MSG_NULL, MSG_WAIT4MSG,MSG_SEND,  MSG_SUSPEND, MSG_RESUME, MSG_NORMAL
+	MSG_NULL, 					//空
+	MSG_WAIT4MSG,		//wite for MSG
+	MSG_SEND,  				//发送
+	MSG_SUSPEND, 			//
+	MSG_RESUME, 			//
+	MSG_NORMAL			//普通消息
 }MSG_TYPE_ENUM;
 
+//消息结构
 typedef struct {
 	u8 from;
 	u8 to;
@@ -33,6 +46,7 @@ typedef struct {
 }MSG_s;
 
 /*Task info*/
+//任务信息
 typedef struct {
 		u8	rank;										/*优先级*/
 		TASK_STATUS_ENUM status;	/*任务状态*/
@@ -51,6 +65,7 @@ LinkedList * MSG_list;
 
 MSG_s MSG[64];									/*消息真正存储的地方*/
 
+//存储任务寄存器
 typedef struct {
 		u32 r0;
 		u32 r1;
@@ -75,20 +90,20 @@ typedef struct {
 TASK_TABLE   task_table[17];
 u8   task_stack[17][1024];
 
+//任务全局变量
 typedef struct {
-		u32	current_tasktable;
-		u8	current_TID;
-		u8 	schedule_lock ;
-		u8  is_uart_irq;
+		u32	current_tasktable;		//当前任务寄存器存放的首地址(切换任务的时候需要)
+		u8	current_TID;				//当前TID
+		u8 	schedule_lock ;			//是否锁定调度函数(不进行任务调度)
 }TASK_GLOBAL;
 
-u8 task_create(u8 rank, u32 task_func);
-u8  task_run(u8 TID);
-void task_lock_schedule(void);
-void task_unlock_schedule(void);
-u8  task_send_msg(u8 to, MSG_TYPE_ENUM  type, u32 value);
-MSG_s  task_recevie_msg(void);
-void task_manager();
+u8 task_create(u8 rank, u32 task_func);							//创建任务
+u8  task_run(u8 TID);																//加入调度管理
+void task_lock_schedule(void);										//锁定调度函数
+void task_unlock_schedule(void);								//解锁
+u8  task_send_msg(u8 to, MSG_TYPE_ENUM  type, u32 value);		//发送消息
+MSG_s  task_recevie_msg(void);																//接收消息, 执行这个函数后进入阻塞状态
+void task_manager();																					//调试的时候用   显示任务状态
 
 #endif
 

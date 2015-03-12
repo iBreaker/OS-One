@@ -11,10 +11,11 @@
 #include "Global.h"
 #include "Graphic.h"
 
-unsigned char get_os_timer_id( void);
+unsigned char get_os_timer_id( void);																								//申请空timer id
 void os_timer_insert_pointer(unsigned int value, unsigned char os_timer_id);
 void os_timer_remove_pointer(void);
-void time_out_msg (unsigned char os_timer_id);
+void time_out_msg (unsigned char os_timer_id);																			//无论哪一个timer 超时, 都会调用这个函数,参数是超时timer 的id
+
 
 /*timer.c*/
 arm_timer_t *ArmTimer = (arm_timer_t *)ARMTIMER_BASE;		//ArmTimer首地址

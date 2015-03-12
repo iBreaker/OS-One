@@ -42,11 +42,12 @@
 #define GPPUDCLK0  0x20200098UL
 #define GPPUDCLK1  0x2020009CUL
 
-void gpio_init(void);
-void GPIO_SET_GPFSEL(u8 pin, u8 mode);
-int GPIO_SET_GPSET(int pin);
-int GPIO_SET_GPCLR(int pin);
+void gpio_init(void);																			//初始化
+void GPIO_SET_GPFSEL(u8 pin, u8 mode);								//设置GPIO功能
+int GPIO_SET_GPSET(int pin);														//set
+int GPIO_SET_GPCLR(int pin);														//clear
 
+//闪烁
 void blink_GPIO16(void);
 void blink_GPIO19(void);
 

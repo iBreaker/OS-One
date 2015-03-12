@@ -5,6 +5,10 @@
 *	文件名：interrupt.h
 *    	中断相关声明
 */
+
+
+ // 硬件相关, 具体请参考BCM2835文档
+
 #define   	INTERRUPT_CONTROLLER_BASE	0x2000B200
 
 #define BASIC_ARM_TIMER_IRQ				(1 <<  0)
@@ -31,8 +35,8 @@ typedef struct {
 	volatile unsigned int Disable_Basic_IRQs;
 }irq_controller_t;
 
-void _enable_interrupts(void);
-void _disable_interrupts(void);
+void _enable_interrupts(void);		//开中断
+void _disable_interrupts(void);		//关中断 这两个函数在startup.s中定义
 
 	
 	
