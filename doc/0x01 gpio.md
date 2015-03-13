@@ -2,7 +2,7 @@
 ========
 *2015-3-13 19:17:50*
 
-![B+ GPIO](/IMG/Raspberry_Pi_B+_GPIO.png)
+![B+ GPIO](https://coding.net/u/breaker/p/PRi-OS/git/raw/master/doc/IMG/Raspberry_Pi_B_plus_GPIO.png)
 
 ###函数
 `void gpio_init(void)`	初始化   
