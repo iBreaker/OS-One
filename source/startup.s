@@ -34,7 +34,7 @@
 .equ    CPSR_MODE_IRQ,          		0x12
 .equ    CPSR_MODE_SVR,          		0x13
 .equ    CPSR_MODE_ABORT,        		0x17
-.equ    CPSR_MODE_UNDEFINED,    	0x1B
+.equ    CPSR_MODE_UNDEFINED,    		0x1B
 .equ    CPSR_MODE_SYSTEM,       		0x1F
 
 // See ARM section A2.5 (Program status registers)

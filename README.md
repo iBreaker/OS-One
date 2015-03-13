@@ -19,18 +19,18 @@ OS One
 
 ## 编译:
 
-硬件： Raspberry Pi B+ （其他版本树莓派没有测试）  
-Host :   Linux version 3.13.0-44-generic (buildd@lamiak) #73-Ubuntu SMP Tue Dec 16 00:22:43 UTC 2014  
-工具链：arm-none-eabi-         V4.8.2
+**硬件**： Raspberry Pi B+ （其他版本树莓派没有测试）  
+**Host** :   Linux version 3.13.0-44-generic (buildd@lamiak) #73-Ubuntu SMP Tue Dec 16 00:22:43 UTC 2014  
+**工具链**：`arm-none-eabi-`         V4.8.2
 
-kernel.img   
-make = make kernel.img        -编译最终产生的 kernel.img  
-make clean                               -清理项目     
-make install    -将kernel.img 复制到sd卡， 复制之前确认请修改Makefile里的设备名称和路径  
+###kernel.img   
+`make` = `make kernel.img`        -编译最终产生的 kernel.img  
+`make clean`                               -清理项目     
+`make install`    -将kernel.img 复制到sd卡， 复制之前确认请修改Makefile里的设备名称和路径  
 
-minocom for OS One
+###minocom for OS One
 树莓派输入设备（鼠标键盘）用串口通信，所以必须运行串口程序   
-先make，然后make install  <千万不要./configure !!!>
+先`make`，然后`make install`  <千万不要`./configure` !!!>
  
 ## 使用:
 1. 接上树莓派串口线， 两个LED灯分别连接到GPIO16和GPIO19。这两个等会显示内核状态信息（不接这两个LED不影响系统运行）  
@@ -54,9 +54,10 @@ minocom for OS One
 4.  《linux内核设计的艺术》
 5.  《Linux 0.01内和分析与操作系统设计》  
 
-####项目主页：http://os.0x7c00.cn  
-####github地址 :  
-####coding地址：  
+**项目主页**：[OS One主页](http://os.0x7c00.cn)  
+**github地址** :  
+**coding地址**：  
+
 Breaker   
 791628659@qq.com  
 2015-03-12 15:05:14
