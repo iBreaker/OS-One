@@ -55,8 +55,8 @@ OS One
 5.  《Linux 0.01内和分析与操作系统设计》  
 
 **项目主页**：[OS One主页](http://os.0x7c00.cn)  
-**github(国外)** :   [https://coding.net/breaker/OS-ONE.git](https://coding.net/breaker/OS-ONE.git)  
-**coding.net(国内)**：  [https://github.com/iBreaker/OS-ONE.git](https://github.com/iBreaker/OS-ONE.git)
+**github(国外)** :   [https://github.com/iBreaker/OS-ONE.git](https://github.com/iBreaker/OS-ONE.git)  
+**coding.net(国内)**：  [https://coding.net/breaker/OS-ONE.git](https://coding.net/breaker/OS-ONE.git)   
 
 Breaker   
 791628659@qq.com  
