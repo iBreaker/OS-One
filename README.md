@@ -61,3 +61,22 @@ OS One
 Breaker   
 791628659@qq.com  
 2015-03-12 15:05:14
+
+
+秀一秀
+===
+* 下面的是树莓派，没有写好显示驱动的时候就用那个灯调试。因为树莓派的输出只有这个灯，通过这个灯的亮灭来判断要被调试的某个值的大小。树莓派通过HDMI线和显示器连接。开发环境 backtrack5。
+![https://pic.0x7c00.cn/OS-One/1.jpg](https://pic.0x7c00.cn/OS-One/1.jpg)
+
+* 实现简单的UI库后，做出的一个360风格的窗口
+![https://pic.0x7c00.cn/OS-One/1.jpg](https://pic.0x7c00.cn/OS-One/2.jpg)
+
+* 简单的进程管理器，显示当前多进程的信息，以及内存和鼠标键盘的状态。
+![https://pic.0x7c00.cn/OS-One/1.jpg](https://pic.0x7c00.cn/OS-One/3.jpg)
+
+* 同上
+![https://pic.0x7c00.cn/OS-One/1.jpg](https://pic.0x7c00.cn/OS-One/4.jpg)
+
+* 同上  秀一秀鼠标箭头 。
+![https://pic.0x7c00.cn/OS-One/1.jpg](https://pic.0x7c00.cn/OS-One/5.jpg)
+
