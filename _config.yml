@@ -2,7 +2,7 @@ title: OS One
 description: 一个自制的树莓派操作系统
 google_analytics: 
 show_downloads: true
-theme: jekyll-theme-modernist
+theme: jekyll-theme-architect
 
 gems:
   - jekyll-mentions
