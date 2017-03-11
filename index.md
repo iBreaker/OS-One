@@ -23,12 +23,12 @@ OS One
 **Host** :   Linux version 3.13.0-44-generic (buildd@lamiak) #73-Ubuntu SMP Tue Dec 16 00:22:43 UTC 2014  
 **工具链**：`arm-none-eabi-`         V4.8.2
 
-###kernel.img   
+### kernel.img   
 `make` = `make kernel.img`        -编译最终产生的 kernel.img  
 `make clean`                               -清理项目     
 `make install`    -将kernel.img 复制到sd卡， 复制之前确认请修改Makefile里的设备名称和路径  
 
-###minocom for OS One
+### minocom for OS One
 树莓派输入设备（鼠标键盘）用串口通信，所以必须运行串口程序   
 先`make`，然后`make install`  <千万不要`./configure` !!!>
  
@@ -47,7 +47,7 @@ OS One
 ## 已知漏洞: 
 
 
-##参考资料
+## 参考资料
 1.  《操作系统设计 Xinu方法》
 2.  《30天自制操作系统》
 3.  《嵌入式实时操作系统uc/os III》
